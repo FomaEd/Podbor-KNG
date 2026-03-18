@@ -673,7 +673,8 @@
             items: resultArticles
         };
     }
-        function groupArticles(items, multiplier) {
+
+    function groupArticles(items, multiplier) {
         const map = new Map();
 
         items.forEach(item => {
@@ -692,7 +693,7 @@
         return Array.from(map.values()).sort((a, b) => a.article.localeCompare(b.article));
     }
 
-        saveBtn.addEventListener('click', () => {
+    saveBtn.addEventListener('click', () => {
         const hardwareResult = calculateHardware();
         if (!hardwareResult) return;
 
@@ -706,14 +707,12 @@
         accumulatedCounter.style.display = '';
         accumulatedCountElement.textContent = String(accumulatedResults.length);
 
-        // лёгкий визуальный фидбек: номер расчёта + мигание счётчика
         const n = accumulatedResults.length;
         showMessage(`Расчёт №${n} записан. Нажми «Итого», когда соберёшь все окна.`, 'success');
         accumulatedCounter.classList.remove('flash');
         void accumulatedCounter.offsetWidth;
         accumulatedCounter.classList.add('flash');
 
-        // haptic feedback при успешной записи
         if (tg && tg.HapticFeedback && tg.HapticFeedback.notificationOccurred) {
             tg.HapticFeedback.notificationOccurred('success');
         }
