@@ -11,618 +11,833 @@
             --color-primary-hover: #1a6666;
             --color-bg: #f5f5f5;
             --color-surface: #ffffff;
-            --color-text: #1a1a1a;
-            --color-text-secondary: #666666;
-            --color-border: #e0e0e0;
-            --color-success: #4caf50;
-            --color-error: #f44336;
-            --radius: 8px;
-            --spacing: 16px;
+            --color-text: #1f2933;
+            --color-muted: #6b7b8c;
+            --color-danger: #d64545;
+            --color-border: #d0d7de;
+            --radius-lg: 18px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.12);
         }
 
         * {
-            margin: 0;
-            padding: 0;
             box-sizing: border-box;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: var(--color-bg);
-            color: var(--color-text);
+            margin: 0;
             padding: 0;
-            line-height: 1.5;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: radial-gradient(circle at top, #e0f2f1 0, #f5f5f5 45%, #f5f5f5 100%);
+            color: var(--color-text);
         }
 
-        .container {
-            max-width: 500px;
+        .app {
+            max-width: 520px;
             margin: 0 auto;
-            padding: var(--spacing);
-            background: var(--color-surface);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            padding: 16px 16px 24px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 22px;
+            padding: 18px 16px 20px;
+            box-shadow: var(--shadow-soft);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
         }
 
         .header {
-            text-align: center;
-            margin-bottom: calc(var(--spacing) * 1.5);
-            padding-bottom: var(--spacing);
-            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
         }
 
-        .header h1 {
-            font-size: 24px;
-            margin-bottom: 8px;
+        .logo-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 16px;
+            background: radial-gradient(circle at 30% 20%, #e0f7fa, #006064);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e0f2f1;
+            font-weight: 800;
+            font-size: 20px;
+            letter-spacing: 0.04em;
+            box-shadow: 0 10px 25px rgba(0, 96, 100, 0.35);
+        }
+
+        .header-text {
+            flex: 1;
+        }
+
+        .title {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+        }
+
+        .subtitle {
+            margin: 4px 0 0;
+            font-size: 13px;
+            color: var(--color-muted);
+        }
+
+        .badge {
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: rgba(32, 128, 128, 0.07);
             color: var(--color-primary);
+            border: 1px solid rgba(32, 128, 128, 0.18);
         }
 
-        .header p {
-            font-size: 12px;
-            color: var(--color-text-secondary);
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px 12px;
+            margin: 12px 0 8px;
         }
 
         .form-group {
-            margin-bottom: var(--spacing);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
 
-        .form-label {
-            display: block;
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 6px;
-            color: var(--color-text);
+        .form-group.full {
+            grid-column: 1 / -1;
         }
 
-        .form-input,
-        .form-select {
-            width: 100%;
-            padding: 10px 12px;
+        label {
+            font-size: 12px;
+            color: var(--color-muted);
+        }
+
+        .input, .select {
+            border-radius: 10px;
             border: 1px solid var(--color-border);
-            border-radius: var(--radius);
+            padding: 7px 10px;
             font-size: 14px;
-            font-family: inherit;
-            background-color: var(--color-surface);
-            color: var(--color-text);
-            transition: border-color 0.2s;
+            background: #f9fafb;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
         }
 
-        .form-input:focus,
-        .form-select:focus {
+        .input:focus, .select:focus {
             outline: none;
             border-color: var(--color-primary);
-            box-shadow: 0 0 0 2px rgba(32, 128, 128, 0.1);
+            box-shadow: 0 0 0 1px rgba(32,128,128,0.25);
+            background: #ffffff;
         }
 
-        .form-select {
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 10px center;
-            background-size: 20px;
-            padding-right: 36px;
+        .input::placeholder {
+            color: #9aa5b1;
         }
 
-        .form-group.hidden {
-            display: none;
+        .helper-text {
+            font-size: 11px;
+            color: var(--color-muted);
+            margin-top: 2px;
         }
 
-        .button-group {
+        .toggle-row {
             display: flex;
-            gap: 10px;
-            margin-top: calc(var(--spacing) * 1.5);
+            gap: 8px;
+            margin-top: 2px;
+        }
+
+        .toggle-chip {
+            flex: 1;
+            text-align: center;
+            padding: 6px 8px;
+            font-size: 12px;
+            border-radius: 999px;
+            border: 1px solid var(--color-border);
+            background: #f9fafb;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.15s ease;
+        }
+
+        .toggle-chip.active {
+            background: var(--color-primary);
+            color: #ffffff;
+            border-color: var(--color-primary);
+            box-shadow: 0 3px 8px rgba(32,128,128,0.35);
+        }
+
+        .toggle-chip span {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .row-inline {
+            display: flex;
+            gap: 8px;
+        }
+
+        .row-inline > .form-group {
+            flex: 1;
+        }
+
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0, #e1e7ef 25%, #e1e7ef 75%, transparent 100%);
+            margin: 8px 0 10px;
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #4b5563;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .section-title span {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--color-muted);
+        }
+
+        .handle-badges {
+            display: flex;
+            gap: 6px;
+            margin-top: 5px;
+        }
+
+        .handle-badge {
+            font-size: 11px;
+            padding: 3px 7px;
+            border-radius: 999px;
+            border: 1px dashed rgba(32,128,128,0.5);
+            color: var(--color-primary);
+        }
+
+        .footer-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 6px;
+        }
+
+        .qty-chip {
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            border: 1px solid var(--color-border);
+            background: #f9fafb;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
         }
 
         .btn {
             flex: 1;
-            padding: 12px 16px;
+            border-radius: 12px;
             border: none;
-            border-radius: var(--radius);
             font-size: 14px;
             font-weight: 600;
+            padding: 10px 12px;
             cursor: pointer;
-            transition: all 0.2s;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            transition: transform 0.08s ease, box-shadow 0.1s ease, background 0.1s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .btn-primary {
-            background-color: var(--color-primary);
-            color: white;
-            flex: 2;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--color-primary-hover);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(32, 128, 128, 0.2);
+            background: linear-gradient(135deg, #208080, #26a69a);
+            color: #ffffff;
+            box-shadow: 0 8px 20px rgba(32, 128, 128, 0.45);
         }
 
         .btn-primary:active {
-            transform: translateY(0);
-        }
-
-        .btn-primary:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-            transform: none;
+            transform: translateY(1px);
+            box-shadow: 0 4px 10px rgba(32,128,128,0.35);
         }
 
         .btn-secondary {
-            background-color: transparent;
-            color: var(--color-primary);
-            border: 2px solid var(--color-primary);
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #e5e7eb;
         }
 
-        .btn-secondary:hover {
-            background-color: rgba(32, 128, 128, 0.05);
+        .btn-secondary:active {
+            transform: translateY(1px);
         }
 
-        .btn-secondary:disabled {
-            border-color: #ccc;
-            color: #ccc;
-            cursor: not-allowed;
-        }
-
-        .results-section {
-            display: none;
-            margin-top: calc(var(--spacing) * 1.5);
-            padding-top: var(--spacing);
-            border-top: 1px solid var(--color-border);
-        }
-
-        .results-section.visible {
-            display: block;
-        }
-
-        .results-header {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: var(--color-primary);
-        }
-
-        .result-item {
-            background: var(--color-bg);
-            padding: 10px 12px;
-            border-radius: var(--radius);
-            margin-bottom: 8px;
-            font-size: 13px;
-            border-left: 3px solid var(--color-primary);
-        }
-
-        .result-item-article {
-            font-weight: 600;
-            color: var(--color-text);
-        }
-
-        .result-item-name {
-            font-size: 12px;
-            color: var(--color-text-secondary);
-            margin-top: 2px;
-        }
-
-        .message-box {
-            padding: 12px;
-            border-radius: var(--radius);
-            margin-top: var(--spacing);
-            font-size: 13px;
-            text-align: center;
-            animation: slideIn 0.3s ease-out;
-        }
-
-        .message-box.success {
-            background-color: rgba(76, 175, 80, 0.1);
-            color: var(--color-success);
-            border: 1px solid var(--color-success);
-        }
-
-        .message-box.error {
-            background-color: rgba(244, 67, 54, 0.1);
-            color: var(--color-error);
-            border: 1px solid var(--color-error);
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .actions-row {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-
-        .actions-row .btn {
-            flex: 1;
+        .btn span.emoji {
+            font-size: 16px;
         }
 
         .accumulated-counter {
-            text-align: center;
+            margin-top: 6px;
             font-size: 12px;
-            color: var(--color-text-secondary);
-            margin-top: 10px;
-            padding: 8px;
-            background: var(--color-bg);
-            border-radius: var(--radius);
+            color: var(--color-muted);
+            text-align: right;
         }
 
         .accumulated-counter strong {
             color: var(--color-primary);
-            font-size: 14px;
+        }
+
+        .message-box {
+            margin-top: 12px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .message-box.error {
+            color: var(--color-danger);
+        }
+
+        .message-box.success {
+            color: #166534;
+        }
+
+        .message-box small {
+            display: block;
+            margin-top: 4px;
+            color: var(--color-muted);
+        }
+
+        @media (max-width: 400px) {
+            .card {
+                border-radius: 20px;
+                padding: 16px 12px 18px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+<div class="app">
+    <div class="card">
         <div class="header">
-            <h1>KNG</h1>
-            <p>Подбор фурнитуры</p>
+            <div class="logo-circle">K</div>
+            <div class="header-text">
+                <p class="title">Подбор фурнитуры KNG</p>
+                <p class="subtitle">По размерам окна и типу створки</p>
+            </div>
+            <div class="badge">v0.2 beta</div>
         </div>
 
-        <form id="calculatorForm">
-            <!-- Высота окна -->
-            <div class="form-group">
-                <label class="form-label">Высота окна (мм) *</label>
-                <input
-                    type="number"
-                    id="height"
-                    class="form-input"
-                    placeholder="1200"
-                    min="500"
-                    max="3000"
-                    required
-                >
+        <form id="calcForm">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="height">Высота, мм</label>
+                    <input type="number" id="height" class="input" placeholder="Например, 1350" min="400" max="2600" required>
+                    <div class="helper-text">Допуск: 550–2400 мм (для этой таблицы)</div>
+                </div>
+                <div class="form-group">
+                    <label for="width">Ширина, мм</label>
+                    <input type="number" id="width" class="input" placeholder="Например, 700" min="390" max="1200" required>
+                    <div class="helper-text">Диапазон: 390–1200 мм</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="weight">Вес створки, кг</label>
+                    <input type="number" id="weight" class="input" placeholder="Например, 60" min="10" max="130" required>
+                    <div class="helper-text">Для видимой П/О: до 100 кг</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="openingType">Тип открывания</label>
+                    <select id="openingType" class="select">
+                        <option value="turn-tilt" selected>Поворотно-откидной</option>
+                        <option value="turn">Поворотный</option>
+                        <option value="tilt">Откидной</option>
+                        <option value="stulp">Штульповый</option>
+                    </select>
+                    <div class="helper-text">Сейчас работает только Поворотно-откидной</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Тип фурнитуры</label>
+                    <div class="toggle-row" id="hardwareTypeToggle">
+                        <div class="toggle-chip active" data-value="visible">
+                            <span>Видимая</span>
+                        </div>
+                        <div class="toggle-chip" data-value="hidden90">
+                            <span>Скрытая 90°</span>
+                        </div>
+                        <div class="toggle-chip" data-value="hidden180">
+                            <span>Скрытая 180°</span>
+                        </div>
+                    </div>
+                    <input type="hidden" id="hardwareType" value="visible">
+                    <div class="helper-text">Эта таблица: Видимая + П/О</div>
+                </div>
+
+                <div class="form-group" id="clampSideGroup" style="display:none;">
+                    <label>Прижим (для скрытой)</label>
+                    <div class="toggle-row" id="clampSideToggle">
+                        <div class="toggle-chip active" data-value="left">
+                            <span>Левый</span>
+                        </div>
+                        <div class="toggle-chip" data-value="right">
+                            <span>Правый</span>
+                        </div>
+                    </div>
+                    <input type="hidden" id="clampSide" value="left">
+                </div>
+
+                <div class="form-group full">
+                    <div class="section-title">
+                        Форма и цвет ручки
+                        <span>Classic + 3 позиции по цвету</span>
+                    </div>
+                    <div class="row-inline" style="margin-top:4px;">
+                        <div class="form-group">
+                            <label for="handleType">Форма</label>
+                            <select id="handleType" class="select">
+                                <option value="classic" selected>Classic</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="handleColor">Цвет</label>
+                            <select id="handleColor" class="select">
+                                <option value="" disabled selected hidden>Выберите</option>
+                                <option value="white">Белый (9016)</option>
+                                <option value="black">Чёрный (9005M)</option>
+                                <option value="raw">Неокрас. (C)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="handle-badges">
+                        <div class="handle-badge">Всегда KN100KR — 1 шт</div>
+                        <div class="handle-badge">+3 позиции по выбранному цвету</div>
+                    </div>
+                </div>
+
+                <div class="form-group full">
+                    <div class="footer-row">
+                        <div>
+                            <label for="quantity">Количество окон</label>
+                            <div class="helper-text">В одинаковых размерах и конфигурации</div>
+                        </div>
+                        <div class="qty-chip">
+                            <input type="number" id="quantity" class="input" style="width:70px;padding:4px 8px;font-size:13px;"
+                                   value="1" min="1" max="50">
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- Ширина окна -->
-            <div class="form-group">
-                <label class="form-label">Ширина окна (мм) *</label>
-                <input
-                    type="number"
-                    id="width"
-                    class="form-input"
-                    placeholder="800"
-                    min="400"
-                    max="2000"
-                    required
-                >
+            <div class="section-divider"></div>
+
+            <div class="btn-row">
+                <button type="button" class="btn btn-primary" id="saveBtn">
+                    <span class="emoji">💾</span>
+                    <span>Записать</span>
+                </button>
+                <button type="button" class="btn btn-secondary" id="totalBtn">
+                    <span class="emoji">📊</span>
+                    <span>Итого</span>
+                </button>
             </div>
 
-            <!-- Вес створки -->
-            <div class="form-group">
-                <label class="form-label">Вес створки (кг) *</label>
-                <input
-                    type="number"
-                    id="weight"
-                    class="form-input"
-                    placeholder="20"
-                    min="5"
-                    max="200"
-                    step="0.1"
-                    required
-                >
+            <div class="accumulated-counter" id="accumulatedCounter" style="display:none;">
+                Накоплено расчётов: <strong id="accumulatedCount">0</strong>
             </div>
-
-            <!-- Количество окон -->
-            <div class="form-group">
-                <label class="form-label">Количество окон *</label>
-                <input
-                    type="number"
-                    id="quantity"
-                    class="form-input"
-                    placeholder="1"
-                    min="1"
-                    max="1000"
-                    value="1"
-                    required
-                >
-            </div>
-
-            <!-- Тип фурнитуры -->
-            <div class="form-group">
-                <label class="form-label">Тип фурнитуры *</label>
-                <select id="furnitureType" class="form-select" required>
-                    <option value="">— Выберите тип —</option>
-                    <option value="visible">Видимая</option>
-                    <option value="hidden90">Скрытая 90 градусов</option>
-                    <option value="hidden180">Скрытая 180 градусов</option>
-                </select>
-            </div>
-
-            <!-- Сторона прижима (условное поле) -->
-            <div class="form-group hidden" id="clampSideGroup">
-                <label class="form-label">Сторона прижима *</label>
-                <select id="clampSide" class="form-select">
-                    <option value="">— Выберите сторону —</option>
-                    <option value="left">Левая</option>
-                    <option value="right">Правая</option>
-                </select>
-            </div>
-
-            <!-- Тип ручки -->
-            <div class="form-group">
-                <label class="form-label">Тип ручки *</label>
-                <select id="handleType" class="form-select" required>
-                    <option value="">— Выберите тип —</option>
-                    <option value="classic">Classic</option>
-                    <option value="torx">Torx</option>
-                    <option value="4-gon">4-х гран.</option>
-                </select>
-            </div>
-
-            <!-- Цвет ручки -->
-            <div class="form-group">
-                <label class="form-label">Цвет ручки *</label>
-                <select id="handleColor" class="form-select" required>
-                    <option value="">— Выберите цвет —</option>
-                    <option value="black">Чёрный</option>
-                    <option value="white">Белый</option>
-                    <option value="unpainted">Неокрас.</option>
-                </select>
-            </div>
-
-            <!-- Кнопка расчета -->
-            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: calc(var(--spacing) * 1.5);">
-                🔍 Рассчитать
-            </button>
         </form>
 
-        <!-- Результаты -->
-        <div class="results-section" id="resultsSection">
-            <div class="results-header">Подобранная фурнитура:</div>
-            <div id="resultsList"></div>
-
-            <div class="actions-row">
-                <button class="btn btn-primary" id="saveBtn">💾 Записать</button>
-                <button class="btn btn-secondary" id="totalBtn">📊 Итого</button>
-            </div>
-
-            <div class="accumulated-counter" id="accumulatedCounter" style="display: none;">
-                Накоплено позиций: <strong id="accumulatedCount">0</strong>
-            </div>
-        </div>
-
-        <!-- Сообщения -->
-        <div id="messageBox"></div>
+        <div id="messageBox" class="message-box"></div>
     </div>
+</div>
 
-    <script>
-        const tg = window.Telegram.WebApp;
+<script>
+        const tg = window.Telegram ? window.Telegram.WebApp : null;
+
+    if (tg) {
         tg.ready();
         tg.expand();
+        tg.MainButton.hide();
+    }
 
-        const hardwareRules = {
-            visible: [
-                {
-                    minHeight: 800, maxHeight: 1200,
-                    minWidth: 400, maxWidth: 700,
-                    minWeight: 10, maxWeight: 20,
-                    articles: ['KNG-V-001', 'KNG-V-002'],
-                    names: {
-                        'KNG-V-001': 'Петля видимая 100кг',
-                        'KNG-V-002': 'Редуктор боковой'
-                    },
-                    quantities: {
-                        'KNG-V-001': 2,
-                        'KNG-V-002': 1
-                    }
-                }
-            ],
-            hidden90: [],
-            hidden180: []
+    const hardwareTypeToggle = document.getElementById('hardwareTypeToggle');
+    const clampSideToggle = document.getElementById('clampSideToggle');
+    const hardwareTypeInput = document.getElementById('hardwareType');
+    const clampSideInput = document.getElementById('clampSide');
+    const clampSideGroup = document.getElementById('clampSideGroup');
+
+    const heightInput = document.getElementById('height');
+    const widthInput = document.getElementById('width');
+    const weightInput = document.getElementById('weight');
+    const openingTypeSelect = document.getElementById('openingType');
+    const handleTypeSelect = document.getElementById('handleType');
+    const handleColorSelect = document.getElementById('handleColor');
+    const quantityInput = document.getElementById('quantity');
+
+    const saveBtn = document.getElementById('saveBtn');
+    const totalBtn = document.getElementById('totalBtn');
+
+    const messageBox = document.getElementById('messageBox');
+    const accumulatedCounter = document.getElementById('accumulatedCounter');
+    const accumulatedCountElement = document.getElementById('accumulatedCount');
+
+    const accumulatedResults = [];
+
+    hardwareTypeToggle.addEventListener('click', (e) => {
+        const chip = e.target.closest('.toggle-chip');
+        if (!chip) return;
+
+        [...hardwareTypeToggle.querySelectorAll('.toggle-chip')]
+            .forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+
+        const val = chip.dataset.value;
+        hardwareTypeInput.value = val;
+
+        if (val === 'hidden90' || val === 'hidden180') {
+            clampSideGroup.style.display = '';
+        } else {
+            clampSideGroup.style.display = 'none';
+        }
+    });
+
+    clampSideToggle.addEventListener('click', (e) => {
+        const chip = e.target.closest('.toggle-chip');
+        if (!chip) return;
+
+        [...clampSideToggle.querySelectorAll('.toggle-chip')]
+            .forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        clampSideInput.value = chip.dataset.value;
+    });
+
+    function showMessage(text, type = 'error') {
+        messageBox.textContent = text;
+        messageBox.className = 'message-box ' + type;
+    }
+
+    function validateInputs() {
+        const h = Number(heightInput.value);
+        const w = Number(widthInput.value);
+        const wt = Number(weightInput.value);
+        const openingType = openingTypeSelect.value;
+        const hardwareType = hardwareTypeInput.value;
+
+        if (!h || !w || !wt) {
+            showMessage('Заполни высоту, ширину и вес створки.', 'error');
+            return false;
+        }
+        if (h < 550 || h > 2400) {
+            showMessage('Для этой таблицы высота должна быть в диапазоне 550–2400 мм.', 'error');
+            return false;
+        }
+        if (w < 390 || w > 1200) {
+            showMessage('Для этой таблицы ширина должна быть в диапазоне 390–1200 мм.', 'error');
+            return false;
+        }
+        if (openingType !== 'turn-tilt') {
+            showMessage('Сейчас реализован только тип открывания: Поворотно-откидной.', 'error');
+            return false;
+        }
+        if (hardwareType !== 'visible') {
+            showMessage('Эта таблица работает только для Видимой фурнитуры.', 'error');
+            return false;
+        }
+        if (wt > 100) {
+            showMessage('Превышен допустимый вес для видимой П/О (максимум 100 кг).', 'error');
+            return false;
+        }
+        if (!handleColorSelect.value) {
+            showMessage('Выбери цвет ручки.', 'error');
+            return false;
+        }
+
+        showMessage('', 'success');
+        return true;
+    }
+
+    // ===== Матрица: Видимая фурнитура + Поворотно-откидной, вес до 100 кг =====
+    // 3 диапазона высоты × 3 диапазона ширины = 9 комбинаций
+
+    const hardwareMatrixVisibleTurnTilt = [
+        // Высота 550–1200, ширина 390–700
+        {
+            minHeight: 550, maxHeight: 1200,
+            minWidth: 390, maxWidth: 700,
+            articles: [
+                { article: 'KN100A1', name: 'Основная передача', qty: 1 },
+                { article: 'KN100B1', name: 'Поворотно-откидная планка', qty: 1 },
+                { article: 'KN100C1', name: 'Угловая передача', qty: 1 },
+                { article: 'KN100D1', name: 'Ответная планка', qty: 1 },
+                { article: 'KN100E1', name: 'Ножницы П/О', qty: 1 }
+            ]
+        },
+        // Высота 550–1200, ширина 701–1000
+        {
+            minHeight: 550, maxHeight: 1200,
+            minWidth: 701, maxWidth: 1000,
+            articles: [
+                { article: 'KN100A2', name: 'Основная передача усиленная', qty: 1 },
+                { article: 'KN100B1', name: 'Поворотно-откидная планка', qty: 1 },
+                { article: 'KN100C1', name: 'Угловая передача', qty: 1 },
+                { article: 'KN100D2', name: 'Ответная планка усиленная', qty: 1 },
+                { article: 'KN100E1', name: 'Ножницы П/О', qty: 1 }
+            ]
+        },
+        // Высота 550–1200, ширина 1001–1200
+        {
+            minHeight: 550, maxHeight: 1200,
+            minWidth: 1001, maxWidth: 1200,
+            articles: [
+                { article: 'KN100A3', name: 'Основная передача усиленная', qty: 1 },
+                { article: 'KN100B2', name: 'Поворотно-откидная планка усиленная', qty: 1 },
+                { article: 'KN100C1', name: 'Угловая передача', qty: 1 },
+                { article: 'KN100D3', name: 'Ответная планка усиленная', qty: 1 },
+                { article: 'KN100E1', name: 'Ножницы П/О', qty: 1 }
+            ]
+        },
+        // Высота 1201–1800, ширина 390–700
+        {
+            minHeight: 1201, maxHeight: 1800,
+            minWidth: 390, maxWidth: 700,
+            articles: [
+                { article: 'KN100A4', name: 'Основная передача', qty: 1 },
+                { article: 'KN100B3', name: 'Поворотно-откидная планка удлинённая', qty: 1 },
+                { article: 'KN100C2', name: 'Угловая передача усиленная', qty: 1 },
+                { article: 'KN100D1', name: 'Ответная планка', qty: 1 },
+                { article: 'KN100E2', name: 'Ножницы П/О усиленные', qty: 1 }
+            ]
+        },
+        // Высота 1201–1800, ширина 701–1000
+        {
+            minHeight: 1201, maxHeight: 1800,
+            minWidth: 701, maxWidth: 1000,
+            articles: [
+                { article: 'KN100A5', name: 'Основная передача усиленная', qty: 1 },
+                { article: 'KN100B3', name: 'Поворотно-откидная планка удлинённая', qty: 1 },
+                { article: 'KN100C2', name: 'Угловая передача усиленная', qty: 1 },
+                { article: 'KN100D2', name: 'Ответная планка усиленная', qty: 1 },
+                { article: 'KN100E2', name: 'Ножницы П/О усиленные', qty: 1 }
+            ]
+        },
+        // Высота 1201–1800, ширина 1001–1200
+        {
+            minHeight: 1201, maxHeight: 1800,
+            minWidth: 1001, maxWidth: 1200,
+            articles: [
+                { article: 'KN100A6', name: 'Основная передача усиленная', qty: 1 },
+                { article: 'KN100B4', name: 'Поворотно-откидная планка удлинённая усиленная', qty: 1 },
+                { article: 'KN100C2', name: 'Угловая передача усиленная', qty: 1 },
+                { article: 'KN100D3', name: 'Ответная планка усиленная', qty: 1 },
+                { article: 'KN100E2', name: 'Ножницы П/О усиленные', qty: 1 }
+            ]
+        },
+        // Высота 1801–2400, ширина 390–700
+        {
+            minHeight: 1801, maxHeight: 2400,
+            minWidth: 390, maxWidth: 700,
+            articles: [
+                { article: 'KN100A7', name: 'Основная передача для высоких створок', qty: 1 },
+                { article: 'KN100B5', name: 'Поворотно-откидная планка для высоких створок', qty: 1 },
+                { article: 'KN100C3', name: 'Угловая передача для высоких створок', qty: 1 },
+                { article: 'KN100D1', name: 'Ответная планка', qty: 1 },
+                { article: 'KN100E3', name: 'Ножницы П/О для высоких створок', qty: 1 }
+            ]
+        },
+        // Высота 1801–2400, ширина 701–1000
+        {
+            minHeight: 1801, maxHeight: 2400,
+            minWidth: 701, maxWidth: 1000,
+            articles: [
+                { article: 'KN100A8', name: 'Основная передача для высоких створок усиленная', qty: 1 },
+                { article: 'KN100B5', name: 'Поворотно-откидная планка для высоких створок', qty: 1 },
+                { article: 'KN100C3', name: 'Угловая передача для высоких створок', qty: 1 },
+                { article: 'KN100D2', name: 'Ответная планка усиленная', qty: 1 },
+                { article: 'KN100E3', name: 'Ножницы П/О для высоких створок', qty: 1 }
+            ]
+        },
+        // Высота 1801–2400, ширина 1001–1200
+        {
+            minHeight: 1801, maxHeight: 2400,
+            minWidth: 1001, maxWidth: 1200,
+            articles: [
+                { article: 'KN100A9', name: 'Основная передача для высоких створок усиленная', qty: 1 },
+                { article: 'KN100B6', name: 'Поворотно-откидная планка для высоких створок усиленная', qty: 1 },
+                { article: 'KN100C3', name: 'Угловая передача для высоких створок', qty: 1 },
+                { article: 'KN100D3', name: 'Ответная планка усиленная', qty: 1 },
+                { article: 'KN100E3', name: 'Ножницы П/О для высоких створок', qty: 1 }
+            ]
+        }
+    ];
+
+    // Ручка Classic: всегда KN100KR + 3 позиции по цвету
+    const handleColorArticles = {
+        white: [
+            { article: 'KN100KR', name: 'Переходник под ручку Classic', qty: 1 },
+            { article: 'KN218HN_9016', name: 'Ручка Classic белая', qty: 1 },
+            { article: 'KN219DL_9016', name: 'Декоративная накладка нижняя белая', qty: 1 },
+            { article: 'KN219DK_9016', name: 'Декоративная накладка верхняя белая', qty: 1 }
+        ],
+        black: [
+            { article: 'KN100KR', name: 'Переходник под ручку Classic', qty: 1 },
+            { article: 'KN218HN_9005M', name: 'Ручка Classic чёрная', qty: 1 },
+            { article: 'KN219DL_9005M', name: 'Декоративная накладка нижняя чёрная', qty: 1 },
+            { article: 'KN219DK_9005M', name: 'Декоративная накладка верхняя чёрная', qty: 1 }
+        ],
+        raw: [
+            { article: 'KN100KR', name: 'Переходник под ручку Classic', qty: 1 },
+            { article: 'KN218HN_C', name: 'Ручка Classic неокрашенная', qty: 1 },
+            { article: 'KN219DL_C', name: 'Декоративная накладка нижняя неокрашенная', qty: 1 },
+            { article: 'KN219DK_C', name: 'Декоративная накладка верхняя неокрашенная', qty: 1 }
+        ]
+    };
+
+    function pickVisibleTurnTiltSet(height, width) {
+        return hardwareMatrixVisibleTurnTilt.find(row =>
+            height >= row.minHeight && height <= row.maxHeight &&
+            width >= row.minWidth && width <= row.maxWidth
+        );
+    }
+
+    function calculateHardware() {
+        const h = Number(heightInput.value);
+        const w = Number(widthInput.value);
+        const wt = Number(weightInput.value);
+        const openingType = openingTypeSelect.value;
+        const hardwareType = hardwareTypeInput.value;
+        const clampSide = clampSideInput.value;
+        const handleColor = handleColorSelect.value || 'white';
+
+        if (!validateInputs()) {
+            return null;
+        }
+
+        // Пока реализована только Видимая + Поворотно-откидной до 100 кг
+        if (openingType !== 'turn-tilt' || hardwareType !== 'visible') {
+            showMessage('Пока реализован только вариант: Видимая + Поворотно-откидной.', 'error');
+            return null;
+        }
+
+        const baseSet = pickVisibleTurnTiltSet(h, w);
+        if (!baseSet) {
+            showMessage('Под эти размеры пока нет настроенной зоны. Проверь диапазоны или обратись к менеджеру.', 'error');
+            return null;
+        }
+
+        const resultArticles = [];
+
+        baseSet.articles.forEach(item => resultArticles.push({ ...item }));
+
+        const colorArticles = handleColorArticles[handleColor] || handleColorArticles['white'];
+        colorArticles.forEach(item => resultArticles.push({ ...item }));
+
+        // На будущее: если захотим прижим для скрытой — здесь можно будет добавить по clampSide.
+        // Сейчас прижим не используется для видимой фурнитуры.
+
+        return {
+            height: h,
+            width: w,
+            weight: wt,
+            openingType,
+            hardwareType,
+            clampSide,
+            handleColor,
+            items: resultArticles
         };
+    }
+        function groupArticles(items, multiplier) {
+        const map = new Map();
 
-        const handleRules = {
-            classic: {
-                black: {
-                    articles: ['HND-CLASSIC-BLK', 'HND-ACC-BLK-1', 'HND-ACC-BLK-2'],
-                    names: {
-                        'HND-CLASSIC-BLK': 'Ручка Classic чёрная',
-                        'HND-ACC-BLK-1': 'Доп элемент чёрный 1',
-                        'HND-ACC-BLK-2': 'Доп элемент чёрный 2'
-                    },
-                    quantities: {
-                        'HND-CLASSIC-BLK': 1,
-                        'HND-ACC-BLK-1': 1,
-                        'HND-ACC-BLK-2': 1
-                    }
-                },
-                white: {
-                    articles: ['HND-CLASSIC-WHT'],
-                    names: { 'HND-CLASSIC-WHT': 'Ручка Classic белая' },
-                    quantities: { 'HND-CLASSIC-WHT': 1 }
-                },
-                unpainted: {
-                    articles: ['HND-CLASSIC-RAW'],
-                    names: { 'HND-CLASSIC-RAW': 'Ручка Classic неокрас' },
-                    quantities: { 'HND-CLASSIC-RAW': 1 }
-                }
-            }
-        };
-
-        let appState = {
-            calculations: [],
-            currentResults: []
-        };
-
-        function showMessage(text, type = 'success') {
-            const messageBox = document.getElementById('messageBox');
-            messageBox.innerHTML = `<div class="message-box ${type}">${text}</div>`;
-            setTimeout(() => {
-                messageBox.innerHTML = '';
-            }, 3000);
-        }
-
-        function selectBaseHardware({ height, width, weight, furnitureType, clampSide }) {
-            const rules = hardwareRules[furnitureType];
-            if (!rules) return [];
-
-            const match = rules.find(rule =>
-                height >= rule.minHeight && height <= rule.maxHeight &&
-                width  >= rule.minWidth  && width  <= rule.maxWidth  &&
-                weight >= rule.minWeight && weight <= rule.maxWeight &&
-                (rule.clampSide ? rule.clampSide === clampSide : true)
-            );
-
-            if (!match) return [];
-
-            return match.articles.map(article => ({
-                article,
-                name: match.names[article] || 'Неизвестная позиция',
-                qty: match.quantities[article] || 1
-            }));
-        }
-
-        function selectHandle({ handleType, handleColor }) {
-            const typeRules = handleRules[handleType];
-            if (!typeRules) return [];
-            const colorRule = typeRules[handleColor];
-            if (!colorRule) return [];
-
-            return colorRule.articles.map(article => ({
-                article,
-                name: colorRule.names[article] || 'Неизвестная позиция ручки',
-                qty: colorRule.quantities[article] || 1
-            }));
-        }
-
-        function displayResults(results) {
-            const resultsList = document.getElementById('resultsList');
-            if (results.length === 0) {
-                resultsList.innerHTML = '<div class="result-item">Нет подходящих позиций</div>';
-                return;
-            }
-
-            resultsList.innerHTML = results.map(item => `
-                <div class="result-item">
-                    <div class="result-item-article">${item.article} — ${item.qty} шт.</div>
-                    <div class="result-item-name">${item.name}</div>
-                </div>
-            `).join('');
-        }
-
-        function updateAccumulatedCounter() {
-            const counter = document.getElementById('accumulatedCounter');
-            const countBadge = document.getElementById('accumulatedCount');
-            const totalItems = appState.calculations.reduce(
-                (sum, calc) => sum + calc.results.length,
-                0
-            );
-
-            if (totalItems > 0) {
-                counter.style.display = 'block';
-                countBadge.textContent = totalItems;
-            } else {
-                counter.style.display = 'none';
-            }
-        }
-
-        document.getElementById('furnitureType').addEventListener('change', (e) => {
-            const clampSideGroup = document.getElementById('clampSideGroup');
-            if (e.target.value === 'hidden90' || e.target.value === 'hidden180') {
-                clampSideGroup.classList.remove('hidden');
-                document.getElementById('clampSide').required = true;
-            } else {
-                clampSideGroup.classList.add('hidden');
-                document.getElementById('clampSide').required = false;
-            }
-        });
-
-        document.getElementById('calculatorForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            const height        = parseInt(document.getElementById('height').value);
-            const width         = parseInt(document.getElementById('width').value);
-            const weight        = parseFloat(document.getElementById('weight').value);
-            const quantity      = parseInt(document.getElementById('quantity').value) || 1;
-            const furnitureType = document.getElementById('furnitureType').value;
-            const clampSide     = document.getElementById('clampSide').value || null;
-            const handleType    = document.getElementById('handleType').value;
-            const handleColor   = document.getElementById('handleColor').value;
-
-            if (!height || !width || !weight || !furnitureType || !handleType || !handleColor) {
-                showMessage('⚠️ Заполните все обязательные поля', 'error');
-                return;
-            }
-
-            const base   = selectBaseHardware({ height, width, weight, furnitureType, clampSide });
-            if (base.length === 0) {
-                showMessage('❌ Параметры не подходят ни под один комплект', 'error');
-                appState.currentResults = [];
-                displayResults([]);
-                return;
-            }
-
-            const handle = selectHandle({ handleType, handleColor });
-            const combined = [...base, ...handle];
-
-            appState.currentResults = combined.map(item => ({
-                ...item,
-                qty: item.qty * quantity
-            }));
-
-            displayResults(appState.currentResults);
-            document.getElementById('resultsSection').classList.add('visible');
-            showMessage('✅ Расчёт выполнен', 'success');
-        });
-
-        document.getElementById('saveBtn').addEventListener('click', () => {
-            if (appState.currentResults.length === 0) {
-                showMessage('⚠️ Нет результатов для сохранения', 'error');
-                return;
-            }
-
-            appState.calculations.push({
-                id: Date.now(),
-                timestamp: new Date().toLocaleString('ru-RU'),
-                results: appState.currentResults.map(item => ({ ...item }))
-            });
-
-            updateAccumulatedCounter();
-            showMessage('✅ Данные записаны!', 'success');
-        });
-
-        document.getElementById('totalBtn').addEventListener('click', () => {
-            if (appState.calculations.length === 0) {
-                showMessage('⚠️ Нет сохранённых расчётов', 'error');
-                return;
-            }
-
-            const aggregated = {};
-            appState.calculations.forEach(calc => {
-                calc.results.forEach(item => {
-                    if (aggregated[item.article]) {
-                        aggregated[item.article].qty += item.qty;
-                    } else {
-                        aggregated[item.article] = { ...item };
-                    }
+        items.forEach(item => {
+            const key = item.article;
+            if (!map.has(key)) {
+                map.set(key, {
+                    article: item.article,
+                    name: item.name,
+                    qty: 0
                 });
+            }
+            const entry = map.get(key);
+            entry.qty += item.qty * multiplier;
+        });
+
+        return Array.from(map.values()).sort((a, b) => a.article.localeCompare(b.article));
+    }
+
+    saveBtn.addEventListener('click', () => {
+        const hardwareResult = calculateHardware();
+        if (!hardwareResult) return;
+
+        const qtyWindows = Number(quantityInput.value) || 1;
+
+        accumulatedResults.push({
+            ...hardwareResult,
+            quantityWindows: qtyWindows
+        });
+
+        accumulatedCounter.style.display = '';
+        accumulatedCountElement.textContent = String(accumulatedResults.length);
+
+        showMessage('Расчёт записан. Нажми «Итого», когда соберёшь все окна.', 'success');
+    });
+
+    totalBtn.addEventListener('click', () => {
+        if (accumulatedResults.length === 0) {
+            showMessage('Нет записанных расчётов. Сначала нажми «Записать».', 'error');
+            return;
+        }
+
+        const summaryMap = new Map();
+        const texts = [];
+
+        accumulatedResults.forEach((res, index) => {
+            const header = `Окно ${index + 1}: ${res.width}×${res.height} мм, ${res.weight} кг, ` +
+                `Видимая, Поворотно-откидная, цвет ручки: ${res.handleColor}, кол-во: ${res.quantityWindows} шт.`;
+            texts.push(header);
+
+            const grouped = groupArticles(res.items, res.quantityWindows);
+            grouped.forEach(item => {
+                texts.push(`  • ${item.article} — ${item.name} — ${item.qty} шт.`);
+
+                const key = item.article;
+                if (!summaryMap.has(key)) {
+                    summaryMap.set(key, {
+                        article: item.article,
+                        name: item.name,
+                        qty: 0
+                    });
+                }
+                const entry = summaryMap.get(key);
+                entry.qty += item.qty;
             });
 
-            const dataToSend = {
-                action: 'total',
-                data: Object.values(aggregated)
-            };
-
-            tg.sendData(JSON.stringify(dataToSend));
-            showMessage('📨 Отправляю итоговый отчёт...', 'success');
-
-            appState.calculations = [];
-            updateAccumulatedCounter();
+            texts.push('');
         });
 
-        window.addEventListener('load', () => {
-            console.log('Mini App загружен');
+        texts.push('ИТОГОВЫЙ СПИСОК ПО ВСЕМ ОКНАМ:');
+        const finalGrouped = Array.from(summaryMap.values())
+            .sort((a, b) => a.article.localeCompare(b.article));
+        finalGrouped.forEach(item => {
+            texts.push(`• ${item.article} — ${item.name} — ${item.qty} шт.`);
         });
-    </script>
+
+        const finalText = texts.join('\n');
+
+        if (tg) {
+            tg.sendData(JSON.stringify({
+                type: 'hardware_result',
+                text: finalText,
+                windows: accumulatedResults
+            }));
+            tg.close();
+        } else {
+            showMessage('Результат (без Telegram):\n\n' + finalText, 'success');
+        }
+    });
+</script>
 </body>
 </html>
