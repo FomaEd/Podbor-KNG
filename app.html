@@ -705,7 +705,20 @@
 
         accumulatedCounter.style.display = '';
         accumulatedCountElement.textContent = String(accumulatedResults.length);
+        
+        // вот сюда вставляем haptic, сразу после обновления счётчика
+        const n = accumulatedResults.length;
+        showMessage(`Расчёт №${n} записан. Нажми «Итого», когда соберёшь все окна.`, 'success');
+        accumulatedCounter.classList.remove('flash');
+        void accumulatedCounter.offsetWidth;
+        accumulatedCounter.classList.add('flash');
 
+        // haptic feedback при успешной записи
+        if (tg && tg.HapticFeedback && tg.HapticFeedback.notificationOccurred) {
+            tg.HapticFeedback.notificationOccurred('success');
+        }
+    });
+        
         // лёгкий визуальный фидбек: номер расчёта + мигание счётчика
         const n = accumulatedResults.length;
         showMessage(`Расчёт №${n} записан. Нажми «Итого», когда соберёшь все окна.`, 'success');
