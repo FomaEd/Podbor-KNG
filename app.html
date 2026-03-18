@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подбор фурнитуры KNG</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --color-primary: #208080;
+            --color-primary-hover: #1a6666;
+            --color-bg: #f5f5f5;
+            --color-surface: #ffffff;
+            --color-text: #1a1a1a;
+            --color-text-secondary: #666666;
+            --color-border: #e0e0e0;
+            --color-success: #4caf50;
+            --color-error: #f44336;
+            --radius: 8px;
+            --spacing: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            padding: 0;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: var(--spacing);
+            background: var(--color-surface);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: calc(var(--spacing) * 1.5);
+            padding-bottom: var(--spacing);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: var(--color-primary);
+        }
+
+        .header p {
+            font-size: 12px;
+            color: var(--color-text-secondary);
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing);
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: var(--color-text);
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-family: inherit;
+            background-color: var(--color-surface);
+            color: var(--color-text);
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 2px rgba(32, 128, 128, 0.1);
+        }
+
+        .form-select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 20px;
+            padding-right: 36px;
+        }
+
+        .form-group.hidden {
+            display: none;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: calc(var(--spacing) * 1.5);
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: white;
+            flex: 2;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--color-primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(32, 128, 128, 0.2);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--color-primary);
+            border: 2px solid var(--color-primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(32, 128, 128, 0.05);
+        }
+
+        .btn-secondary:disabled {
+            border-color: #ccc;
+            color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .results-section {
+            display: none;
+            margin-top: calc(var(--spacing) * 1.5);
+            padding-top: var(--spacing);
+            border-top: 1px solid var(--color-border);
+        }
+
+        .results-section.visible {
+            display: block;
+        }
+
+        .results-header {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--color-primary);
+        }
+
+        .result-item {
+            background: var(--color-bg);
+            padding: 10px 12px;
+            border-radius: var(--radius);
+            margin-bottom: 8px;
+            font-size: 13px;
+            border-left: 3px solid var(--color-primary);
+        }
+
+        .result-item-article {
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .result-item-name {
+            font-size: 12px;
+            color: var(--color-text-secondary);
+            margin-top: 2px;
+        }
+
+        .message-box {
+            padding: 12px;
+            border-radius: var(--radius);
+            margin-top: var(--spacing);
+            font-size: 13px;
+            text-align: center;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .message-box.success {
+            background-color: rgba(76, 175, 80, 0.1);
+            color: var(--color-success);
+            border: 1px solid var(--color-success);
+        }
+
+        .message-box.error {
+            background-color: rgba(244, 67, 54, 0.1);
+            color: var(--color-error);
+            border: 1px solid var(--color-error);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .actions-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .actions-row .btn {
+            flex: 1;
+        }
+
+        .accumulated-counter {
+            text-align: center;
+            font-size: 12px;
+            color: var(--color-text-secondary);
+            margin-top: 10px;
+            padding: 8px;
+            background: var(--color-bg);
+            border-radius: var(--radius);
+        }
+
+        .accumulated-counter strong {
+            color: var(--color-primary);
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>KNG</h1>
+            <p>Подбор фурнитуры</p>
+        </div>
+
+        <form id="calculatorForm">
+            <!-- Высота окна -->
+            <div class="form-group">
+                <label class="form-label">Высота окна (мм) *</label>
+                <input
+                    type="number"
+                    id="height"
+                    class="form-input"
+                    placeholder="1200"
+                    min="500"
+                    max="3000"
+                    required
+                >
+            </div>
+
+            <!-- Ширина окна -->
+            <div class="form-group">
+                <label class="form-label">Ширина окна (мм) *</label>
+                <input
+                    type="number"
+                    id="width"
+                    class="form-input"
+                    placeholder="800"
+                    min="400"
+                    max="2000"
+                    required
+                >
+            </div>
+
+            <!-- Вес створки -->
+            <div class="form-group">
+                <label class="form-label">Вес створки (кг) *</label>
+                <input
+                    type="number"
+                    id="weight"
+                    class="form-input"
+                    placeholder="20"
+                    min="5"
+                    max="200"
+                    step="0.1"
+                    required
+                >
+            </div>
+
+            <!-- Количество окон -->
+            <div class="form-group">
+                <label class="form-label">Количество окон *</label>
+                <input
+                    type="number"
+                    id="quantity"
+                    class="form-input"
+                    placeholder="1"
+                    min="1"
+                    max="1000"
+                    value="1"
+                    required
+                >
+            </div>
+
+            <!-- Тип фурнитуры -->
+            <div class="form-group">
+                <label class="form-label">Тип фурнитуры *</label>
+                <select id="furnitureType" class="form-select" required>
+                    <option value="">— Выберите тип —</option>
+                    <option value="visible">Видимая</option>
+                    <option value="hidden90">Скрытая 90 градусов</option>
+                    <option value="hidden180">Скрытая 180 градусов</option>
+                </select>
+            </div>
+
+            <!-- Сторона прижима (условное поле) -->
+            <div class="form-group hidden" id="clampSideGroup">
+                <label class="form-label">Сторона прижима *</label>
+                <select id="clampSide" class="form-select">
+                    <option value="">— Выберите сторону —</option>
+                    <option value="left">Левая</option>
+                    <option value="right">Правая</option>
+                </select>
+            </div>
+
+            <!-- Тип ручки -->
+            <div class="form-group">
+                <label class="form-label">Тип ручки *</label>
+                <select id="handleType" class="form-select" required>
+                    <option value="">— Выберите тип —</option>
+                    <option value="classic">Classic</option>
+                    <option value="torx">Torx</option>
+                    <option value="4-gon">4-х гран.</option>
+                </select>
+            </div>
+
+            <!-- Цвет ручки -->
+            <div class="form-group">
+                <label class="form-label">Цвет ручки *</label>
+                <select id="handleColor" class="form-select" required>
+                    <option value="">— Выберите цвет —</option>
+                    <option value="black">Чёрный</option>
+                    <option value="white">Белый</option>
+                    <option value="unpainted">Неокрас.</option>
+                </select>
+            </div>
+
+            <!-- Кнопка расчета -->
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: calc(var(--spacing) * 1.5);">
+                🔍 Рассчитать
+            </button>
+        </form>
+
+        <!-- Результаты -->
+        <div class="results-section" id="resultsSection">
+            <div class="results-header">Подобранная фурнитура:</div>
+            <div id="resultsList"></div>
+
+            <div class="actions-row">
+                <button class="btn btn-primary" id="saveBtn">💾 Записать</button>
+                <button class="btn btn-secondary" id="totalBtn">📊 Итого</button>
+            </div>
+
+            <div class="accumulated-counter" id="accumulatedCounter" style="display: none;">
+                Накоплено позиций: <strong id="accumulatedCount">0</strong>
+            </div>
+        </div>
+
+        <!-- Сообщения -->
+        <div id="messageBox"></div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+
+        const hardwareRules = {
+            visible: [
+                {
+                    minHeight: 800, maxHeight: 1200,
+                    minWidth: 400, maxWidth: 700,
+                    minWeight: 10, maxWeight: 20,
+                    articles: ['KNG-V-001', 'KNG-V-002'],
+                    names: {
+                        'KNG-V-001': 'Петля видимая 100кг',
+                        'KNG-V-002': 'Редуктор боковой'
+                    },
+                    quantities: {
+                        'KNG-V-001': 2,
+                        'KNG-V-002': 1
+                    }
+                }
+            ],
+            hidden90: [],
+            hidden180: []
+        };
+
+        const handleRules = {
+            classic: {
+                black: {
+                    articles: ['HND-CLASSIC-BLK', 'HND-ACC-BLK-1', 'HND-ACC-BLK-2'],
+                    names: {
+                        'HND-CLASSIC-BLK': 'Ручка Classic чёрная',
+                        'HND-ACC-BLK-1': 'Доп элемент чёрный 1',
+                        'HND-ACC-BLK-2': 'Доп элемент чёрный 2'
+                    },
+                    quantities: {
+                        'HND-CLASSIC-BLK': 1,
+                        'HND-ACC-BLK-1': 1,
+                        'HND-ACC-BLK-2': 1
+                    }
+                },
+                white: {
+                    articles: ['HND-CLASSIC-WHT'],
+                    names: { 'HND-CLASSIC-WHT': 'Ручка Classic белая' },
+                    quantities: { 'HND-CLASSIC-WHT': 1 }
+                },
+                unpainted: {
+                    articles: ['HND-CLASSIC-RAW'],
+                    names: { 'HND-CLASSIC-RAW': 'Ручка Classic неокрас' },
+                    quantities: { 'HND-CLASSIC-RAW': 1 }
+                }
+            }
+        };
+
+        let appState = {
+            calculations: [],
+            currentResults: []
+        };
+
+        function showMessage(text, type = 'success') {
+            const messageBox = document.getElementById('messageBox');
+            messageBox.innerHTML = `<div class="message-box ${type}">${text}</div>`;
+            setTimeout(() => {
+                messageBox.innerHTML = '';
+            }, 3000);
+        }
+
+        function selectBaseHardware({ height, width, weight, furnitureType, clampSide }) {
+            const rules = hardwareRules[furnitureType];
+            if (!rules) return [];
+
+            const match = rules.find(rule =>
+                height >= rule.minHeight && height <= rule.maxHeight &&
+                width  >= rule.minWidth  && width  <= rule.maxWidth  &&
+                weight >= rule.minWeight && weight <= rule.maxWeight &&
+                (rule.clampSide ? rule.clampSide === clampSide : true)
+            );
+
+            if (!match) return [];
+
+            return match.articles.map(article => ({
+                article,
+                name: match.names[article] || 'Неизвестная позиция',
+                qty: match.quantities[article] || 1
+            }));
+        }
+
+        function selectHandle({ handleType, handleColor }) {
+            const typeRules = handleRules[handleType];
+            if (!typeRules) return [];
+            const colorRule = typeRules[handleColor];
+            if (!colorRule) return [];
+
+            return colorRule.articles.map(article => ({
+                article,
+                name: colorRule.names[article] || 'Неизвестная позиция ручки',
+                qty: colorRule.quantities[article] || 1
+            }));
+        }
+
+        function displayResults(results) {
+            const resultsList = document.getElementById('resultsList');
+            if (results.length === 0) {
+                resultsList.innerHTML = '<div class="result-item">Нет подходящих позиций</div>';
+                return;
+            }
+
+            resultsList.innerHTML = results.map(item => `
+                <div class="result-item">
+                    <div class="result-item-article">${item.article} — ${item.qty} шт.</div>
+                    <div class="result-item-name">${item.name}</div>
+                </div>
+            `).join('');
+        }
+
+        function updateAccumulatedCounter() {
+            const counter = document.getElementById('accumulatedCounter');
+            const countBadge = document.getElementById('accumulatedCount');
+            const totalItems = appState.calculations.reduce(
+                (sum, calc) => sum + calc.results.length,
+                0
+            );
+
+            if (totalItems > 0) {
+                counter.style.display = 'block';
+                countBadge.textContent = totalItems;
+            } else {
+                counter.style.display = 'none';
+            }
+        }
+
+        document.getElementById('furnitureType').addEventListener('change', (e) => {
+            const clampSideGroup = document.getElementById('clampSideGroup');
+            if (e.target.value === 'hidden90' || e.target.value === 'hidden180') {
+                clampSideGroup.classList.remove('hidden');
+                document.getElementById('clampSide').required = true;
+            } else {
+                clampSideGroup.classList.add('hidden');
+                document.getElementById('clampSide').required = false;
+            }
+        });
+
+        document.getElementById('calculatorForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const height        = parseInt(document.getElementById('height').value);
+            const width         = parseInt(document.getElementById('width').value);
+            const weight        = parseFloat(document.getElementById('weight').value);
+            const quantity      = parseInt(document.getElementById('quantity').value) || 1;
+            const furnitureType = document.getElementById('furnitureType').value;
+            const clampSide     = document.getElementById('clampSide').value || null;
+            const handleType    = document.getElementById('handleType').value;
+            const handleColor   = document.getElementById('handleColor').value;
+
+            if (!height || !width || !weight || !furnitureType || !handleType || !handleColor) {
+                showMessage('⚠️ Заполните все обязательные поля', 'error');
+                return;
+            }
+
+            const base   = selectBaseHardware({ height, width, weight, furnitureType, clampSide });
+            if (base.length === 0) {
+                showMessage('❌ Параметры не подходят ни под один комплект', 'error');
+                appState.currentResults = [];
+                displayResults([]);
+                return;
+            }
+
+            const handle = selectHandle({ handleType, handleColor });
+            const combined = [...base, ...handle];
+
+            appState.currentResults = combined.map(item => ({
+                ...item,
+                qty: item.qty * quantity
+            }));
+
+            displayResults(appState.currentResults);
+            document.getElementById('resultsSection').classList.add('visible');
+            showMessage('✅ Расчёт выполнен', 'success');
+        });
+
+        document.getElementById('saveBtn').addEventListener('click', () => {
+            if (appState.currentResults.length === 0) {
+                showMessage('⚠️ Нет результатов для сохранения', 'error');
+                return;
+            }
+
+            appState.calculations.push({
+                id: Date.now(),
+                timestamp: new Date().toLocaleString('ru-RU'),
+                results: appState.currentResults.map(item => ({ ...item }))
+            });
+
+            updateAccumulatedCounter();
+            showMessage('✅ Данные записаны!', 'success');
+        });
+
+        document.getElementById('totalBtn').addEventListener('click', () => {
+            if (appState.calculations.length === 0) {
+                showMessage('⚠️ Нет сохранённых расчётов', 'error');
+                return;
+            }
+
+            const aggregated = {};
+            appState.calculations.forEach(calc => {
+                calc.results.forEach(item => {
+                    if (aggregated[item.article]) {
+                        aggregated[item.article].qty += item.qty;
+                    } else {
+                        aggregated[item.article] = { ...item };
+                    }
+                });
+            });
+
+            const dataToSend = {
+                action: 'total',
+                data: Object.values(aggregated)
+            };
+
+            tg.sendData(JSON.stringify(dataToSend));
+            showMessage('📨 Отправляю итоговый отчёт...', 'success');
+
+            appState.calculations = [];
+            updateAccumulatedCounter();
+        });
+
+        window.addEventListener('load', () => {
+            console.log('Mini App загружен');
+        });
+    </script>
+</body>
+</html>
