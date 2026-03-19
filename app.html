@@ -830,6 +830,65 @@
     },
 ];
 
+    const hardwareMatrixVisibleProvedalTurn = [
+    {
+        minHeight: 500, maxHeight: 1300,
+        minWidth: 300, maxWidth: 1300,
+        articles: [
+            { article: 'KN100LE', name: 'Цапфа концевая', qty: 2 },
+            { article: 'KN400FS', name: 'Приподниматель створки', qty: 1 },
+            { article: 'KN100YZ', name: 'Ответная планка для цапфы', qty: 2 },
+        ],
+    },
+    {
+        minHeight: 1301, maxHeight: 2400,
+        minWidth: 300, maxWidth: 1300,
+        articles: [
+            { article: 'KN100LE', name: 'Цапфа концевая', qty: 2 },
+            { article: 'KN400FS', name: 'Приподниматель створки', qty: 1 },
+            { article: 'KN100YZ', name: 'Ответная планка для цапфы', qty: 3 },
+            { article: 'KN100OU', name: 'Цапфа под тягу стандарт', qty: 1 },
+        ],
+    },
+];
+
+    const handleColorArticlesProvedalTurn = {
+    zone1: { // 500–1300 x 300–1300
+        white: [
+            { article: 'KN100KR',      name: 'Переходник под ручку Classic', qty: 1 },
+            { article: 'KN218HN_9016', name: 'Ручка оконная Classic_9016',   qty: 1 },
+            { article: 'KN219HX_9016', name: 'Петля поворотная бел.',        qty: 2 },
+        ],
+        black: [
+            { article: 'KN100KR',      name: 'Переходник под ручку Classic',           qty: 1 },
+            { article: 'KN218HN_9005M', name: 'Ручка оконная Classic черн. Matt',      qty: 1 },
+            { article: 'KN219HX_9005M', name: 'Петля поворотная черн. matt',           qty: 2 },
+        ],
+        raw: [
+            { article: 'KN100KR',   name: 'Переходник под ручку Classic', qty: 1 },
+            { article: 'KN218HN_C', name: 'Ручка оконная Classic неокр.', qty: 1 },
+            { article: 'KN219HX_C', name: 'Петля поворотная неокр',       qty: 2 },
+        ],
+    },
+    zone2: { // 1301–2400 x 300–1300
+        white: [
+            { article: 'KN100KR',      name: 'Переходник под ручку Classic', qty: 1 },
+            { article: 'KN218HN_9016', name: 'Ручка оконная Classic_9016',   qty: 1 },
+            { article: 'KN219HX_9016', name: 'Петля поворотная бел.',        qty: 3 },
+        ],
+        black: [
+            { article: 'KN100KR',      name: 'Переходник под ручку Classic',           qty: 1 },
+            { article: 'KN218HN_9005M', name: 'Ручка оконная Classic черн. Matt',      qty: 1 },
+            { article: 'KN219HX_9005M', name: 'Петля поворотная черн. matt',           qty: 3 },
+        ],
+        raw: [
+            { article: 'KN100KR',   name: 'Переходник под ручку Classic', qty: 1 },
+            { article: 'KN218HN_C', name: 'Ручка оконная Classic неокр.', qty: 1 },
+            { article: 'KN219HX_C', name: 'Петля поворотная неокр',       qty: 3 },
+        ],
+    },
+};
+
     const handleColorArticlesProvedalTurnTilt = {
     white: [
         { article: 'KN100KR',      name: 'Переходник под ручку Classic',        qty: 1 },
@@ -934,61 +993,73 @@
         );
     }
 
-    function calculateHardware() {
-        const h = Number(heightInput.value);
-        const w = Number(widthInput.value);
-        const wt = Number(weightInput.value);
-        const openingType = openingTypeSelect.value; // 'turn-tilt' | 'turn' | 'tilt'
-        const hardwareType = hardwareTypeInput.value;
-        const clampSide = clampSideInput.value;
-        const handleColor = handleColorSelect.value || 'white';
+  function calculateHardware() {
+    const h = Number(heightInput.value);
+    const w = Number(widthInput.value);
+    const wt = Number(weightInput.value);
+    const openingType = openingTypeSelect.value; // 'turn-tilt' | 'turn' | 'tilt'
+    const hardwareType = hardwareTypeInput.value;
+    const clampSide = clampSideInput.value;
+    const handleColor = handleColorSelect.value || 'white';
 
-        if (!validateInputs()) {
-            return null;
-        }
+    if (!validateInputs()) {
+        return null;
+    }
 
-        const resultArticles = [];
+    const resultArticles = [];
 
-                if (openingType === 'turn-tilt') {
-                    if (hardwareType === 'visible') {
-                        // Видимая + Поворотно-откидной (как было)
-                        const baseSet = pickVisibleTurnTiltSet(h, w);
-                        if (!baseSet) {
-                            showMessage('Под эти размеры нет настроенной зоны (Видимая П/О). Проверь диапазоны или обратись к менеджеру.', 'error');
-                            return null;
-                        }
-
-                baseSet.articles.forEach(item => resultArticles.push({ ...item }));
-
-                const colorArticles = handleColorArticles[handleColor] || handleColorArticles['white'];
-                colorArticles.forEach(item => resultArticles.push({ ...item }));
-
-            } else if (hardwareType === 'visibleProvedal') {
-                // Видимая Provedal + Поворотно-откидной
-                const baseSet = hardwareMatrixVisibleProvedalTurnTilt.find(row =>
-                    h >= row.minHeight && h <= row.maxHeight &&
-                    w >= row.minWidth && w <= row.maxWidth
+    if (openingType === 'turn-tilt') {
+        if (hardwareType === 'visible') {
+            // Видимая + Поворотно-откидной
+            const baseSet = pickVisibleTurnTiltSet(h, w);
+            if (!baseSet) {
+                showMessage(
+                    'Под эти размеры нет настроенной зоны (Видимая П/О). Проверь диапазоны или обратись к менеджеру.',
+                    'error'
                 );
-
-                if (!baseSet) {
-                    showMessage('Под эти размеры нет зоны для Видимая Provedal П/О. Проверь диапазоны или обратись к менеджеру.', 'error');
-                    return null;
-                }
-
-                    baseSet.articles.forEach(item => resultArticles.push({ ...item }));
-                        
-                        const colorArticles =
-                            handleColorArticlesProvedalTurnTilt[handleColor] ||
-                            handleColorArticlesProvedalTurnTilt['white'];
-                        
-                        colorArticles.forEach(item => resultArticles.push({ ...item }));
-
-            } else {
-                showMessage('Для этого типа фурнитуры с Поворотно-откидным ещё нет подбора.', 'error');
                 return null;
             }
 
-        } else if (openingType === 'turn') {
+            baseSet.articles.forEach(item => resultArticles.push({ ...item }));
+
+            const colorArticles =
+                handleColorArticles[handleColor] || handleColorArticles['white'];
+            colorArticles.forEach(item => resultArticles.push({ ...item }));
+
+        } else if (hardwareType === 'visibleProvedal') {
+            // Видимая Provedal + Поворотно-откидной
+            const baseSet = hardwareMatrixVisibleProvedalTurnTilt.find(row =>
+                h >= row.minHeight && h <= row.maxHeight &&
+                w >= row.minWidth && w <= row.maxWidth
+            );
+
+            if (!baseSet) {
+                showMessage(
+                    'Под эти размеры нет зоны для Видимая Provedal П/О. Проверь диапазоны или обратись к менеджеру.',
+                    'error'
+                );
+                return null;
+            }
+
+            baseSet.articles.forEach(item => resultArticles.push({ ...item }));
+
+            const colorArticles =
+                handleColorArticlesProvedalTurnTilt[handleColor] ||
+                handleColorArticlesProvedalTurnTilt['white'];
+
+            colorArticles.forEach(item => resultArticles.push({ ...item }));
+
+        } else {
+            showMessage(
+                'Для этого типа фурнитуры с Поворотно-откидным ещё нет подбора.',
+                'error'
+            );
+            return null;
+        }
+
+    } else if (openingType === 'turn') {
+
+        if (hardwareType === 'visible') {
             // Видимая + Поворотный
             const baseSet = hardwareMatrixVisibleTurn.find(row =>
                 h >= row.minHeight && h <= row.maxHeight &&
@@ -996,57 +1067,106 @@
             );
 
             if (!baseSet) {
-                showMessage('Под эти размеры нет настроенной зоны (Поворотный). Проверь диапазоны или обратись к менеджеру.', 'error');
+                showMessage(
+                    'Под эти размеры нет настроенной зоны (Поворотный). Проверь диапазоны или обратись к менеджеру.',
+                    'error'
+                );
                 return null;
             }
 
             baseSet.articles.forEach(item => resultArticles.push({ ...item }));
 
-            const colorArticles = handleColorArticlesTurnVisible[handleColor] || handleColorArticlesTurnVisible['white'];
+            const colorArticles =
+                handleColorArticlesTurnVisible[handleColor] ||
+                handleColorArticlesTurnVisible['white'];
+
             colorArticles.forEach(item => resultArticles.push({ ...item }));
 
-        } else if (openingType === 'tilt') {
-            // Видимая + Откидной
-            const baseSet = hardwareMatrixVisibleTilt.find(row =>
+        } else if (hardwareType === 'visibleProvedal') {
+            // Видимая Provedal + Поворотный
+            const baseSet = hardwareMatrixVisibleProvedalTurn.find(row =>
                 h >= row.minHeight && h <= row.maxHeight &&
                 w >= row.minWidth && w <= row.maxWidth
             );
 
             if (!baseSet) {
-                showMessage('Под эти размеры нет настроенной зоны (Откидной). Проверь диапазоны или обратись к менеджеру.', 'error');
+                showMessage(
+                    'Под эти размеры нет зоны для Видимая Provedal Поворотная. Проверь диапазоны или обратись к менеджеру.',
+                    'error'
+                );
                 return null;
             }
 
             baseSet.articles.forEach(item => resultArticles.push({ ...item }));
 
-            // Определяем зону по ширине
-            const zoneKey = (w >= 445 && w <= 1000) ? 'zone1' : 'zone2';
+            // Зона по высоте: 500–1300 -> zone1, 1301–2400 -> zone2
+            const zoneKey = (h >= 500 && h <= 1300) ? 'zone1' : 'zone2';
 
-            const tiltHandleByZone = handleColorArticlesTiltVisible[zoneKey];
+            const turnHandleByZone = handleColorArticlesProvedalTurn[zoneKey];
             const colorArticles =
-                (tiltHandleByZone && tiltHandleByZone[handleColor]) ||
-                (tiltHandleByZone && tiltHandleByZone['white']);
+                (turnHandleByZone && turnHandleByZone[handleColor]) ||
+                (turnHandleByZone && turnHandleByZone['white']);
 
             if (colorArticles) {
                 colorArticles.forEach(item => resultArticles.push({ ...item }));
             }
 
         } else {
-            showMessage('Для этого типа открывания подбор ещё не реализован.', 'error');
+            showMessage(
+                'Для этого типа фурнитуры с Поворотным ещё нет подбора.',
+                'error'
+            );
             return null;
         }
 
-        return {
-            height: h,
-            width: w,
-            weight: wt,
-            openingType,
-            hardwareType,
-            clampSide,
-            handleColor,
-            items: resultArticles
-        };
+    } else if (openingType === 'tilt') {
+        // Видимая + Откидной
+        const baseSet = hardwareMatrixVisibleTilt.find(row =>
+            h >= row.minHeight && h <= row.maxHeight &&
+            w >= row.minWidth && w <= row.maxWidth
+        );
+
+        if (!baseSet) {
+            showMessage(
+                'Под эти размеры нет настроенной зоны (Откидной). Проверь диапазоны или обратись к менеджеру.',
+                'error'
+            );
+            return null;
+        }
+
+        baseSet.articles.forEach(item => resultArticles.push({ ...item }));
+
+        // Определяем зону по ширине
+        const zoneKey = (w >= 445 && w <= 1000) ? 'zone1' : 'zone2';
+
+        const tiltHandleByZone = handleColorArticlesTiltVisible[zoneKey];
+        const colorArticles =
+            (tiltHandleByZone && tiltHandleByZone[handleColor]) ||
+            (tiltHandleByZone && tiltHandleByZone['white']);
+
+        if (colorArticles) {
+            colorArticles.forEach(item => resultArticles.push({ ...item }));
+        }
+
+    } else {
+        showMessage(
+            'Для этого типа открывания подбор ещё не реализован.',
+            'error'
+        );
+        return null;
     }
+
+    return {
+        height: h,
+        width: w,
+        weight: wt,
+        openingType,
+        hardwareType,
+        clampSide,
+        handleColor,
+        items: resultArticles
+    };
+}
 
     function groupArticles(items, multiplier) {
         const map = new Map();
