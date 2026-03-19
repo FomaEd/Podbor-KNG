@@ -515,6 +515,22 @@
         }
     }
 
+            // Ограничения по весу для Видимая Provedal
+    if (hardwareType === 'visibleProvedal') {
+        if (openingType === 'turn' && wt > 60) {
+            showMessage('Максимально допустимый вес для Видимая Provedal + Поворотный — 60 кг.', 'error');
+            return false;
+        }
+        if (openingType === 'tilt' && wt > 50) {
+            showMessage('Максимально допустимый вес для Видимая Provedal + Откидной — 50 кг.', 'error');
+            return false;
+        }
+        if (openingType === 'turn-tilt' && wt > 90) {
+            showMessage('Превышен допустимый вес для Видимая Provedal + Поворотно-откидной (максимум 90 кг).', 'error');
+            return false;
+        }
+    }
+            
     if (!handleColorSelect.value) {
         showMessage('Выбери цвет ручки.', 'error');
         return false;
