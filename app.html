@@ -341,7 +341,9 @@
                         <div class="toggle-chip" data-value="right">
                             <span>Правый</span>
                         </div>
-                    </div>
+                        <div class="toggle-chip active" data-value="any">
+                            <span>Не имеет значения</span>
+                        </div>
                     <input type="hidden" id="clampSide" value="left">
                 </div>
 
@@ -1181,6 +1183,186 @@ function showMessage(text, type = 'error') {
     },
 ];
 
+    const hardwareMatrixHidden90Turn_0_100 = [
+    {
+        minHeight: 550,
+        maxHeight: 1200,
+        minWidth: 390,
+        maxWidth: 1000,
+        articles: [
+            { article: 'KN219EE', name: 'Компл. Петля Пов скрытая верх/низ 95º', qty: 1 },
+            { article: 'KN100LE', name: 'Цапфа концевая', qty: 2 },
+            { article: 'KN100TD', name: 'Ответная планка для цапфы', qty: 2 },
+            { article: 'KN400FS', name: 'Приподниматель створки поворотной', qty: 1 },
+        ],
+    },
+    {
+        minHeight: 550,
+        maxHeight: 1200,
+        minWidth: 1001,
+        maxWidth: 1200,
+        articles: [
+            { article: 'KN219EE', name: 'Компл. Петля Пов скрытая верх/низ 95º', qty: 1 },
+            { article: 'KN100LI', name: 'Угловая передача без блокиратора', qty: 2 },
+            { article: 'KN100LE', name: 'Цапфа концевая', qty: 2 },
+            { article: 'KN100TD', name: 'Ответная планка для цапфы', qty: 4 },
+            { article: 'KN400FS', name: 'Приподниматель створки поворотной', qty: 1 },
+        ],
+    },
+    {
+        minHeight: 550,
+        maxHeight: 1200,
+        minWidth: 1201,
+        maxWidth: 1500,
+        articles: [
+            { article: 'KN219EE', name: 'Компл. Петля Пов скрытая верх/низ 95º', qty: 1 },
+            { article: 'KN100LI', name: 'Угловая передача без блокиратора', qty: 2 },
+            { article: 'KN100LE', name: 'Цапфа концевая', qty: 2 },
+            { article: 'KN100TD', name: 'Ответная планка для цапфы', qty: 4 },
+            { article: 'KN400FS', name: 'Приподниматель створки поворотной', qty: 1 },
+            { article: 'KN604BZ', name: 'Ограничитель открывания створки', qty: 1 },
+        ],
+    },
+    {
+        minHeight: 1201,
+        maxHeight: 1800,
+        minWidth: 390,
+        maxWidth: 1000,
+        articles: [
+            { article: 'KN219EE', name: 'Компл. Петля Пов скрытая верх/низ 95º', qty: 1 },
+            { article: 'KN100LE', name: 'Цапфа концевая', qty: 2 },
+            { article: 'KN100TD', name: 'Ответная планка для цапфы', qty: 3 },
+            { article: 'KN100OU', name: 'Цапфа под тягу стандарт', qty: 1 },
+            { article: 'KN400FS', name: 'Приподниматель створки поворотной', qty: 1 },
+            { article: 'KN100WH', name: 'Скрытый прижим регулируемый винтом', qty: 1 },
+        ],
+    },
+    {
+        minHeight: 1201,
+        maxHeight: 1800,
+        minWidth: 1001,
+        maxWidth: 1200,
+        articles: [
+            { article: 'KN219EE', name: 'Компл. Петля Пов скрытая верх/низ 95º', qty: 1 },
+            { article: 'KN100LI', name: 'Угловая передача без блокиратора', qty: 2 },
+            { article: 'KN100LE', name: 'Цапфа концевая', qty: 2 },
+            { article: 'KN100OU', name: 'Цапфа под тягу стандарт', qty: 1 },
+            { article: 'KN100TD', name: 'Ответная планка для цапфы', qty: 5 },
+            { article: 'KN400FS', name: 'Приподниматель створки поворотной', qty: 1 },
+            { article: 'KN100WH', name: 'Скрытый прижим регулируемый винтом', qty: 1 },
+        ],
+    },
+    {
+        minHeight: 1201,
+        maxHeight: 1800,
+        minWidth: 1201,
+        maxWidth: 1500,
+        articles: [
+            { article: 'KN219EE', name: 'Компл. Петля Пов скрытая верх/низ 95º', qty: 1 },
+            { article: 'KN100LI', name: 'Угловая передача без блокиратора', qty: 2 },
+            { article: 'KN100LE', name: 'Цапфа концевая', qty: 2 },
+            { article: 'KN100OU', name: 'Цапфа под тягу стандарт', qty: 1 },
+            { article: 'KN100TD', name: 'Ответная планка для цапфы', qty: 5 },
+            { article: 'KN400FS', name: 'Приподниматель створки поворотной', qty: 1 },
+            { article: 'KN100WH', name: 'Скрытый прижим регулируемый винтом', qty: 1 },
+            { article: 'KN604BZ', name: 'Ограничитель открывания створки', qty: 1 },
+        ],
+    },
+    {
+        minHeight: 1801,
+        maxHeight: 2400,
+        minWidth: 390,
+        maxWidth: 1000,
+        articles: [
+            { article: 'KN219EE', name: 'Компл. Петля Пов скрытая верх/низ 95º', qty: 1 },
+            { article: 'KN100LE', name: 'Цапфа концевая', qty: 2 },
+            { article: 'KN100TD', name: 'Ответная планка для цапфы', qty: 4 },
+            { article: 'KN100OU', name: 'Цапфа под тягу стандарт', qty: 2 },
+            { article: 'KN400FS', name: 'Приподниматель створки поворотной', qty: 1 },
+            { article: 'KN100WH', name: 'Скрытый прижим регулируемый винтом', qty: 2 },
+        ],
+    },
+    {
+        minHeight: 1801,
+        maxHeight: 2400,
+        minWidth: 1001,
+        maxWidth: 1200,
+        articles: [
+            { article: 'KN219EE', name: 'Компл. Петля Пов скрытая верх/низ 95º', qty: 1 },
+            { article: 'KN100LI', name: 'Угловая передача без блокиратора', qty: 2 },
+            { article: 'KN100LE', name: 'Цапфа концевая', qty: 2 },
+            { article: 'KN100OU', name: 'Цапфа под тягу стандарт', qty: 2 },
+            { article: 'KN100TD', name: 'Ответная планка для цапфы', qty: 6 },
+            { article: 'KN400FS', name: 'Приподниматель створки поворотной', qty: 1 },
+            { article: 'KN100WH', name: 'Скрытый прижим регулируемый винтом', qty: 2 },
+            { article: 'KN604BZ', name: 'Ограничитель открывания створки', qty: 1 },
+        ],
+    },
+    {
+        minHeight: 1801,
+        maxHeight: 2400,
+        minWidth: 1201,
+        maxWidth: 1500,
+        articles: [
+            { article: 'KN219EE', name: 'Компл. Петля Пов скрытая верх/низ 95º', qty: 1 },
+            { article: 'KN100LI', name: 'Угловая передача без блокиратора', qty: 2 },
+            { article: 'KN100LE', name: 'Цапфа концевая', qty: 2 },
+            { article: 'KN100OU', name: 'Цапфа под тягу стандарт', qty: 2 },
+            { article: 'KN100TD', name: 'Ответная планка для цапфы', qty: 6 },
+            { article: 'KN400FS', name: 'Приподниматель створки поворотной', qty: 1 },
+            { article: 'KN100WH', name: 'Скрытый прижим регулируемый винтом', qty: 2 },
+            { article: 'KN604BZ', name: 'Ограничитель открывания створки', qty: 1 },
+        ],
+    },
+    {
+        minHeight: 2401,
+        maxHeight: 3000,
+        minWidth: 390,
+        maxWidth: 1000,
+        articles: [
+            { article: 'KN219EE', name: 'Компл. Петля Пов скрытая верх/низ 95º', qty: 1 },
+            { article: 'KN100LE', name: 'Цапфа концевая', qty: 2 },
+            { article: 'KN100TD', name: 'Ответная планка для цапфы', qty: 5 },
+            { article: 'KN100OU', name: 'Цапфа под тягу стандарт', qty: 3 },
+            { article: 'KN400FS', name: 'Приподниматель створки поворотной', qty: 1 },
+            { article: 'KN100WH', name: 'Скрытый прижим регулируемый винтом', qty: 2 },
+            { article: 'KN604BZ', name: 'Ограничитель открывания створки', qty: 1 },
+        ],
+    },
+    {
+        minHeight: 2401,
+        maxHeight: 3000,
+        minWidth: 1001,
+        maxWidth: 1200,
+        articles: [
+            { article: 'KN219EE', name: 'Компл. Петля Пов скрытая верх/низ 95º', qty: 1 },
+            { article: 'KN100LI', name: 'Угловая передача без блокиратора', qty: 2 },
+            { article: 'KN100LE', name: 'Цапфа концевая', qty: 2 },
+            { article: 'KN100OU', name: 'Цапфа под тягу стандарт', qty: 3 },
+            { article: 'KN100TD', name: 'Ответная планка для цапфы', qty: 7 },
+            { article: 'KN400FS', name: 'Приподниматель створки поворотной', qty: 1 },
+            { article: 'KN100WH', name: 'Скрытый прижим регулируемый винтом', qty: 3 },
+            { article: 'KN604BZ', name: 'Ограничитель открывания створки', qty: 1 },
+        ],
+    },
+    {
+        minHeight: 2401,
+        maxHeight: 3000,
+        minWidth: 1201,
+        maxWidth: 1500,
+        articles: [
+            { article: 'KN219EE', name: 'Компл. Петля Пов скрытая верх/низ 95º', qty: 1 },
+            { article: 'KN100LI', name: 'Угловая передача без блокиратора', qty: 2 },
+            { article: 'KN100LE', name: 'Цапфа концевая', qty: 2 },
+            { article: 'KN100OU', name: 'Цапфа под тягу стандарт', qty: 3 },
+            { article: 'KN100TD', name: 'Ответная планка для цапфы', qty: 7 },
+            { article: 'KN400FS', name: 'Приподниматель створки поворотной', qty: 1 },
+            { article: 'KN100WH', name: 'Скрытый прижим регулируемый винтом', qty: 3 },
+            { article: 'KN604BZ', name: 'Ограничитель открывания створки', qty: 1 },
+        ],
+    },
+];
+
     const handleColorArticlesProvedalTilt = {
     zone1: { // Высота 500–1300, ширина 500–1300
         white: [
@@ -1364,6 +1546,21 @@ function showMessage(text, type = 'error') {
         },
     };
 
+    const handleColorArticlesHidden90Turn = {
+        white: [
+            { article: 'KN100KR', name: 'Переходник под ручку Classic', qty: 1 },
+            { article: 'KN218HN_9016', name: 'Ручка оконная Classic_9016', qty: 1 },
+        ],
+        black: [
+            { article: 'KN100KR', name: 'Переходник под ручку Classic', qty: 1 },
+            { article: 'KN218HN_9005M', name: 'Ручка оконная Classic черн. Matt', qty: 1 },
+        ],
+        raw: [
+            { article: 'KN100KR', name: 'Переходник под ручку Classic', qty: 1 },
+            { article: 'KN218HN_C', name: 'Ручка оконная Classic неокр.', qty: 1 },
+        ],
+    };
+
     function pickVisibleTurnTiltSet(height, width) {
         return hardwareMatrixVisibleTurnTilt.find(row =>
             height >= row.minHeight && height <= row.maxHeight &&
@@ -1503,6 +1700,49 @@ function showMessage(text, type = 'error') {
         }
 
     } else if (openingType === 'turn') {
+
+        if (hardwareType === 'hidden90') {
+            if (wt > 150) {
+                showMessage('Максимальный вес для скрытой фурнитуры 90° — 150 кг.', 'error');
+                return null;
+            }
+
+            if (wt <= 100) {
+                if (clampSide !== 'any') {
+                    showMessage(
+                        'Для ваших параметров сторона прижима не имеет значения. ' +
+                        'Выберите вариант «Не имеет значения».',
+                        'error'
+                    );
+                    return null;
+                }
+
+                const baseSet = hardwareMatrixHidden90Turn_0_100.find(row =>
+                    h >= row.minHeight && h <= row.maxHeight &&
+                    w >= row.minWidth && w <= row.maxWidth
+                );
+
+                if (!baseSet) {
+                    showMessage(
+                        'Под эти размеры нет зоны для Скрытая 90 Поворотная до 100 кг. ' +
+                        'Проверь диапазоны или обратись к менеджеру.',
+                        'error'
+                    );
+                    return null;
+                }
+
+                baseSet.articles.forEach(item => resultArticles.push({ ...item }));
+
+                const handleSet =
+                    handleColorArticlesHidden90Turn[handleColor] ||
+                    handleColorArticlesHidden90Turn['white'];
+                handleSet.forEach(item => resultArticles.push({ ...item }));
+
+            } else {
+                // здесь потом допишем ветку для >100 кг с разделением лев/прав, по аналогии с П/О
+            }
+
+        // дальше твои ветки для visible / visibleProvedal...
 
         if (hardwareType === 'visible') {
             // Видимая + Поворотный
