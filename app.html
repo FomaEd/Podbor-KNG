@@ -558,47 +558,6 @@ function showMessage(text, type = 'error') {
     return true;
 }
 
-    // Ограничения по весу для Видимой
-    if (hardwareType === 'visible') {
-        if (openingType === 'turn' && wt > 60) {
-            showMessage('Максимально допустимый вес для Видимая + Поворотный — 60 кг.', 'error');
-            return false;
-        }
-        if (openingType === 'tilt' && wt > 50) {
-            showMessage('Максимально допустимый вес для Видимая + Откидной — 50 кг.', 'error');
-            return false;
-        }
-        if (openingType === 'turn-tilt' && wt > 100) {
-            showMessage('Превышен допустимый вес для Видимая + Поворотно-откидной (максимум 100 кг).', 'error');
-            return false;
-        }
-    }
-
-            // Ограничения по весу для Видимая Provedal
-    if (hardwareType === 'visibleProvedal') {
-        if (openingType === 'turn' && wt > 60) {
-            showMessage('Максимально допустимый вес для Видимая Provedal + Поворотный — 60 кг.', 'error');
-            return false;
-        }
-        if (openingType === 'tilt' && wt > 50) {
-            showMessage('Максимально допустимый вес для Видимая Provedal + Откидной — 50 кг.', 'error');
-            return false;
-        }
-        if (openingType === 'turn-tilt' && wt > 90) {
-            showMessage('Превышен допустимый вес для Видимая Provedal + Поворотно-откидной (максимум 90 кг).', 'error');
-            return false;
-        }
-    }
-            
-    if (!handleColorSelect.value) {
-        showMessage('Выбери цвет ручки.', 'error');
-        return false;
-    }
-
-    showMessage('', 'success');
-    return true;
-}
-
     const hardwareMatrixVisibleTurnTilt = [
         {
             minHeight: 550, maxHeight: 1200,
