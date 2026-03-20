@@ -1412,10 +1412,10 @@
         } else if (hardwareType === 'hidden90') {
             // Скрытая 90 + Поворотно-откидной
 
-            // Ограничение по весу
-            if (wt > 100) {
+            // Новый общий лимит по весу: до 150 кг
+            if (wt > 150) {
                 showMessage(
-                    'Максимальный вес для скрытой фурнитуры 90° не более 100 кг.',
+                    'Максимальный вес для скрытой фурнитуры 90° не более 150 кг.',
                     'error'
                 );
                 return null;
@@ -1441,7 +1441,7 @@
                 );
             }
 
-            // Прижим: левый / правый
+            // Прижим: левый / правый (базовый комплект)
             const clampKey = clampSide === 'right' ? 'articlesRight' : 'articlesLeft';
             const clampArticles = baseSet[clampKey];
 
@@ -1449,6 +1449,24 @@
                 clampArticles.forEach(item =>
                     resultArticles.push({ ...item })
                 );
+            }
+
+            // Если вес > 100 кг, добавляем усилитель скрытых петель
+            if (wt > 100) {
+                if (clampSide === 'right') {
+                    resultArticles.push({
+                        article: 'KN100UW-R',
+                        name: 'Усилитель скрытых петель правый +50кг',
+                        qty: 1,
+                    });
+                } else {
+                    // считаем всё, что не right, левым прижимом
+                    resultArticles.push({
+                        article: 'KN100UW-L',
+                        name: 'Усилитель скрытых петель левый +50кг',
+                        qty: 1,
+                    });
+                }
             }
 
             // Ручка Classic (1 шт, цвет по выбору)
