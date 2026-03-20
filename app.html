@@ -409,28 +409,30 @@
     }
 
     const hardwareTypeToggle = document.getElementById('hardwareTypeToggle');
-    const clampSideToggle = document.getElementById('clampSideToggle');
-    const hardwareTypeInput = document.getElementById('hardwareType');
-    const clampSideInput = document.getElementById('clampSide');
-    const clampSideGroup = document.getElementById('clampSideGroup');
+const clampSideToggle = document.getElementById('clampSideToggle');
+const hardwareTypeInput = document.getElementById('hardwareType');
+const clampSideInput = document.getElementById('clampSide');
+const clampSideGroup = document.getElementById('clampSideGroup');
 
-    const heightInput = document.getElementById('height');
-    const widthInput = document.getElementById('width');
-    const weightInput = document.getElementById('weight');
-    const openingTypeSelect = document.getElementById('openingType');
-    const handleTypeSelect = document.getElementById('handleType');
-    const handleColorSelect = document.getElementById('handleColor');
-    const quantityInput = document.getElementById('quantity');
+const heightInput = document.getElementById('height');
+const widthInput = document.getElementById('width');
+const weightInput = document.getElementById('weight');
+const openingTypeSelect = document.getElementById('openingType');
+const handleTypeSelect = document.getElementById('handleType');
+const handleColorSelect = document.getElementById('handleColor');
+const quantityInput = document.getElementById('quantity');
 
-    const saveBtn = document.getElementById('saveBtn');
-    const totalBtn = document.getElementById('totalBtn');
+const saveBtn = document.getElementById('saveBtn');
+const totalBtn = document.getElementById('totalBtn');
 
-    const messageBox = document.getElementById('messageBox');
-    const accumulatedCounter = document.getElementById('accumulatedCounter');
-    const accumulatedCountElement = document.getElementById('accumulatedCount');
+const messageBox = document.getElementById('messageBox');
+const accumulatedCounter = document.getElementById('accumulatedCounter');
+const accumulatedCountElement = document.getElementById('accumulatedCount');
 
-    const accumulatedResults = [];
+const accumulatedResults = [];
 
+// --- Тоггл типа фурнитуры ---
+if (hardwareTypeToggle && hardwareTypeInput && clampSideGroup) {
     hardwareTypeToggle.addEventListener('click', (e) => {
         const chip = e.target.closest('.toggle-chip');
         if (!chip) return;
@@ -448,7 +450,10 @@
             clampSideGroup.style.display = 'none';
         }
     });
+}
 
+// --- Тоггл прижима ---
+if (clampSideToggle && clampSideInput) {
     clampSideToggle.addEventListener('click', (e) => {
         const chip = e.target.closest('.toggle-chip');
         if (!chip) return;
@@ -458,12 +463,13 @@
         chip.classList.add('active');
         clampSideInput.value = chip.dataset.value;
     });
+}
 
-    function showMessage(text, type = 'error') {
-        messageBox.textContent = text;
-        messageBox.className = 'message-box ' + type;
-    }
-
+function showMessage(text, type = 'error') {
+    messageBox.textContent = text;
+    messageBox.className = 'message-box ' + type;
+}
+    
     function validateInputs() {
     const h = Number(heightInput.value);
     const w = Number(widthInput.value);
