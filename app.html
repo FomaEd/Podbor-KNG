@@ -464,7 +464,7 @@
         messageBox.className = 'message-box ' + type;
     }
 
-        function validateInputs() {
+       function validateInputs() {
     const h = Number(heightInput.value);
     const w = Number(widthInput.value);
     const wt = Number(weightInput.value);
@@ -475,8 +475,10 @@
         showMessage('Заполни высоту, ширину и вес створки.', 'error');
         return false;
     }
-    if (h < 500 || h > 2400) {
-        showMessage('Высота должна быть в диапазоне 500–2400 мм.', 'error');
+
+    // Общие габариты по проекту
+    if (h < 500 || h > 3000) {
+        showMessage('Высота должна быть в диапазоне 500–3000 мм.', 'error');
         return false;
     }
     if (w < 390 || w > 1600) {
@@ -498,6 +500,59 @@
         showMessage('Неизвестный тип фурнитуры.', 'error');
         return false;
     }
+
+    // Общие проверки по весу по типам фурнитуры / открывания
+
+    // Видимая + П/О, Поворотный, Откидной
+    if (hardwareType === 'visible') {
+        if (openingType === 'turn-tilt' && wt > 100) {
+            showMessage('Максимальный вес для Видимая П/О — 100 кг.', 'error');
+            return false;
+        }
+        if (openingType === 'turn' && wt > 60) {
+            showMessage('Максимальный вес для Видимая Поворотный — 60 кг.', 'error');
+            return false;
+        }
+        if (openingType === 'tilt' && wt > 50) {
+            showMessage('Максимальный вес для Видимая Откидной — 50 кг.', 'error');
+            return false;
+        }
+    }
+
+    // Видимая Provedal
+    if (hardwareType === 'visibleProvedal') {
+        if (openingType === 'turn-tilt' && wt > 90) {
+            showMessage('Максимальный вес для Видимая Provedal П/О — 90 кг.', 'error');
+            return false;
+        }
+        if (openingType === 'turn' && wt > 60) {
+            showMessage('Максимальный вес для Видимая Provedal Поворотный — 60 кг.', 'error');
+            return false;
+        }
+        if (openingType === 'tilt' && wt > 50) {
+            showMessage('Максимальный вес для Видимая Provedal Откидной — 50 кг.', 'error');
+            return false;
+        }
+    }
+
+    // Скрытая 90 — общий лимит до 150 кг (детализация уже в calculateHardware)
+    if (hardwareType === 'hidden90') {
+        if (wt > 150) {
+            showMessage('Максимальный вес для скрытой фурнитуры 90° — 150 кг.', 'error');
+            return false;
+        }
+    }
+
+    // Для скрытой 180 пока базовый лимит, потом уточним
+    if (hardwareType === 'hidden180') {
+        if (wt > 150) {
+            showMessage('Максимальный вес для скрытой фурнитуры 180° — 150 кг.', 'error');
+            return false;
+        }
+    }
+
+    return true;
+}
 
     // Ограничения по весу для Видимой
     if (hardwareType === 'visible') {
