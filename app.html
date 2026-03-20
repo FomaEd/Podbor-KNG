@@ -1699,8 +1699,7 @@ function showMessage(text, type = 'error') {
             );
             return null;
         }
-
-    } else if (openingType === 'turn') {
+                } else if (openingType === 'turn') {
 
         if (hardwareType === 'hidden90') {
             if (wt > 150) {
@@ -1740,12 +1739,11 @@ function showMessage(text, type = 'error') {
                 handleSet.forEach(item => resultArticles.push({ ...item }));
 
             } else {
-                // здесь потом допишем ветку для >100 кг с разделением лев/прав, по аналогии с П/О
+                // здесь позже допишем ветку для >100 кг с разделением лев/прав
             }
 
-        // дальше твои ветки для visible / visibleProvedal...
+        } else if (hardwareType === 'visible') {
 
-        if (hardwareType === 'visible') {
             // Видимая + Поворотный
             const baseSet = hardwareMatrixVisibleTurn.find(row =>
                 h >= row.minHeight && h <= row.maxHeight &&
@@ -1769,6 +1767,7 @@ function showMessage(text, type = 'error') {
             colorArticles.forEach(item => resultArticles.push({ ...item }));
 
         } else if (hardwareType === 'visibleProvedal') {
+
             // Видимая Provedal + Поворотный
             const baseSet = hardwareMatrixVisibleProvedalTurn.find(row =>
                 h >= row.minHeight && h <= row.maxHeight &&
