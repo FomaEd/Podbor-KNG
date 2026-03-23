@@ -2275,13 +2275,13 @@ function showMessage(text, type = 'error') {
                 }
             }
 
-            const handleSet =
+                        const handleSet =
                 handleColorArticlesHidden90[handleColor] ||
                 handleColorArticlesHidden90['white'];
 
             handleSet.forEach(item => resultArticles.push({ ...item }));
 
-                } else if (hardwareType === 'hidden180') {
+        } else if (hardwareType === 'hidden180') {
             if (wt > 130) {
                 showMessage('Максимальный вес для Скрытая 180° П/О — 130 кг.', 'error');
                 return null;
