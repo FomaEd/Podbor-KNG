@@ -2965,162 +2965,164 @@ const hardwareMatrixHidden180TurnTilt_130_160 = [
         }
 
     } else {
-        showMessage(
-            'Для этого типа открывания подбор ещё не реализован.',
-            'error'
-        );
-        return null;
+    showMessage(
+        'Для этого типа открывания подбор ещё не реализован.',
+        'error'
+    );
+    return null;
+}
+
+return {
+    height: h,
+    width: w,
+    weight: wt,
+    openingType,
+    hardwareType,
+    clampSide,
+    handleColor,
+    items: resultArticles
+};
+}
+
+// === КАСТОМНЫЙ ПОПАП ДЛЯ СКРЫТАЯ 180 / 131–160 КГ ===
+const angleWarningOverlay = document.getElementById('angleWarningOverlay');
+const angleWarningOkBtn = document.getElementById('angleWarningOkBtn');
+
+function groupArticles(items, multiplier) {
+    const map = new Map();
+
+    items.forEach(item => {
+        const key = item.article;
+        if (!map.has(key)) {
+            map.set(key, {
+                article: item.article,
+                name: item.name,
+                qty: 0
+            });
+        }
+        const entry = map.get(key);
+        entry.qty += item.qty * multiplier;
+    });
+
+    return Array.from(map.values()).sort((a, b) => a.article.localeCompare(b.article));
+}
+
+saveBtn.addEventListener('click', () => {
+    const hardwareResult = calculateHardware();
+    if (!hardwareResult) return;
+
+    const qtyWindows = Number(quantityInput.value) || 1;
+
+    accumulatedResults.push({
+        ...hardwareResult,
+        quantityWindows: qtyWindows
+    });
+
+    accumulatedCounter.style.display = '';
+    accumulatedCountElement.textContent = String(accumulatedResults.length);
+
+    const n = accumulatedResults.length;
+    showMessage(`Расчёт №${n} записан. Нажмите «Итого», когда соберёте все окна.`, 'success');
+    accumulatedCounter.classList.remove('flash');
+    void accumulatedCounter.offsetWidth;
+    accumulatedCounter.classList.add('flash');
+
+    if (tg && tg.HapticFeedback && tg.HapticFeedback.notificationOccurred) {
+        tg.HapticFeedback.notificationOccurred('success');
+    }
+});
+
+totalBtn.addEventListener('click', () => {
+    if (accumulatedResults.length === 0) {
+        showMessage('Нет записанных расчётов. Сначала нажмите «Записать».', 'error');
+        return;
     }
 
-    return {
-        height: h,
-        width: w,
-        weight: wt,
-        openingType,
-        hardwareType,
-        clampSide,
-        handleColor,
-        items: resultArticles
-    };
-}
-        const angleWarningOverlay = document.getElementById('angleWarningOverlay');
-    const angleWarningOkBtn = document.getElementById('angleWarningOkBtn');
+    const summaryMap = new Map();
+    const texts = [];
 
-    function groupArticles(items, multiplier) {
-        const map = new Map();
+    accumulatedResults.forEach((res, index) => {
+        let openingTypeText = 'Поворотно-откидная';
+        if (res.openingType === 'turn') {
+            openingTypeText = 'Поворотная';
+        } else if (res.openingType === 'tilt') {
+            openingTypeText = 'Откидная';
+        }
 
-        items.forEach(item => {
+        const header = `Окно ${index + 1}: ${res.width}×${res.height} мм, ${res.weight} кг, ` +
+            `Видимая, ${openingTypeText}, цвет ручки: ${res.handleColor}, кол-во: ${res.quantityWindows} шт.`;
+        texts.push(header);
+
+        const grouped = groupArticles(res.items, res.quantityWindows);
+        grouped.forEach(item => {
+            texts.push(`  • ${item.article} — ${item.name} — ${item.qty} шт.`);
+
             const key = item.article;
-            if (!map.has(key)) {
-                map.set(key, {
+            if (!summaryMap.has(key)) {
+                summaryMap.set(key, {
                     article: item.article,
                     name: item.name,
                     qty: 0
                 });
             }
-            const entry = map.get(key);
-            entry.qty += item.qty * multiplier;
+            const entry = summaryMap.get(key);
+            entry.qty += item.qty;
         });
 
-        return Array.from(map.values()).sort((a, b) => a.article.localeCompare(b.article));
-    }
-
-    saveBtn.addEventListener('click', () => {
-        const hardwareResult = calculateHardware();
-        if (!hardwareResult) return;
-
-        const qtyWindows = Number(quantityInput.value) || 1;
-
-        accumulatedResults.push({
-            ...hardwareResult,
-            quantityWindows: qtyWindows
-        });
-
-        accumulatedCounter.style.display = '';
-        accumulatedCountElement.textContent = String(accumulatedResults.length);
-
-        const n = accumulatedResults.length;
-        showMessage(`Расчёт №${n} записан. Нажмите «Итого», когда соберёте все окна.`, 'success');
-        accumulatedCounter.classList.remove('flash');
-        void accumulatedCounter.offsetWidth;
-        accumulatedCounter.classList.add('flash');
-
-        if (tg && tg.HapticFeedback && tg.HapticFeedback.notificationOccurred) {
-            tg.HapticFeedback.notificationOccurred('success');
-        }
+        texts.push('');
     });
 
-    totalBtn.addEventListener('click', () => {
-        if (accumulatedResults.length === 0) {
-            showMessage('Нет записанных расчётов. Сначала нажмите «Записать».', 'error');
-            return;
-        }
+    texts.push('ИТОГОВЫЙ СПИСОК ПО ВСЕМ ОКНАМ:');
+    const finalGrouped = Array.from(summaryMap.values())
+        .sort((a, b) => a.article.localeCompare(b.article));
+    finalGrouped.forEach(item => {
+        texts.push(`• ${item.article} — ${item.name} — ${item.qty} шт.`);
+    });
 
-        const summaryMap = new Map();
-        const texts = [];
+    const finalText = texts.join('\n');
 
-        accumulatedResults.forEach((res, index) => {
-            let openingTypeText = 'Поворотно-откидная';
-            if (res.openingType === 'turn') {
-                openingTypeText = 'Поворотная';
-            } else if (res.openingType === 'tilt') {
-                openingTypeText = 'Откидная';
-            }
+    const tg = window.Telegram && window.Telegram.WebApp;
 
-            const header = `Окно ${index + 1}: ${res.width}×${res.height} мм, ${res.weight} кг, ` +
-                `Видимая, ${openingTypeText}, цвет ручки: ${res.handleColor}, кол-во: ${res.quantityWindows} шт.`;
-            texts.push(header);
+    // Готовим массив для Excel — то, что ждёт бэкенд
+    const excelData = finalGrouped.map(item => ({
+        article: item.article,
+        name: item.name,
+        qty: item.qty
+    }));
 
-            const grouped = groupArticles(res.items, res.quantityWindows);
-            grouped.forEach(item => {
-                texts.push(`  • ${item.article} — ${item.name} — ${item.qty} шт.`);
-
-                const key = item.article;
-                if (!summaryMap.has(key)) {
-                    summaryMap.set(key, {
-                        article: item.article,
-                        name: item.name,
-                        qty: 0
-                    });
-                }
-                const entry = summaryMap.get(key);
-                entry.qty += item.qty;
-            });
-
-            texts.push('');
-        });
-
-        texts.push('ИТОГОВЫЙ СПИСОК ПО ВСЕМ ОКНАМ:');
-        const finalGrouped = Array.from(summaryMap.values())
-            .sort((a, b) => a.article.localeCompare(b.article));
-        finalGrouped.forEach(item => {
-            texts.push(`• ${item.article} — ${item.name} — ${item.qty} шт.`);
-        });
-
-        const finalText = texts.join('\n');
-
-        const tg = window.Telegram && window.Telegram.WebApp;
-
-        // Готовим массив для Excel — то, что ждёт бэкенд
-        const excelData = finalGrouped.map(item => ({
-            article: item.article,
-            name: item.name,
-            qty: item.qty
-        }));
-
-        // Функция отправки и закрытия
-        const sendAndClose = () => {
-            if (tg) {
-                tg.sendData(JSON.stringify({
-                    action: 'total',
-                    data: excelData
-                }));
-                tg.close();
-            } else {
-                showMessage('Результат (без Telegram):\n\n' + finalText, 'success');
-            }
-        };
-
-        // Проверяем, есть ли среди окон сочетание:
-        // Поворотно-откидной + Скрытая 180 + вес 131–210 кг
-        const needAngleWarning = accumulatedResults.some(res =>
-            res.openingType === 'turn-tilt' &&
-            res.hardwareType === 'hidden180' &&
-            res.weight >= 131 && res.weight <= 210
-        );
-
-        if (needAngleWarning) {
-            angleWarningOverlay.style.display = 'flex';
-
-            angleWarningOkBtn.onclick = null;
-            angleWarningOkBtn.onclick = () => {
-                angleWarningOverlay.style.display = 'none';
-                sendAndClose();
-            };
+    // Функция отправки и закрытия
+    const sendAndClose = () => {
+        if (tg) {
+            tg.sendData(JSON.stringify({
+                action: 'total',
+                data: excelData
+            }));
+            tg.close();
         } else {
-            sendAndClose();
+            showMessage('Результат (без Telegram):\n\n' + finalText, 'success');
         }
-    });
+    };
+
+    // Проверяем, есть ли среди окон сочетание:
+    // Поворотно-откидной + Скрытая 180 + вес 131–160 кг (по факту)
+    const needAngleWarning = accumulatedResults.some(res =>
+        res.openingType === 'turn-tilt' &&
+        res.hardwareType === 'hidden180' &&
+        res.weight >= 131 && res.weight <= 160
+    );
+
+    if (needAngleWarning && angleWarningOverlay && angleWarningOkBtn) {
+        angleWarningOverlay.style.display = 'flex';
+
+        angleWarningOkBtn.onclick = null;
+        angleWarningOkBtn.onclick = () => {
+            angleWarningOverlay.style.display = 'none';
+            sendAndClose();
+        };
+    } else {
+        sendAndClose();
+    }
+});
 </script>
 </body>
 </html>
