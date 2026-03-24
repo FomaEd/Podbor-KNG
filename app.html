@@ -3249,7 +3249,7 @@ const hardwareMatrixHidden180TurnTilt_130_160 = [
 
             colorArticles.forEach(item => resultArticles.push({ ...item }));
 
-        } else if (hardwareType === 'hidden90') {
+                } else if (hardwareType === 'hidden90') {
             // Скрытая 90 + Поворотно-откидной
 
             if (wt > 150) {
@@ -3304,93 +3304,118 @@ const hardwareMatrixHidden180TurnTilt_130_160 = [
                 }
             }
 
-                        const handleSet =
+            const handleSet =
                 handleColorArticlesHidden90[handleColor] ||
                 handleColorArticlesHidden90['white'];
 
             handleSet.forEach(item => resultArticles.push({ ...item }));
 
-            } else if (hardwareType === 'hidden180') {
-    // Проверка диапазона веса для скрытой 180
-    if (wt > 210) {
-        showMessage('Максимальный вес для Скрытая 180 — 210 кг.', 'error');
-        return null;
-    }
+        } else if (hardwareType === 'hidden180') {
+            // Скрытая 180 + Поворотно-откидной (Tilt First)
 
-    if (clampSide !== 'left' && clampSide !== 'right') {
-        showMessage(
-            'Для этого типа фурнитуры необходимо выбрать сторону прижима: Левый или Правый.',
-            'error'
-        );
-        return null;
-    }
+            if (wt > 210) {
+                showMessage('Максимальный вес для Скрытая 180 (Tilt First) П/О — 210 кг.', 'error');
+                return null;
+            }
 
-    const clampKey = clampSide === 'right' ? 'articlesRight' : 'articlesLeft';
-    let matrix;
+            if (clampSide !== 'left' && clampSide !== 'right') {
+                showMessage(
+                    'Для этого типа фурнитуры необходимо выбрать сторону прижима: Левый или Правый.',
+                    'error'
+                );
+                return null;
+            }
 
-    if (openingType === 'turn-tilt') {
-        // Поворотно-откидная (Tilt First)
-        if (wt <= 130) {
-            matrix = hardwareMatrixHidden180TurnTilt;
-        } else if (wt <= 160) {
-            matrix = hardwareMatrixHidden180TurnTilt_130_160;
+            let matrix;
+            if (wt <= 130) {
+                matrix = hardwareMatrixHidden180TurnTilt;
+            } else if (wt <= 160) {
+                matrix = hardwareMatrixHidden180TurnTilt_130_160;
+            } else {
+                matrix = hardwareMatrixHidden180TurnTilt_160_210;
+            }
+
+            const baseSet = matrix.find(row =>
+                h >= row.minHeight && h <= row.maxHeight &&
+                w >= row.minWidth && w <= row.maxWidth
+            );
+
+            if (!baseSet) {
+                showMessage(
+                    'Под эти размеры нет зоны для Скрытая 180 (Tilt First) П/О. Проверь диапазоны или обратись к менеджеру.',
+                    'error'
+                );
+                return null;
+            }
+
+            const clampKey = clampSide === 'right' ? 'articlesRight' : 'articlesLeft';
+            baseSet[clampKey].forEach(item => resultArticles.push({ ...item }));
+
+            // Ручки Tilt First — своя матрица
+            const handleSetTilt =
+                handleColorArticlesHidden180TurnTilt[handleColor] ||
+                handleColorArticlesHidden180TurnTilt['white'];
+
+            handleSetTilt.forEach(item => resultArticles.push({ ...item }));
+
         } else {
-            matrix = hardwareMatrixHidden180TurnTilt_160_210;
+            showMessage(
+                'Для этого типа фурнитуры с Поворотно-откидным ещё нет подбора.',
+                'error'
+            );
+            return null;
         }
-    } else if (openingType === 'turn') {
-        // Поворотная
-        if (wt <= 130) {
-            matrix = hardwareMatrixHidden180Turn_0_130;
-        } else if (wt <= 160) {
-            matrix = hardwareMatrixHidden180Turn_130_160;
-        } else {
-            matrix = hardwareMatrixHidden180Turn_160_210;
-        }
-    } else {
-        showMessage(
-            'Для этого типа фурнитуры с таким типом открывания ещё нет подбора.',
-            'error'
-        );
-        return null;
-    }
 
-    const baseSet = matrix.find(row =>
-        h >= row.minHeight && h <= row.maxHeight &&
-        w >= row.minWidth && w <= row.maxWidth
-    );
+        } else if (openingType === 'turn') {
 
-    if (!baseSet) {
-        showMessage(
-            'Под эти размеры нет зоны для Скрытая 180. Проверь диапазоны или обратись к менеджеру.',
-            'error'
-        );
-        return null;
-    }
+        if (hardwareType === 'hidden180') {
+            // Скрытая 180 + Поворотная
 
-    baseSet[clampKey].forEach(item => resultArticles.push({ ...item }));
+            if (wt > 210) {
+                showMessage('Максимальный вес для Скрытая 180 — 210 кг.', 'error');
+                return null;
+            }
 
-    // Ручки
-    let handleSet;
+            if (clampSide !== 'left' && clampSide !== 'right') {
+                showMessage(
+                    'Для этого типа фурнитуры необходимо выбрать сторону прижима: Левый или Правый.',
+                    'error'
+                );
+                return null;
+            }
 
-    if (openingType === 'turn-tilt') {
-        // Для П/О — своя матрица hidden180
-        handleSet =
-            handleColorArticlesHidden180TurnTilt[handleColor] ||
-            handleColorArticlesHidden180TurnTilt['white'];
-    } else if (openingType === 'turn') {
-        // Для Поворотной — как у Скрытая 90 Поворотная
-        handleSet =
-            handleColorArticlesHidden90Turn[handleColor] ||
-            handleColorArticlesHidden90Turn['white'];
-    }
+            let matrix;
+            if (wt <= 130) {
+                matrix = hardwareMatrixHidden180Turn_0_130;
+            } else if (wt <= 160) {
+                matrix = hardwareMatrixHidden180Turn_130_160;
+            } else {
+                matrix = hardwareMatrixHidden180Turn_160_210;
+            }
 
-    if (handleSet) {
-        handleSet.forEach(item => resultArticles.push({ ...item }));
-    }
-        
-    } else if (openingType === 'turn') {
+            const baseSet = matrix.find(row =>
+                h >= row.minHeight && h <= row.maxHeight &&
+                w >= row.minWidth && w <= row.maxWidth
+            );
 
-        if (hardwareType === 'hidden90') {
+            if (!baseSet) {
+                showMessage(
+                    'Под эти размеры нет зоны для Скрытая 180 Поворотная. Проверь диапазоны или обратись к менеджеру.',
+                    'error'
+                );
+                return null;
+            }
+
+            const clampKey = clampSide === 'right' ? 'articlesRight' : 'articlesLeft';
+            baseSet[clampKey].forEach(item => resultArticles.push({ ...item }));
+
+            // Ручки — как у Скрытая 90 Поворотная
+            const handleSet =
+                handleColorArticlesHidden90Turn[handleColor] ||
+                handleColorArticlesHidden90Turn['white'];
+            handleSet.forEach(item => resultArticles.push({ ...item }));
+
+        } else if (hardwareType === 'hidden90') {
             if (wt > 150) {
                 showMessage('Максимальный вес для скрытой фурнитуры 90° — 150 кг.', 'error');
                 return null;
