@@ -3391,6 +3391,51 @@ saveBtn.addEventListener('click', () => {
     const hardwareResult = calculateHardware();
     if (!hardwareResult) return;
 
+    // Предупреждение про ограничитель сразу при записи окна
+    const oType = String(hardwareResult.openingType);
+    const hType = String(hardwareResult.hardwareType);
+    const wgt = Number(hardwareResult.weight);
+
+    const isHidden180 = hType === 'hidden180';
+    const inWeightRange = wgt >= 131 && wgt <= 210;
+    const isTurnTilt = oType === 'turn-tilt';
+    const isTurn = oType === 'turn';
+
+    if (isHidden180 && inWeightRange && (isTurnTilt || isTurn)) {
+        let angleWarningText;
+
+        if (isTurnTilt) {
+            angleWarningText =
+                'Внимание! В поворотно-откидном или откидно-поворотном режиме, при типе фурнитуры Tilt First, а так же, при весе створки от 131 кг до 210 кг ' +
+                'установка Ограничителя открывания створки обязательна!';
+        } else {
+            angleWarningText =
+                'Внимание! В поворотном режиме, при типе фурнитуры Tilt First, а так же, при весе створки от 131 кг до 210 кг ' +
+                'установка Ограничителя открывания створки обязательна!';
+        }
+
+        if (angleWarningOverlay && angleWarningOkBtn) {
+            angleWarningOverlay.querySelector('.modal-text').textContent = angleWarningText;
+            angleWarningOverlay.style.display = 'flex';
+
+            angleWarningOkBtn.onclick = null;
+            angleWarningOkBtn.onclick = () => {
+                angleWarningOverlay.style.display = 'none';
+                finalizeSave(hardwareResult);
+            };
+
+            return; // ждём нажатия ОК
+        } else {
+            // если по какой-то причине оверлей недоступен — хотя бы тост
+            showMessage(angleWarningText, 'warning');
+        }
+    }
+
+    // Если предупреждение не нужно — сразу сохраняем
+    finalizeSave(hardwareResult);
+});
+
+function finalizeSave(hardwareResult) {
     const qtyWindows = Number(quantityInput.value) || 1;
 
     accumulatedResults.push({
@@ -3410,7 +3455,7 @@ saveBtn.addEventListener('click', () => {
     if (tg && tg.HapticFeedback && tg.HapticFeedback.notificationOccurred) {
         tg.HapticFeedback.notificationOccurred('success');
     }
-});
+}
 
 totalBtn.addEventListener('click', () => {
     if (accumulatedResults.length === 0) {
@@ -3463,14 +3508,12 @@ totalBtn.addEventListener('click', () => {
 
     const tg = window.Telegram && window.Telegram.WebApp;
 
-    // Готовим массив для Excel — то, что ждёт бэкенд
     const excelData = finalGrouped.map(item => ({
         article: item.article,
         name: item.name,
         qty: item.qty
     }));
 
-    // Функция отправки и закрытия
     const sendAndClose = () => {
         if (tg) {
             tg.sendData(JSON.stringify({
@@ -3483,52 +3526,7 @@ totalBtn.addEventListener('click', () => {
         }
     };
 
-    // Проверяем, есть ли среди окон сочетание:
-    // Поворотно-откидной + Скрытая 180 + вес 131–160 кг (по факту)
-    // Проверяем, есть ли среди окон сочетания для предупреждения
-    let needAngleWarning = false;
-    let angleWarningText = '';
-
-    for (const res of accumulatedResults) {
-    const oType = String(res.openingType);
-    const hType = String(res.hardwareType);
-    const wgt = Number(res.weight);
-
-    const isHidden180 = hType === 'hidden180';
-    const inWeightRange = wgt >= 131 && wgt <= 210;
-    const isTurnTilt = oType === 'turn-tilt';
-    const isTurn = oType === 'turn';
-
-    if (isHidden180 && inWeightRange && (isTurnTilt || isTurn)) {
-        needAngleWarning = true;
-
-        if (isTurnTilt) {
-            angleWarningText =
-                'Внимание! В поворотно-откидном или откидно-поворотном режиме, при типе фурнитуры Tilt First, а так же, при весе створки от 131 кг до 210 кг ' +
-                'установка Ограничителя открывания створки обязательна!';
-        } else if (isTurn) {
-            angleWarningText =
-                'Внимание! В поворотном режиме, при типе фурнитуры Tilt First, а так же, при весе створки от 131 кг до 210 кг ' +
-                'установка Ограничителя открывания створки обязательна!';
-        }
-
-        break; // достаточно первого подходящего окна
-    }
-}
-
-if (needAngleWarning && angleWarningOverlay && angleWarningOkBtn) {
-    angleWarningOverlay.querySelector('.modal-text').textContent = angleWarningText;
-
-    angleWarningOverlay.style.display = 'flex';
-
-    angleWarningOkBtn.onclick = null;
-    angleWarningOkBtn.onclick = () => {
-        angleWarningOverlay.style.display = 'none';
-        sendAndClose();
-    };
-} else {
     sendAndClose();
-}
 });
 </script>
 </body>
