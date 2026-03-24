@@ -127,7 +127,9 @@
 
         .toggle-chip {
             flex: 1;
-            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 7px 8px;
             font-size: 12px;
             border-radius: 999px;
@@ -136,7 +138,8 @@
             cursor: pointer;
             user-select: none;
             transition: all 0.15s ease;
-        }
+            text-align: center;
+
 
         .toggle-chip.active {
             background: var(--color-primary);
@@ -148,6 +151,7 @@
         .toggle-chip span {
             font-size: 13px;
             font-weight: 600;
+            line-height: 1.2;
         }
 
         .row-inline {
