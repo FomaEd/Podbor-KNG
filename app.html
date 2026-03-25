@@ -3571,6 +3571,35 @@ const hardwareMatrixHidden180TurnTilt_130_160 = [
         ],
     },
 ];
+
+    const hardwareMatrixHidden180Tilt_0_130 = [
+    // 1. Высота: 500-1300, Ширина: 445-1000
+    {
+        minHeight: 500, maxHeight: 1300, minWidth: 445, maxWidth: 1000,
+        articles: [
+            { article: 'KN219FM-L', name: 'Петля ПО скрытая 160 кг нижняя лев', qty: 1 },
+            { article: 'KN219FM-R', name: 'Петля ПО скрытая 160 кг нижняя прав', qty: 1 },
+            { article: 'KN100TD',   name: 'Ответная планка для цапфы', qty: 2 },
+            { article: 'KN400FS',   name: 'Приподниматель створки поворотной', qty: 2 },
+            { article: 'KN100LE',   name: 'Цапфа концевая', qty: 2 },
+            { article: 'KN604BZ',   name: 'Ограничитель открывания створки', qty: 2 },
+        ],
+    },
+    // 2. Высота: 500-1300, Ширина: 1001-1600
+    {
+        minHeight: 500, maxHeight: 1300, minWidth: 1001, maxWidth: 1600,
+        articles: [
+            { article: 'KN219FM-R', name: 'Петля ПО скрытая 160 кг нижняя прав', qty: 1 },
+            { article: 'KN219FM-L', name: 'Петля ПО скрытая 160 кг нижняя лев', qty: 1 },
+            { article: 'KN100TD',   name: 'Ответная планка для цапфы', qty: 3 },
+            { article: 'KN400FS',   name: 'Приподниматель створки поворотной', qty: 2 },
+            { article: 'KN100LE',   name: 'Цапфа концевая', qty: 2 },
+            { article: 'KN100OU',   name: 'Цапфа под тягу Стандарт', qty: 1 },
+            { article: 'KN604BZ',   name: 'Ограничитель открывания створки', qty: 2 },
+            { article: 'KN100WH',   name: 'Скрытый прижим регулируемый винтом', qty: 1 },
+        ],
+    },
+];
     
              const handleColorArticlesHidden180TurnTilt = {
     white: [
@@ -4175,74 +4204,116 @@ const hardwareMatrixHidden180TurnTilt_130_160 = [
 
     } else if (openingType === 'tilt') {
 
-        if (hardwareType === 'visible') {
-            // Видимая + Откидной
-            const baseSet = hardwareMatrixVisibleTilt.find(row =>
-                h >= row.minHeight && h <= row.maxHeight &&
-                w >= row.minWidth && w <= row.maxWidth
+    if (hardwareType === 'visible') {
+        // Видимая + Откидной
+        const baseSet = hardwareMatrixVisibleTilt.find(row =>
+            h >= row.minHeight && h <= row.maxHeight &&
+            w >= row.minWidth && w <= row.maxWidth
+        );
+
+        if (!baseSet) {
+            showMessage(
+                'Под эти размеры нет настроенной зоны (Откидной). Проверь диапазоны или обратись к менеджеру.',
+                'error'
             );
+            return null;
+        }
 
-            if (!baseSet) {
-                showMessage(
-                    'Под эти размеры нет настроенной зоны (Откидной). Проверь диапазоны или обратись к менеджеру.',
-                    'error'
-                );
-                return null;
-            }
+        baseSet.articles.forEach(item => resultArticles.push({ ...item }));
 
-            baseSet.articles.forEach(item => resultArticles.push({ ...item }));
+        // Определяем зону по ширине
+        const zoneKey = (w >= 445 && w <= 1000) ? 'zone1' : 'zone2';
 
-            // Определяем зону по ширине
-            const zoneKey = (w >= 445 && w <= 1000) ? 'zone1' : 'zone2';
+        const tiltHandleByZone = handleColorArticlesTiltVisible[zoneKey];
+        const colorArticles =
+            (tiltHandleByZone && tiltHandleByZone[handleColor]) ||
+            (tiltHandleByZone && tiltHandleByZone['white']);
 
-            const tiltHandleByZone = handleColorArticlesTiltVisible[zoneKey];
-            const colorArticles =
-                (tiltHandleByZone && tiltHandleByZone[handleColor]) ||
-                (tiltHandleByZone && tiltHandleByZone['white']);
+        if (colorArticles) {
+            colorArticles.forEach(item => resultArticles.push({ ...item }));
+        }
 
-            if (colorArticles) {
-                colorArticles.forEach(item => resultArticles.push({ ...item }));
-            }
+    } else if (hardwareType === 'visibleProvedal') {
+        // Видимая Provedal + Откидной
+        const baseSet = hardwareMatrixVisibleProvedalTilt.find(row =>
+            h >= row.minHeight && h <= row.maxHeight &&
+            w >= row.minWidth && w <= row.maxWidth
+        );
 
-        } else if (hardwareType === 'visibleProvedal') {
-            // Видимая Provedal + Откидной
-            const baseSet = hardwareMatrixVisibleProvedalTilt.find(row =>
-                h >= row.minHeight && h <= row.maxHeight &&
-                w >= row.minWidth && w <= row.maxWidth
+        if (!baseSet) {
+            showMessage(
+                'Под эти размеры нет зоны для Видимая Provedal Откидная. Проверь диапазоны или обратись к менеджеру.',
+                'error'
             );
+            return null;
+        }
 
-            if (!baseSet) {
-                showMessage(
-                    'Под эти размеры нет зоны для Видимая Provedal Откидная. Проверь диапазоны или обратись к менеджеру.',
-                    'error'
-                );
-                return null;
-            }
+        // Проверяем вес под конкретный диапазон
+        if (typeof baseSet.maxWeight === 'number' && wt > baseSet.maxWeight) {
+            showMessage(baseSet.weightErrorMessage, 'error');
+            return null;
+        }
+        if (typeof baseSet.minWeight === 'number' && wt <= baseSet.minWeight) {
+            showMessage(baseSet.weightErrorMessage, 'error');
+            return null;
+        }
 
-            // Проверяем вес под конкретный диапазон
-            if (typeof baseSet.maxWeight === 'number' && wt > baseSet.maxWeight) {
-                showMessage(baseSet.weightErrorMessage, 'error');
-                return null;
-            }
-            if (typeof baseSet.minWeight === 'number' && wt <= baseSet.minWeight) {
-                showMessage(baseSet.weightErrorMessage, 'error');
-                return null;
-            }
+        baseSet.articles.forEach(item => resultArticles.push({ ...item }));
 
-            baseSet.articles.forEach(item => resultArticles.push({ ...item }));
+        // Зона по ширине строго как в матрице:
+        // zone1: 500–1300, zone2: 1301–2000
+        const zoneKey = (w >= 500 && w <= 1300) ? 'zone1' : 'zone2';
 
-            // Зона по ширине строго как в матрице:
-            // zone1: 500–1300, zone2: 1301–2000
-            const zoneKey = (w >= 500 && w <= 1300) ? 'zone1' : 'zone2';
+        const tiltHandleByZone = handleColorArticlesProvedalTilt[zoneKey];
+        const colorArticles =
+            (tiltHandleByZone && tiltHandleByZone[handleColor]) ||
+            (tiltHandleByZone && tiltHandleByZone['white']);
 
-            const tiltHandleByZone = handleColorArticlesProvedalTilt[zoneKey];
-            const colorArticles =
-                (tiltHandleByZone && tiltHandleByZone[handleColor]) ||
-                (tiltHandleByZone && tiltHandleByZone['white']);
+        if (colorArticles) {
+            colorArticles.forEach(item => resultArticles.push({ ...item }));
+        }
 
-            if (colorArticles) {
-                colorArticles.forEach(item => resultArticles.push({ ...item }));
-            }
+    } else if (hardwareType === 'hidden180') {
+        // Скрытая 180 + Откидной, до 130 кг
+
+        if (wt > 130) {
+            showMessage('Максимальный вес для Скрытая 180 Откидная — 130 кг.', 'error');
+            return null;
+        }
+
+        if (clampSide !== 'any') {
+            showMessage(
+                'Для ваших параметров сторона прижима не имеет значения. ' +
+                'Выберите вариант «Не имеет значения».',
+                'error'
+            );
+            return null;
+        }
+
+        const baseSet = hardwareMatrixHidden180Tilt_0_130.find(row =>
+            h >= row.minHeight && h <= row.maxHeight &&
+            w >= row.minWidth && w <= row.maxWidth
+        );
+
+        if (!baseSet) {
+            showMessage(
+                'Под эти размеры нет зоны для Скрытая 180 Откидная. Проверь диапазоны или обратись к менеджеру.',
+                'error'
+            );
+            return null;
+        }
+
+        baseSet.articles.forEach(item => resultArticles.push({ ...item }));
+
+        // Ручки — как у Скрытая 180 Поворотная (та же матрица, что и для hidden90 turn)
+        const handleSet =
+            handleColorArticlesHidden90Turn[handleColor] ||
+            handleColorArticlesHidden90Turn['white'];
+
+        if (handleSet) {
+            handleSet.forEach(item => resultArticles.push({ ...item }));
+        }
+    }
 
         } else if (hardwareType === 'hidden90') {
             if (wt > 80) {
