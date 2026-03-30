@@ -3880,31 +3880,33 @@ const hardwareMatrixHidden180TurnTilt_130_160 = [
             width >= row.minWidth && width <= row.maxWidth
         );
     }
-
- function calculateHardware() {
-    const h = Number(heightInput.value);
-    const w = Number(widthInput.value);
-    const wt = Number(weightInput.value);
-    const openingType = openingTypeSelect.value; // 'turn-tilt' | 'turn' | 'tilt'
-    const hardwareType = hardwareTypeInput.value;
-    const clampSide = clampSideInput.value;
-    const handleColor = handleColorSelect.value || 'white';
+    
+    function calculateHardware() {
+        const h = Number(heightInput.value);
+        const w = Number(widthInput.value);
+        const wt = Number(weightInput.value);
+        const openingType = openingTypeSelect.value; // 'turn-tilt' | 'turn' | 'tilt' | 'stulp' | 'top-hung'
+        const hardwareType = hardwareTypeInput.value;
+        const clampSide = clampSideInput.value;
+        const handleColor = handleColorSelect.value || 'white';
 
     if (!validateInputs()) {
         return null;
     }
 
-        const resultArticles = [];
+    const resultArticles = [];
 
- } else if (openingType === 'top-hung') {
-     showMessage(
-         'Для Верхнеподвесной пока нет настроенной матрицы. Обратись к менеджеру.',
-         'error'
-     );
-     return null;
- }
+    // === Верхнеподвесной (пока заглушка) ===
+    if (openingType === 'top-hung') {
+        showMessage(
+            'Для Верхнеподвесной пока нет настроенной матрицы. Обратись к менеджеру.',
+            'error'
+        );
+        return null;
 
-    if (openingType === 'turn-tilt') {
+    // === Поворотно-откидной ===
+    } else if (openingType === 'turn-tilt') {
+
         if (hardwareType === 'visible') {
             // Видимая + Поворотно-откидной
             const baseSet = pickVisibleTurnTiltSet(h, w);
@@ -3945,7 +3947,7 @@ const hardwareMatrixHidden180TurnTilt_130_160 = [
 
             colorArticles.forEach(item => resultArticles.push({ ...item }));
 
-                } else if (hardwareType === 'hidden90') {
+        } else if (hardwareType === 'hidden90') {
             // Скрытая 90 + Поворотно-откидной
 
             if (wt > 150) {
@@ -4047,7 +4049,6 @@ const hardwareMatrixHidden180TurnTilt_130_160 = [
             const clampKey = clampSide === 'right' ? 'articlesRight' : 'articlesLeft';
             baseSet[clampKey].forEach(item => resultArticles.push({ ...item }));
 
-            // Ручки Tilt First — своя матрица
             const handleSetTilt =
                 handleColorArticlesHidden180TurnTilt[handleColor] ||
                 handleColorArticlesHidden180TurnTilt['white'];
@@ -4062,60 +4063,62 @@ const hardwareMatrixHidden180TurnTilt_130_160 = [
             return null;
         }
 
-        } else if (openingType === 'turn') {
+    // === Поворотный ===
+    } else if (openingType === 'turn') {
 
         if (hardwareType === 'hidden180') {
-        // Скрытая 180 + Поворотная
+            // Скрытая 180 + Поворотная
 
-        if (wt > 210) {
-            showMessage('Максимальный вес для Скрытая 180 Поворотная — 210 кг.', 'error');
-            return null;
-        }
+            if (wt > 210) {
+                showMessage('Максимальный вес для Скрытая 180 Поворотная — 210 кг.', 'error');
+                return null;
+            }
 
-        if (clampSide !== 'left' && clampSide !== 'right') {
-            showMessage(
-                'Для этого типа фурнитуры необходимо выбрать сторону прижима: Левый или Правый.',
-                'error'
-            );
-            return null;
-        }
+            if (clampSide !== 'left' && clampSide !== 'right') {
+                showMessage(
+                    'Для этого типа фурнитуры необходимо выбрать сторону прижима: Левый или Правый.',
+                    'error'
+                );
+                return null;
+            }
 
             let matrix;
 
-        if (wt <= 130) {
-            matrix = hardwareMatrixHidden180Turn_0_130;
-        } else if (wt <= 160) {
-            matrix = hardwareMatrixHidden180Turn_130_160;
-        } else if (wt <= 210) {
-        matrix = hardwareMatrixHidden180Turn_160_210;
-        } else {
-            showMessage('Максимальный вес для Скрытая 180 Поворотная — 210 кг.', 'error');
-            return null;
-        }
+            if (wt <= 130) {
+                matrix = hardwareMatrixHidden180Turn_0_130;
+            } else if (wt <= 160) {
+                matrix = hardwareMatrixHidden180Turn_130_160;
+            } else if (wt <= 210) {
+                matrix = hardwareMatrixHidden180Turn_160_210;
+            } else {
+                showMessage('Максимальный вес для Скрытая 180 Поворотная — 210 кг.', 'error');
+                return null;
+            }
 
-        const baseSet = matrix.find(row =>
-            h >= row.minHeight && h <= row.maxHeight &&
-            w >= row.minWidth && w <= row.maxWidth
-        );
-
-        if (!baseSet) {
-            showMessage(
-                'Под эти размеры нет зоны для Скрытая 180 Поворотная. Проверь диапазоны или обратись к менеджеру.',
-                'error'
+            const baseSet = matrix.find(row =>
+                h >= row.minHeight && h <= row.maxHeight &&
+                w >= row.minWidth && w <= row.maxWidth
             );
-            return null;
-        }
 
-        const clampKey = clampSide === 'right' ? 'articlesRight' : 'articlesLeft';
-        baseSet[clampKey].forEach(item => resultArticles.push({ ...item }));
+            if (!baseSet) {
+                showMessage(
+                    'Под эти размеры нет зоны для Скрытая 180 Поворотная. Проверь диапазоны или обратись к менеджеру.',
+                    'error'
+                );
+                return null;
+            }
 
-            // Ручки — как у Скрытая 90 Поворотная
+            const clampKey = clampSide === 'right' ? 'articlesRight' : 'articlesLeft';
+            baseSet[clampKey].forEach(item => resultArticles.push({ ...item }));
+
             const handleSet =
                 handleColorArticlesHidden90Turn[handleColor] ||
                 handleColorArticlesHidden90Turn['white'];
             handleSet.forEach(item => resultArticles.push({ ...item }));
 
         } else if (hardwareType === 'hidden90') {
+            // Скрытая 90 + Поворотная
+
             if (wt > 150) {
                 showMessage('Максимальный вес для скрытой фурнитуры 90° — 150 кг.', 'error');
                 return null;
@@ -4219,7 +4222,6 @@ const hardwareMatrixHidden180TurnTilt_130_160 = [
             colorArticles.forEach(item => resultArticles.push({ ...item }));
 
         } else if (hardwareType === 'visibleProvedal') {
-
             // Видимая Provedal + Поворотный
             const baseSet = hardwareMatrixVisibleProvedalTurn.find(row =>
                 h >= row.minHeight && h <= row.maxHeight &&
@@ -4255,177 +4257,178 @@ const hardwareMatrixHidden180TurnTilt_130_160 = [
             return null;
         }
 
+    // === Откидной ===
     } else if (openingType === 'tilt') {
 
-    if (hardwareType === 'visible') {
-        // Видимая + Откидной
-        const baseSet = hardwareMatrixVisibleTilt.find(row =>
-            h >= row.minHeight && h <= row.maxHeight &&
-            w >= row.minWidth && w <= row.maxWidth
-        );
-
-        if (!baseSet) {
-            showMessage(
-                'Под эти размеры нет настроенной зоны (Откидной). Проверь диапазоны или обратись к менеджеру.',
-                'error'
+        if (hardwareType === 'visible') {
+            // Видимая + Откидной
+            const baseSet = hardwareMatrixVisibleTilt.find(row =>
+                h >= row.minHeight && h <= row.maxHeight &&
+                w >= row.minWidth && w <= row.maxWidth
             );
-            return null;
-        }
 
-        baseSet.articles.forEach(item => resultArticles.push({ ...item }));
+            if (!baseSet) {
+                showMessage(
+                    'Под эти размеры нет настроенной зоны (Откидной). Проверь диапазоны или обратись к менеджеру.',
+                    'error'
+                );
+                return null;
+            }
 
-        const zoneKey = (w >= 445 && w <= 1000) ? 'zone1' : 'zone2';
+            baseSet.articles.forEach(item => resultArticles.push({ ...item }));
 
-        const tiltHandleByZone = handleColorArticlesTiltVisible[zoneKey];
-        const colorArticles =
-            (tiltHandleByZone && tiltHandleByZone[handleColor]) ||
-            (tiltHandleByZone && tiltHandleByZone['white']);
+            const zoneKey = (w >= 445 && w <= 1000) ? 'zone1' : 'zone2';
 
-        if (colorArticles) {
-            colorArticles.forEach(item => resultArticles.push({ ...item }));
-        }
+            const tiltHandleByZone = handleColorArticlesTiltVisible[zoneKey];
+            const colorArticles =
+                (tiltHandleByZone && tiltHandleByZone[handleColor]) ||
+                (tiltHandleByZone && tiltHandleByZone['white']);
 
-    } else if (hardwareType === 'visibleProvedal') {
-        // Видимая Provedal + Откидной
-        const baseSet = hardwareMatrixVisibleProvedalTilt.find(row =>
-            h >= row.minHeight && h <= row.maxHeight &&
-            w >= row.minWidth && w <= row.maxWidth
-        );
+            if (colorArticles) {
+                colorArticles.forEach(item => resultArticles.push({ ...item }));
+            }
 
-        if (!baseSet) {
-            showMessage(
-                'Под эти размеры нет зоны для Видимая Provedal Откидная. Проверь диапазоны или обратись к менеджеру.',
-                'error'
+        } else if (hardwareType === 'visibleProvedal') {
+            // Видимая Provedal + Откидной
+            const baseSet = hardwareMatrixVisibleProvedalTilt.find(row =>
+                h >= row.minHeight && h <= row.maxHeight &&
+                w >= row.minWidth && w <= row.maxWidth
             );
-            return null;
-        }
 
-        if (typeof baseSet.maxWeight === 'number' && wt > baseSet.maxWeight) {
-            showMessage(baseSet.weightErrorMessage, 'error');
-            return null;
-        }
-        if (typeof baseSet.minWeight === 'number' && wt <= baseSet.minWeight) {
-            showMessage(baseSet.weightErrorMessage, 'error');
-            return null;
-        }
+            if (!baseSet) {
+                showMessage(
+                    'Под эти размеры нет зоны для Видимая Provedal Откидная. Проверь диапазоны или обратись к менеджеру.',
+                    'error'
+                );
+                return null;
+            }
 
-        baseSet.articles.forEach(item => resultArticles.push({ ...item }));
+            if (typeof baseSet.maxWeight === 'number' && wt > baseSet.maxWeight) {
+                showMessage(baseSet.weightErrorMessage, 'error');
+                return null;
+            }
+            if (typeof baseSet.minWeight === 'number' && wt <= baseSet.minWeight) {
+                showMessage(baseSet.weightErrorMessage, 'error');
+                return null;
+            }
 
-        const zoneKey = (w >= 500 && w <= 1300) ? 'zone1' : 'zone2';
+            baseSet.articles.forEach(item => resultArticles.push({ ...item }));
 
-        const tiltHandleByZone = handleColorArticlesProvedalTilt[zoneKey];
-        const colorArticles =
-            (tiltHandleByZone && tiltHandleByZone[handleColor]) ||
-            (tiltHandleByZone && tiltHandleByZone['white']);
+            const zoneKey = (w >= 500 && w <= 1300) ? 'zone1' : 'zone2';
 
-        if (colorArticles) {
-            colorArticles.forEach(item => resultArticles.push({ ...item }));
-        }
+            const tiltHandleByZone = handleColorArticlesProvedalTilt[zoneKey];
+            const colorArticles =
+                (tiltHandleByZone && tiltHandleByZone[handleColor]) ||
+                (tiltHandleByZone && tiltHandleByZone['white']);
 
-    } else if (hardwareType === 'hidden180') {
-        // Скрытая 180 + Откидной, до 130 кг
+            if (colorArticles) {
+                colorArticles.forEach(item => resultArticles.push({ ...item }));
+            }
 
-        if (wt > 130) {
-            showMessage('Максимальный вес для Скрытая 180 Откидная — 130 кг.', 'error');
-            return null;
-        }
+        } else if (hardwareType === 'hidden180') {
+            // Скрытая 180 + Откидной, до 130 кг
 
-        if (clampSide !== 'any') {
-            showMessage(
-                'Для ваших параметров сторона прижима не имеет значения. ' +
-                'Выберите вариант «Не имеет значения».',
-                'error'
+            if (wt > 130) {
+                showMessage('Максимальный вес для Скрытая 180 Откидная — 130 кг.', 'error');
+                return null;
+            }
+
+            if (clampSide !== 'any') {
+                showMessage(
+                    'Для ваших параметров сторона прижима не имеет значения. ' +
+                    'Выберите вариант «Не имеет значения».',
+                    'error'
+                );
+                return null;
+            }
+
+            const baseSet = hardwareMatrixHidden180Tilt_0_130.find(row =>
+                h >= row.minHeight && h <= row.maxHeight &&
+                w >= row.minWidth && w <= row.maxWidth
             );
-            return null;
-        }
 
-        const baseSet = hardwareMatrixHidden180Tilt_0_130.find(row =>
-            h >= row.minHeight && h <= row.maxHeight &&
-            w >= row.minWidth && w <= row.maxWidth
-        );
+            if (!baseSet) {
+                showMessage(
+                    'Под эти размеры нет зоны для Скрытая 180 Откидная. Проверь диапазоны или обратись к менеджеру.',
+                    'error'
+                );
+                return null;
+            }
 
-        if (!baseSet) {
-            showMessage(
-                'Под эти размеры нет зоны для Скрытая 180 Откидная. Проверь диапазоны или обратись к менеджеру.',
-                'error'
+            baseSet.articles.forEach(item => resultArticles.push({ ...item }));
+
+            const handleSet =
+                handleColorArticlesHidden90Turn[handleColor] ||
+                handleColorArticlesHidden90Turn['white'];
+
+            if (handleSet) {
+                handleSet.forEach(item => resultArticles.push({ ...item }));
+            }
+
+        } else if (hardwareType === 'hidden90') {
+            // Скрытая 90 + Откидной
+            if (wt > 80) {
+                showMessage('Максимальный вес для Скрытая 90 Откидной — 80 кг.', 'error');
+                return null;
+            }
+
+            if (clampSide !== 'any') {
+                showMessage(
+                    'Для ваших параметров сторона прижима не имеет значения. ' +
+                    'Выберите вариант «Не имеет значения».',
+                    'error'
+                );
+                return null;
+            }
+
+            const baseSet = hardwareMatrixHidden90Tilt.find(row =>
+                h >= row.minHeight && h <= row.maxHeight &&
+                w >= row.minWidth && w <= row.maxWidth
             );
-            return null;
-        }
 
-        baseSet.articles.forEach(item => resultArticles.push({ ...item }));
+            if (!baseSet) {
+                showMessage(
+                    'Под эти размеры нет зоны для Скрытая 90 Откидная. Проверь диапазоны или обратись к менеджеру.',
+                    'error'
+                );
+                return null;
+            }
 
-        const handleSet =
-            handleColorArticlesHidden90Turn[handleColor] ||
-            handleColorArticlesHidden90Turn['white'];
+            baseSet.articles.forEach(item => resultArticles.push({ ...item }));
 
-        if (handleSet) {
+            const handleSet =
+                handleColorArticlesHidden90Tilt[handleColor] ||
+                handleColorArticlesHidden90Tilt['white'];
             handleSet.forEach(item => resultArticles.push({ ...item }));
-        }
 
-    } else if (hardwareType === 'hidden90') {
-        // Скрытая 90 + Откидной
-        if (wt > 80) {
-            showMessage('Максимальный вес для Скрытая 90 Откидной — 80 кг.', 'error');
-            return null;
-        }
-
-        if (clampSide !== 'any') {
+        } else {
             showMessage(
-                'Для ваших параметров сторона прижима не имеет значения. ' +
-                'Выберите вариант «Не имеет значения».',
+                'Для этого типа фурнитуры с Откидным ещё нет подбора.',
                 'error'
             );
             return null;
         }
-
-        const baseSet = hardwareMatrixHidden90Tilt.find(row =>
-            h >= row.minHeight && h <= row.maxHeight &&
-            w >= row.minWidth && w <= row.maxWidth
-        );
-
-        if (!baseSet) {
-            showMessage(
-                'Под эти размеры нет зоны для Скрытая 90 Откидная. Проверь диапазоны или обратись к менеджеру.',
-                'error'
-            );
-            return null;
-        }
-
-        baseSet.articles.forEach(item => resultArticles.push({ ...item }));
-
-        const handleSet =
-            handleColorArticlesHidden90Tilt[handleColor] ||
-            handleColorArticlesHidden90Tilt['white'];
-        handleSet.forEach(item => resultArticles.push({ ...item }));
 
     } else {
         showMessage(
-            'Для этого типа фурнитуры с Откидным ещё нет подбора.',
+            'Для этого типа открывания подбор ещё не реализован.',
             'error'
         );
         return null;
     }
 
-} else {
-    showMessage(
-        'Для этого типа открывания подбор ещё не реализован.',
-        'error'
-    );
-    return null;
+    return {
+        height: h,
+        width: w,
+        weight: wt,
+        openingType,
+        hardwareType,
+        clampSide,
+        handleColor,
+        items: resultArticles
+    };
 }
-
-return {
-    height: h,
-    width: w,
-    weight: wt,
-    openingType,
-    hardwareType,
-    clampSide,
-    handleColor,
-    items: resultArticles
-};
-}
-
+    
 // === КАСТОМНЫЙ ПОПАП ДЛЯ СКРЫТАЯ 180 / 131–160 КГ ===
 const angleWarningOverlay = document.getElementById('angleWarningOverlay');
 const angleWarningOkBtn = document.getElementById('angleWarningOkBtn');
