@@ -362,10 +362,11 @@
                         <option value="turn">Поворотный</option>
                         <option value="tilt">Откидной</option>
                         <option value="stulp">Штульповый</option>
+                        <option value="top-hung">Верхнеподвесной</option>
                     </select>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" id="hardwareTypeGroup">
                     <label>Тип фурнитуры</label>
                     <div class="toggle-row" id="hardwareTypeToggle">
                         <div class="toggle-chip active" data-value="visible">
@@ -383,6 +384,7 @@
                     </div>
                     <input type="hidden" id="hardwareType" value="visible">
                 </div>
+
 
                 <div class="form-group" id="clampSideGroup" style="display:none;">
     <label>Прижим (для скрытой)</label>
@@ -475,6 +477,7 @@
         tg.MainButton.hide();
     }
 
+    const hardwareTypeGroup = document.getElementById('hardwareTypeGroup');
     const hardwareTypeToggle = document.getElementById('hardwareTypeToggle');
     const clampSideToggle = document.getElementById('clampSideToggle');
     const hardwareTypeInput = document.getElementById('hardwareType');
@@ -497,6 +500,31 @@
     const accumulatedCountElement = document.getElementById('accumulatedCount');
 
     const accumulatedResults = [];
+
+    openingTypeSelect.addEventListener('change', () => {
+    const openingType = openingTypeSelect.value;
+
+    if (openingType === 'top-hung') {
+        // Прячем выбор типа фурнитуры
+        if (hardwareTypeGroup) hardwareTypeGroup.style.display = 'none';
+        hardwareTypeInput.value = 'visible';
+
+        // Прячем прижим и сбрасываем
+        clampSideGroup.style.display = 'none';
+        clampSideInput.value = 'any';
+    } else {
+        // Показываем обратно
+        if (hardwareTypeGroup) hardwareTypeGroup.style.display = '';
+
+        const val = hardwareTypeInput.value;
+        if (val === 'hidden90' || val === 'hidden180') {
+            clampSideGroup.style.display = '';
+        } else {
+            clampSideGroup.style.display = 'none';
+            clampSideInput.value = 'any';
+        }
+    }
+});
 
 // --- Тоггл типа фурнитуры ---
 if (hardwareTypeToggle && hardwareTypeInput && clampSideGroup) {
@@ -559,8 +587,17 @@ function showMessage(text, type = 'error') {
         return false;
     }
 
-    if (openingType !== 'turn-tilt' && openingType !== 'turn' && openingType !== 'tilt') {
-        showMessage('Сейчас доступны: Поворотно-откидной, Поворотный и Откидной.', 'error');
+    if (
+        openingType !== 'turn-tilt' &&
+        openingType !== 'turn' &&
+        openingType !== 'tilt' &&
+        openingType !== 'stulp' &&
+        openingType !== 'top-hung'
+    ) {
+        showMessage(
+            'Сейчас доступны: П/О, Поворотный, Откидной, Штульповый и Верхнеподвесной.',
+            'error'
+        );
         return false;
     }
 
@@ -3858,6 +3895,14 @@ const hardwareMatrixHidden180TurnTilt_130_160 = [
     }
 
         const resultArticles = [];
+
+ } else if (openingType === 'top-hung') {
+     showMessage(
+         'Для Верхнеподвесной пока нет настроенной матрицы. Обратись к менеджеру.',
+         'error'
+     );
+     return null;
+ }
 
     if (openingType === 'turn-tilt') {
         if (hardwareType === 'visible') {
