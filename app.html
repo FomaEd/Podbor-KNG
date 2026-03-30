@@ -669,6 +669,21 @@ function showMessage(text, type = 'error') {
     return true;
 }
 
+    const hardwareMatrixTopHung_0_80 = [
+    {
+        minHeight: 500,
+        maxHeight: 1000,
+        minWidth: 500,
+        maxWidth: 1300,
+        articles: [
+            { article: 'KN604BB', name: 'Ножницы фрикционные в паз верхнеподвесные', qty: 1 },
+            { article: 'KN100LE', name: 'Цапфа концевая', qty: 2 },
+            { article: 'KN100TD', name: 'Ответная планка для цапфы', qty: 2 },
+            { article: 'KN400FS', name: 'Приподниматель створки поворотной', qty: 2 },
+        ],
+    },
+];
+
     const hardwareMatrixVisibleTurnTilt = [
         {
             minHeight: 550, maxHeight: 1200,
@@ -3896,13 +3911,37 @@ const hardwareMatrixHidden180TurnTilt_130_160 = [
 
     const resultArticles = [];
 
-    // === Верхнеподвесной (пока заглушка) ===
-    if (openingType === 'top-hung') {
+    // === Верхнеподвесной ===
+if (openingType === 'top-hung') {
+
+    if (wt > 80) {
+        showMessage('Максимальный вес для Верхнеподвесной створки — 80 кг.', 'error');
+        return null;
+    }
+
+    const baseSet = hardwareMatrixTopHung_0_80.find(row =>
+        h >= row.minHeight && h <= row.maxHeight &&
+        w >= row.minWidth && w <= row.maxWidth
+    );
+
+    if (!baseSet) {
         showMessage(
-            'Для Верхнеподвесной пока нет настроенной матрицы. Обратись к менеджеру.',
+            'Под эти размеры нет зоны для Верхнеподвесной створки. Проверь диапазоны или обратись к менеджеру.',
             'error'
         );
         return null;
+    }
+
+    baseSet.articles.forEach(item => resultArticles.push({ ...item }));
+
+    // Ручка Classic — как у Поворотная + Скрытая 90
+    const handleSet =
+        handleColorArticlesHidden90Turn[handleColor] ||
+        handleColorArticlesHidden90Turn['white'];
+
+    if (handleSet) {
+        handleSet.forEach(item => resultArticles.push({ ...item }));
+    }
 
     // === Поворотно-откидной ===
     } else if (openingType === 'turn-tilt') {
