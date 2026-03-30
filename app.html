@@ -385,6 +385,20 @@
                     </div>
                     <input type="hidden" id="hardwareType" value="visible">
                 </div>
+
+                <div class="form-group" id="profileTypeGroup" style="display:none;">
+  <label>Тип профиля</label>
+  <div class="toggle-row" id="profileTypeToggle">
+    <div class="toggle-chip active" data-value="alutech">
+      <span>ALUTECH</span>
+    </div>
+    <div class="toggle-chip" data-value="other">
+      <span>Другие профили</span>
+    </div>
+  </div>
+  <input type="hidden" id="profileType" value="alutech">
+</div>
+                
                 <div class="form-group" id="ventNoteGroup" style="display:none;">
     <label>Тип фурнитуры</label>
     <div class="message-box" style="margin-top:4px;">
@@ -492,6 +506,9 @@
     const clampSideInput = document.getElementById('clampSide');
     const clampSideGroup = document.getElementById('clampSideGroup');
     const ventNoteGroup = document.getElementById('ventNoteGroup');
+    const profileTypeGroup = document.getElementById('profileTypeGroup');
+    const profileTypeToggle = document.getElementById('profileTypeToggle');
+    const profileTypeInput = document.getElementById('profileType');
 
     const heightInput = document.getElementById('height');
     const widthInput = document.getElementById('width');
@@ -554,6 +571,18 @@
             provedalChip.style.display = '';
           }
         }
+        if (profileTypeGroup) {
+          if (openingType === 'stulp') {
+            profileTypeGroup.style.display = '';
+          } else {
+            profileTypeGroup.style.display = 'none';
+            profileTypeInput.value = 'alutech';
+            [...profileTypeToggle.querySelectorAll('.toggle-chip')]
+              .forEach(c => c.classList.remove('active'));
+            const firstChip = profileTypeToggle.querySelector('[data-value="alutech"]');
+            if (firstChip) firstChip.classList.add('active');
+          }
+        }
     }
 });   // ← добавить эту строку
 
@@ -580,6 +609,18 @@ if (hardwareTypeToggle && hardwareTypeInput && clampSideGroup) {
             clampSideGroup.style.display = 'none';
         }
     });
+}
+
+    // --- Тоггл типа профиля ---
+if (profileTypeToggle && profileTypeInput) {
+  profileTypeToggle.addEventListener('click', (e) => {
+    const chip = e.target.closest('.toggle-chip');
+    if (!chip) return;
+    [...profileTypeToggle.querySelectorAll('.toggle-chip')]
+      .forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    profileTypeInput.value = chip.dataset.value;
+  });
 }
 
 // --- Тоггл прижима ---
@@ -4586,14 +4627,15 @@ if (openingType === 'top-hung') {
     }
 
     return {
-        height: h,
-        width: w,
-        weight: wt,
-        openingType,
-        hardwareType,
-        clampSide,
-        handleColor,
-        items: resultArticles
+  height: h,
+  width: w,
+  weight: wt,
+  openingType,
+  hardwareType,
+  profileType: profileTypeInput.value,  // ← добавить эту строку
+  clampSide,
+  handleColor,
+  items: resultArticles
     };
 }
     
