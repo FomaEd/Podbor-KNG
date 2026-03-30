@@ -550,11 +550,12 @@
                     if (visibleChip) visibleChip.classList.add('active');
                 }
             } else {
-                // В остальных типах открывания Provedal показываем
-                provedalChip.style.display = '';
-            }
+            // В остальных типах открывания Provedal показываем
+            provedalChip.style.display = '';
+          }
         }
-    });
+    }
+});   // ← добавить эту строку
 
 // --- Тоггл типа фурнитуры ---
 if (hardwareTypeToggle && hardwareTypeInput && clampSideGroup) {
