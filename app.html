@@ -4795,6 +4795,9 @@ function groupArticles(items, multiplier) {
     return Array.from(map.values()).sort((a, b) => a.article.localeCompare(b.article));
 }
 
+    console.log('alternativeData:', alternativeData);
+console.log('hasStulpAlutech:', hasStulpAlutech);
+console.log('accumulatedResults:', accumulatedResults);
     function exportToExcel(excelData, alternativeData) {
     const wb = XLSX.utils.book_new();
     const wsData = [
