@@ -5030,10 +5030,6 @@ if (hasStulpAlutech) {
 
 if (tg) {
     await exportToExcel(excelData, alternativeData);
-    tg.sendData(JSON.stringify({
-        action: 'total',
-        message: 'Excel файл сформирован'
-    }));
     tg.close();
 } else {
     await exportToExcel(excelData, alternativeData);
