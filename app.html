@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Подбор фурнитуры KNG</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
     <style>
         :root {
             --color-primary: #208080;
@@ -4807,41 +4807,37 @@ function groupArticles(items, multiplier) {
     return Array.from(map.values()).sort((a, b) => a.article.localeCompare(b.article));
 }
 
-    function exportToExcel(excelData, alternativeData) {
-        console.log('exportToExcel called, alternativeData length:', alternativeData ? alternativeData.length : 'null'); // ← добавить
-    const wb = XLSX.utils.book_new();
-    const wsData = [
-        ['Артикул', 'Наименование', 'Кол-во']
+    async function exportToExcel(excelData, alternativeData) {
+    const workbook = new ExcelJS.Workbook();
+    const sheet = workbook.addWorksheet('Фурнитура');
+
+    // Ширина колонок
+    sheet.columns = [
+        { key: 'A', width: 20 },
+        { key: 'B', width: 55 },
+        { key: 'C', width: 10 },
+        { key: 'D', width: 5 },
+        { key: 'E', width: 20 },
+        { key: 'F', width: 55 },
+        { key: 'G', width: 10 },
     ];
 
-    // Заполняем основные строки
-    excelData.forEach(item => {
-        wsData.push([item.article, item.name, item.qty]);
-    });
+    // Заголовок основной таблицы
+    const headerRow = sheet.addRow(['Артикул', 'Наименование', 'Кол-во']);
+    headerRow.font = { bold: true };
 
-    const ws = XLSX.utils.aoa_to_sheet(wsData);
-
-    // Ширина колонок основной таблицы
-    ws['!cols'] = [
-        { wch: 15 },  // A - артикул
-        { wch: 50 },  // B - наименование
-        { wch: 10 },  // C - кол-во
-        { wch: 5 },   // D - разделитель
-        { wch: 15 },  // E - артикул альтернативы
-        { wch: 50 },  // F - наименование альтернативы
-        { wch: 10 },  // G - кол-во альтернативы
-    ];
-
-    // Жёлтая заливка для KN100OH и KN208AH
+    // Артикулы которые красим жёлтым
     const yellowArticles = ['KN100OH', 'KN208AH'];
-    excelData.forEach((item, i) => {
+
+    // Основные строки
+    excelData.forEach(item => {
+        const row = sheet.addRow([item.article, item.name, item.qty]);
         if (yellowArticles.includes(item.article)) {
-            const rowIndex = i + 2; // +2 потому что строка 1 — заголовок
-            ['A', 'B', 'C'].forEach(col => {
-                const cellRef = `${col}${rowIndex}`;
-                if (!ws[cellRef]) ws[cellRef] = { v: '' };
-                ws[cellRef].s = {
-                    fill: { fgColor: { rgb: 'FFFF00' } }
+            row.eachCell({ includeEmpty: false }, cell => {
+                cell.fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: 'FFFFFF00' }
                 };
             });
         }
@@ -4849,35 +4845,42 @@ function groupArticles(items, multiplier) {
 
     // Альтернатива для штульповой створки
     if (alternativeData && alternativeData.length > 0) {
-        // Заголовок
-        ws['E1'] = { v: 'Альтернатива для штульповой створки', s: { font: { bold: true } } };
-        ws['F1'] = { v: '' };
-        ws['G1'] = { v: '' };
+        // Заголовок альтернативы в строке 1 колонки E
+        const altHeaderCell = sheet.getCell('E1');
+        altHeaderCell.value = 'Альтернатива для штульповой створки';
+        altHeaderCell.font = { bold: true };
 
+        // Артикулы альтернативы начиная со строки 2
         alternativeData.forEach((item, i) => {
             const rowIndex = i + 2;
-            ws[`E${rowIndex}`] = { 
-                v: item.article,
-                s: { fill: { fgColor: { rgb: 'FFFF00' } } }
-            };
-            ws[`F${rowIndex}`] = { 
-                v: item.name,
-                s: { fill: { fgColor: { rgb: 'FFFF00' } } }
-            };
-            ws[`G${rowIndex}`] = { 
-                v: item.qty,
-                s: { fill: { fgColor: { rgb: 'FFFF00' } } }
-            };
+            const cellE = sheet.getCell(`E${rowIndex}`);
+            const cellF = sheet.getCell(`F${rowIndex}`);
+            const cellG = sheet.getCell(`G${rowIndex}`);
+
+            cellE.value = item.article;
+            cellF.value = item.name;
+            cellG.value = item.qty;
+
+            [cellE, cellF, cellG].forEach(cell => {
+                cell.fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: 'FFFFFF00' }
+                };
+            });
         });
-        // Обновляем диапазон листа
-        const range = XLSX.utils.decode_range(ws['!ref']);
-        range.e.c = 6; // колонка G = индекс 6
-        ws['!ref'] = XLSX.utils.encode_range(range);
     }
 
-    XLSX.utils.book_append_sheet(wb, ws, 'Фурнитура');
+    // Скачиваем файл
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
     const date = new Date().toISOString().slice(0, 10);
-    XLSX.writeFile(wb, `KNG_furnitura_${date}.xlsx`);
+    a.download = `KNG_furnitura_${date}.xlsx`;
+    a.click();
+    URL.revokeObjectURL(url);
 }
 
 saveBtn.addEventListener('click', () => {
@@ -4929,7 +4932,6 @@ saveBtn.addEventListener('click', () => {
 });
 
 function finalizeSave(hardwareResult) {
-     console.log('finalizeSave result:', JSON.stringify(hardwareResult)); // ← добавить
     const qtyWindows = Number(quantityInput.value) || 1;
 
     accumulatedResults.push({
@@ -4951,13 +4953,11 @@ function finalizeSave(hardwareResult) {
     }
 }
 
-totalBtn.addEventListener('click', () => {
-    console.log('TOTAL BTN CLICKED'); // ← добавить первой строкой
+totalBtn.addEventListener('click', async () => {
     if (accumulatedResults.length === 0) {
         showMessage('Нет записанных расчётов. Сначала нажмите «Записать».', 'error');
         return;
     }
-    console.log('accumulatedResults length:', accumulatedResults.length); // ← добавить
 
     const summaryMap = new Map();
     const texts = [];
@@ -5007,12 +5007,10 @@ const excelData = finalGrouped.map(item => ({
     name: item.name,
     qty: item.qty
 }));
-    console.log('excelData formed, length:', excelData.length); // ← добавить
 
 // Проверяем есть ли штульповые с Видимая + ALUTECH
 const hasStulpAlutech = accumulatedResults.some(res => res.isStulpAlutech);
-    console.log('hasStulpAlutech:', hasStulpAlutech); // ← добавить
-
+    
 // Альтернативные артикулы (суммируем по кол-ву окон)
 let alternativeData = [];
 if (hasStulpAlutech) {
@@ -5028,7 +5026,6 @@ if (hasStulpAlutech) {
         });
     });
     alternativeData = Array.from(altMap.values());
-    console.log('alternativeData:', alternativeData); // ← добавить
 }
 
 if (tg) {
@@ -5040,8 +5037,7 @@ if (tg) {
     }));
     tg.close();
 } else {
-    console.log('calling exportToExcel, alternativeData:', alternativeData); // ← добавить    
-    exportToExcel(excelData, alternativeData);
+    await exportToExcel(excelData, alternativeData);  
     showMessage('Excel файл сформирован и скачан.', 'success');
 }
 });
