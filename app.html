@@ -4808,6 +4808,7 @@ function groupArticles(items, multiplier) {
 }
 
     function exportToExcel(excelData, alternativeData) {
+        console.log('exportToExcel called, alternativeData length:', alternativeData ? alternativeData.length : 'null'); // ← добавить
     const wb = XLSX.utils.book_new();
     const wsData = [
         ['Артикул', 'Наименование', 'Кол-во']
