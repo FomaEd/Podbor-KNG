@@ -398,6 +398,22 @@
   </div>
   <input type="hidden" id="profileType" value="alutech">
 </div>
+
+                <div class="form-group" id="hingeColorGroup" style="display:none;">
+  abel>Цвет петель</label>
+  <div class="toggle-row" id="hingeColorToggle">
+    <div class="toggle-chip active" data-value="white">
+      <span>Белый (9016)</span>
+    </div>
+    <div class="toggle-chip" data-value="black">
+      <span>Чёрный (9005М)</span>
+    </div>
+    <div class="toggle-chip" data-value="raw">
+      <span>Неокрас. (С)</span>
+    </div>
+  </div>
+  <input type="hidden" id="hingeColor" value="white">
+</div>
                 
                 <div class="form-group" id="ventNoteGroup" style="display:none;">
     <label>Тип фурнитуры</label>
@@ -423,10 +439,11 @@
     <input type="hidden" id="clampSide" value="any">
 </div>
 
+                <div id="handleGroup">
                 <div class="section-divider"></div>
 
                 <div class="section-title">Форма и цвет ручки</div>
-                <div class="row-inline">
+                    <div class="row-inline">
                     <div class="form-group">
                         <label for="handleType">Форма</label>
                         <select id="handleType" class="select">
@@ -509,6 +526,10 @@
     const profileTypeGroup = document.getElementById('profileTypeGroup');
     const profileTypeToggle = document.getElementById('profileTypeToggle');
     const profileTypeInput = document.getElementById('profileType');
+    const hingeColorGroup = document.getElementById('hingeColorGroup');
+    const hingeColorToggle = document.getElementById('hingeColorToggle');
+    const hingeColorInput = document.getElementById('hingeColor');
+    const handleGroup = document.getElementById('handleGroup');
 
     const heightInput = document.getElementById('height');
     const widthInput = document.getElementById('width');
@@ -537,7 +558,9 @@
 
             clampSideGroup.style.display = 'none';
             clampSideInput.value = 'any';
-            if (profileTypeGroup) profileTypeGroup.style.display = 'none'; // ← добавить
+            if (profileTypeGroup) profileTypeGroup.style.display = 'none';
+            if (handleGroup) handleGroup.style.display = '';       // ← добавить
+            if (hingeColorGroup) hingeColorGroup.style.display = 'none'; // ← добавить
 
     } else if (openingType === 'vent-sash') {
         if (hardwareTypeGroup) hardwareTypeGroup.style.display = 'none';
@@ -546,7 +569,9 @@
 
         clampSideGroup.style.display = 'none';
         clampSideInput.value = 'any';
-        if (profileTypeGroup) profileTypeGroup.style.display = 'none'; // ← добавить
+        if (profileTypeGroup) profileTypeGroup.style.display = 'none';
+        if (handleGroup) handleGroup.style.display = '';       // ← добавить
+        if (hingeColorGroup) hingeColorGroup.style.display = 'none'; // ← добавить
 
     } else {
         // Обычные режимы (П/О, Поворотный, Откидной, Штульповый)
@@ -585,6 +610,18 @@
             if (firstChip) firstChip.classList.add('active');
           }
         }
+                    if (openingType === 'stulp') {
+          if (handleGroup) handleGroup.style.display = 'none';
+          if (hingeColorGroup) hingeColorGroup.style.display = '';
+        } else {
+          if (handleGroup) handleGroup.style.display = '';
+          if (hingeColorGroup) hingeColorGroup.style.display = 'none';
+          hingeColorInput.value = 'white';
+          [...hingeColorToggle.querySelectorAll('.toggle-chip')]
+            .forEach(c => c.classList.remove('active'));
+          const firstHingeChip = hingeColorToggle.querySelector('[data-value="white"]');
+          if (firstHingeChip) firstHingeChip.classList.add('active');
+        }
     }
 });   // ← добавить эту строку
 
@@ -622,6 +659,18 @@ if (profileTypeToggle && profileTypeInput) {
       .forEach(c => c.classList.remove('active'));
     chip.classList.add('active');
     profileTypeInput.value = chip.dataset.value;
+  });
+}
+
+    // --- Тоггл цвета петель ---
+if (hingeColorToggle && hingeColorInput) {
+  hingeColorToggle.addEventListener('click', (e) => {
+    const chip = e.target.closest('.toggle-chip');
+    if (!chip) return;
+    [...hingeColorToggle.querySelectorAll('.toggle-chip')]
+      .forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    hingeColorInput.value = chip.dataset.value;
   });
 }
 
