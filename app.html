@@ -5030,7 +5030,7 @@ if (hasStulpAlutech) {
 
 if (tg) {
     await exportToExcel(excelData, alternativeData);
-    tg.close();
+    setTimeout(() => tg.close(), 1000);
 } else {
     await exportToExcel(excelData, alternativeData);
     showMessage('Excel файл сформирован и скачан.', 'success');
