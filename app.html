@@ -5035,7 +5035,7 @@ if (tg) {
     }));
     tg.close();
 } else {
-    
+    console.log('calling exportToExcel, alternativeData:', alternativeData); // ← добавить    
     exportToExcel(excelData, alternativeData);
     showMessage('Excel файл сформирован и скачан.', 'success');
 }
