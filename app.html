@@ -4054,22 +4054,31 @@ const hingeColorArticlesStulp = {
     };
 
     const handleColorArticlesTurnVisible = {
-        white: [
-            { article: 'KN100KR',      name: 'Переходник под ручку Classic', qty: 1 },
-            { article: 'KN218HN_9016', name: 'Ручка оконная Classic_9016',  qty: 1 },
-            { article: 'KN219CC_9016', name: 'Петля поворотная 3-хсекц.бел.', qty: 2 }
-        ],
-        black: [
-            { article: 'KN100KR',        name: 'Переходник под ручку Classic',          qty: 1 },
-            { article: 'KN218HN_9005M',  name: 'Ручка оконная Classic черн. Matt',      qty: 1 },
-            { article: 'KN219CC_9005M',  name: 'Петля поворотная 3-хсекц черн. matt',   qty: 2 }
-        ],
-        raw: [
-            { article: 'KN100KR',    name: 'Переходник под ручку Classic', qty: 1 },
-            { article: 'KN218HN_C',  name: 'Ручка оконная Classic неокр.', qty: 1 },
-            { article: 'KN219CC_C',  name: 'Петля поворотная 3-хсекц неокр', qty: 2 }
-        ]
-    };
+  white: [
+    { article: 'KN100KR', name: 'Переходник под ручку Classic', qty: 1 },
+    { article: 'KN218HN_9016', name: 'Ручка оконная Classic_9016', qty: 1 },
+  ],
+  black: [
+    { article: 'KN100KR', name: 'Переходник под ручку Classic', qty: 1 },
+    { article: 'KN218HN_9005M', name: 'Ручка оконная Classic черн. Matt', qty: 1 },
+  ],
+  raw: [
+    { article: 'KN100KR', name: 'Переходник под ручку Classic', qty: 1 },
+    { article: 'KN218HN_C', name: 'Ручка оконная Classic неокр.', qty: 1 },
+  ]
+};
+
+    const hingeArticlesTurnVisible = {
+  white: 'KN219CC_9016',
+  black: 'KN219CC_9005M',
+  raw:   'KN219CC_C',
+};
+
+const hingeNamesTurnVisible = {
+  white: 'Петля поворотная 3-хсекц.бел.',
+  black: 'Петля поворотная 3-хсекц черн. matt',
+  raw:   'Петля поворотная 3-хсекц неокр',
+};
 
     const handleColorArticlesTiltVisible = {
         zone1: { // 500–1300 x 445–1000
@@ -4528,6 +4537,17 @@ if (openingType === 'top-hung') {
                 handleColorArticlesTurnVisible['white'];
 
             colorArticles.forEach(item => resultArticles.push({ ...item }));
+            
+            // Петли в зависимости от высоты
+let hingeQtyTurn = 2;
+if (h >= 1201 && h <= 1800) hingeQtyTurn = 3;
+else if (h >= 1801 && h <= 2400) hingeQtyTurn = 4;
+
+resultArticles.push({
+  article: hingeArticlesTurnVisible[handleColor] || hingeArticlesTurnVisible['white'],
+  name: hingeNamesTurnVisible[handleColor] || hingeNamesTurnVisible['white'],
+  qty: hingeQtyTurn
+});
 
         } else if (hardwareType === 'visibleProvedal') {
             // Видимая Provedal + Поворотный
