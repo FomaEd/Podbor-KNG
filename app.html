@@ -3846,6 +3846,53 @@ const hardwareMatrixHidden180TurnTilt_130_160 = [
         ],
     },
 ];
+
+    const hardwareMatrixStulpVisibleAlutech = [
+  {
+    minHeight: 650, maxHeight: 1200,
+    minWidth: 390, maxWidth: 1300,
+    variant1: [
+      { article: 'KN400FS', name: 'Приподниматель створки поворотной', qty: 1 },
+      { article: 'KN100KY', name: 'Отв.планка штульп.шпингалета (арт. KN100KY)', qty: 2 },
+      { article: 'KN100OH', name: 'Штульповый шпингалет для реверсивного редуктора', qty: 2 },
+      { article: 'KN208AH', name: 'Реверсивный штульповый редуктор (арт.KN208AH)', qty: 1 },
+    ],
+    hingeQty: 2,
+  },
+  {
+    minHeight: 1201, maxHeight: 1800,
+    minWidth: 390, maxWidth: 1300,
+    variant1: [
+      { article: 'KN400FS', name: 'Приподниматель створки поворотной', qty: 1 },
+      { article: 'KN100KY', name: 'Отв.планка штульп.шпингалета (арт. KN100KY)', qty: 2 },
+      { article: 'KN100OH', name: 'Штульповый шпингалет для реверсивного редуктора', qty: 2 },
+      { article: 'KN208AH', name: 'Реверсивный штульповый редуктор (арт.KN208AH)', qty: 1 },
+    ],
+    hingeQty: 3,
+  },
+  {
+    minHeight: 1801, maxHeight: 2400,
+    minWidth: 390, maxWidth: 1300,
+    variant1: [
+      { article: 'KN400FS', name: 'Приподниматель створки поворотной', qty: 1 },
+      { article: 'KN100KY', name: 'Отв.планка штульп.шпингалета (арт. KN100KY)', qty: 2 },
+      { article: 'KN100OH', name: 'Штульповый шпингалет для реверсивного редуктора', qty: 2 },
+      { article: 'KN208AH', name: 'Реверсивный штульповый редуктор (арт.KN208AH)', qty: 1 },
+    ],
+    hingeQty: 4,
+  },
+];
+
+const stulpAlternativeArticles = [
+  { article: 'KN208AD', name: 'Шпингалет штульп.створки верх (арт. KN208AD)', qty: 1 },
+  { article: 'KN208AE', name: 'Шпингалет штульп.створки низ (арт. KN208AE)', qty: 1 },
+];
+
+const hingeColorArticlesStulp = {
+  white: { article: 'KN219CC_9016', name: 'Петля поворотная 3-хсекц.бел.', qty: 1 },
+  black: { article: 'KN219CC_9005M', name: 'Петля поворотная 3-хсекц черн. matt', qty: 1 },
+  raw:   { article: 'KN219CC_C', name: 'Петля поворотная 3-хсекц неокр', qty: 1 },
+};
     
              const handleColorArticlesHidden180TurnTilt = {
     white: [
@@ -4668,6 +4715,41 @@ if (openingType === 'top-hung') {
             );
             return null;
         }
+
+    } else if (openingType === 'stulp') {
+  if (hardwareType === 'visible') {
+    if (profileTypeInput.value === 'alutech') {
+      if (wt > 60) {
+        showMessage('Максимальный вес для Штульповый Видимая ALUTECH — 60 кг.', 'error');
+        return null;
+      }
+      const baseSet = hardwareMatrixStulpVisibleAlutech.find(row =>
+        h >= row.minHeight && h <= row.maxHeight &&
+        w >= row.minWidth && w <= row.maxWidth
+      );
+      if (!baseSet) {
+        showMessage(
+          'Под эти размеры нет зоны для Штульповый Видимая ALUTECH. Проверь диапазоны или обратись к менеджеру.',
+          'error'
+        );
+        return null;
+      }
+      // Базовые артикулы
+      baseSet.variant1.forEach(item => resultArticles.push({ ...item }));
+      // Петли в зависимости от цвета
+      const hingeColor = hingeColorInput.value || 'white';
+      const hingeArticle = hingeColorArticlesStulp[hingeColor];
+      if (hingeArticle) {
+        resultArticles.push({ ...hingeArticle, qty: baseSet.hingeQty });
+      }
+    } else {
+      showMessage('Для Штульповый Видимая с другим профилем подбор ещё не реализован.', 'error');
+      return null;
+    }
+  } else {
+    showMessage('Для этого типа фурнитуры со Штульповым ещё нет подбора.', 'error');
+    return null;
+  }
 
     } else {
         showMessage(
