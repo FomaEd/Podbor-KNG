@@ -5029,15 +5029,14 @@ if (hasStulpAlutech) {
 }
 
 if (tg) {
+    await exportToExcel(excelData, alternativeData);
     tg.sendData(JSON.stringify({
         action: 'total',
-        data: excelData,
-        alternativeData: alternativeData,
-        yellowArticles: ['KN100OH', 'KN208AH']
+        message: 'Excel файл сформирован'
     }));
     tg.close();
 } else {
-    await exportToExcel(excelData, alternativeData);  
+    await exportToExcel(excelData, alternativeData);
     showMessage('Excel файл сформирован и скачан.', 'success');
 }
 });
