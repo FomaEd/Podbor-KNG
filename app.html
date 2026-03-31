@@ -4952,6 +4952,7 @@ totalBtn.addEventListener('click', () => {
         showMessage('Нет записанных расчётов. Сначала нажмите «Записать».', 'error');
         return;
     }
+    console.log('accumulatedResults length:', accumulatedResults.length); // ← добавить
 
     const summaryMap = new Map();
     const texts = [];
