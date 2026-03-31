@@ -509,7 +509,6 @@
 
 <script>
     const tg = window.Telegram ? window.Telegram.WebApp : null;
-    console.log('SCRIPT LOADED');
 
     if (tg) {
         tg.ready();
@@ -629,10 +628,8 @@
 // --- Тоггл типа фурнитуры ---
 if (hardwareTypeToggle && hardwareTypeInput && clampSideGroup) {
     hardwareTypeToggle.addEventListener('click', (e) => {
-        console.log('CLICK hardwareTypeToggle, target =', e.target);
         
         const chip = e.target.closest('.toggle-chip');
-        console.log('closest chip =', chip);
         
         if (!chip) return;
 
@@ -4132,14 +4129,6 @@ const hingeNamesTurnVisible = {
         ],
     };
 
-    console.log('INIT', {
-  hardwareTypeGroup,
-  hardwareTypeToggle,
-  hardwareTypeInput,
-  clampSideGroup,
-  clampSideToggle
-});
-
     function pickVisibleTurnTiltSet(height, width) {
         return hardwareMatrixVisibleTurnTilt.find(row =>
             height >= row.minHeight && height <= row.maxHeight &&
@@ -4780,8 +4769,6 @@ resultArticles.push({
         return null;
     }
 
-        console.log('isStulpAlutech value:', openingType === 'stulp' && hardwareType === 'visible' && profileTypeInput.value === 'alutech');
-console.log('profileTypeInput.value:', profileTypeInput.value);
     return {
   height: h,
   width: w,
@@ -5043,9 +5030,7 @@ if (tg) {
     }));
     tg.close();
 } else {
-    console.log('alternativeData:', alternativeData);
-    console.log('hasStulpAlutech:', hasStulpAlutech);
-    console.log('accumulatedResults:', accumulatedResults);
+    
     exportToExcel(excelData, alternativeData);
     showMessage('Excel файл сформирован и скачан.', 'success');
 }
