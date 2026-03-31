@@ -4937,6 +4937,7 @@ saveBtn.addEventListener('click', () => {
 });
 
 function finalizeSave(hardwareResult) {
+     console.log('finalizeSave result:', JSON.stringify(hardwareResult)); // ← добавить
     const qtyWindows = Number(quantityInput.value) || 1;
 
     accumulatedResults.push({
