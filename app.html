@@ -3891,6 +3891,20 @@ const hingeColorArticlesStulp = {
   black: { article: 'KN219CC_9005M', name: 'Петля поворотная 3-хсекц черн. matt', qty: 1 },
   raw:   { article: 'KN219CC_C', name: 'Петля поворотная 3-хсекц неокр', qty: 1 },
 };
+
+    const hardwareMatrixStulpVisibleOther = [
+  {
+    minHeight: 650, maxHeight: 2400,
+    minWidth: 390, maxWidth: 1300,
+    variant1: [
+      { article: 'KN400FS', name: 'Приподниматель створки поворотной', qty: 1 },
+      { article: 'KN100KY', name: 'Отв.планка штульп.шпингалета (арт. KN100KY)', qty: 2 },
+      { article: 'KN208AD', name: 'Шпингалет штульп.створки верх (арт. KN208AD)', qty: 1 },
+      { article: 'KN208AE', name: 'Шпингалет штульп.створки низ (арт. KN208AE)', qty: 1 },
+    ],
+    hingeQty: null, // зависит от высоты
+  },
+];
     
              const handleColorArticlesHidden180TurnTilt = {
     white: [
@@ -4752,10 +4766,34 @@ resultArticles.push({
       if (hingeArticle) {
         resultArticles.push({ ...hingeArticle, qty: baseSet.hingeQty });
       }
-    } else {
-      showMessage('Для Штульповый Видимая с другим профилем подбор ещё не реализован.', 'error');
-      return null;
-    }
+    } else if (profileTypeInput.value === 'other') {
+  if (wt > 60) {
+    showMessage('Максимальный вес для Штульповый Видимая Другие профили — 60 кг.', 'error');
+    return null;
+  }
+  const baseSet = hardwareMatrixStulpVisibleOther.find(row =>
+    h >= row.minHeight && h <= row.maxHeight &&
+    w >= row.minWidth && w <= row.maxWidth
+  );
+  if (!baseSet) {
+    showMessage(
+      'Под эти размеры нет зоны для Штульповый Видимая Другие профили. Проверь диапазоны или обратись к менеджеру.',
+      'error'
+    );
+    return null;
+  }
+  // Базовые артикулы
+  baseSet.variant1.forEach(item => resultArticles.push({ ...item }));
+  // Петли в зависимости от высоты и цвета
+  const hingeColor = hingeColorInput.value || 'white';
+  const hingeArticle = hingeColorArticlesStulp[hingeColor];
+  let hingeQty = 2;
+  if (h >= 1201 && h <= 1800) hingeQty = 3;
+  else if (h >= 1801 && h <= 2400) hingeQty = 4;
+  if (hingeArticle) {
+    resultArticles.push({ ...hingeArticle, qty: hingeQty });
+  }
+}
   } else {
     showMessage('Для этого типа фурнитуры со Штульповым ещё нет подбора.', 'error');
     return null;
