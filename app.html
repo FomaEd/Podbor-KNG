@@ -3905,6 +3905,56 @@ const hingeColorArticlesStulp = {
     hingeQty: null, // зависит от высоты
   },
 ];
+
+    const hardwareMatrixStulpHidden90Alutech = [
+  {
+    minHeight: 650, maxHeight: 1200,
+    minWidth: 390, maxWidth: 1300,
+    articles: [
+      { article: 'KN219EE', name: 'Компл. Петля Пов скрытая верх/низ 95º', qty: 1 },
+      { article: 'KN400FS', name: 'Приподниматель створки поворотной', qty: 1 },
+      { article: 'KN100KY', name: 'Отв.планка штульп.шпингалета (арт. KN100KY)', qty: 2 },
+      { article: 'KN100OH', name: 'Штульповый шпингалет для реверсивного редуктора', qty: 2 },
+      { article: 'KN208AH', name: 'Реверсивный штульповый редуктор (арт.KN208AH)', qty: 1 },
+    ],
+  },
+  {
+    minHeight: 1201, maxHeight: 1800,
+    minWidth: 390, maxWidth: 1300,
+    articles: [
+      { article: 'KN219EE', name: 'Компл. Петля Пов скрытая верх/низ 95º', qty: 1 },
+      { article: 'KN400FS', name: 'Приподниматель створки поворотной', qty: 1 },
+      { article: 'KN100KY', name: 'Отв.планка штульп.шпингалета (арт. KN100KY)', qty: 2 },
+      { article: 'KN100OH', name: 'Штульповый шпингалет для реверсивного редуктора', qty: 2 },
+      { article: 'KN208AH', name: 'Реверсивный штульповый редуктор (арт.KN208AH)', qty: 1 },
+      { article: 'KN100WH', name: 'Скрытый прижим регулируемый винтом', qty: 1 },
+    ],
+  },
+  {
+    minHeight: 1801, maxHeight: 2400,
+    minWidth: 390, maxWidth: 1300,
+    articles: [
+      { article: 'KN219EE', name: 'Компл. Петля Пов скрытая верх/низ 95º', qty: 1 },
+      { article: 'KN400FS', name: 'Приподниматель створки поворотной', qty: 1 },
+      { article: 'KN100KY', name: 'Отв.планка штульп.шпингалета (арт. KN100KY)', qty: 2 },
+      { article: 'KN100OH', name: 'Штульповый шпингалет для реверсивного редуктора', qty: 2 },
+      { article: 'KN208AH', name: 'Реверсивный штульповый редуктор (арт.KN208AH)', qty: 1 },
+      { article: 'KN100WH', name: 'Скрытый прижим регулируемый винтом', qty: 2 },
+    ],
+  },
+  {
+    minHeight: 2401, maxHeight: 3000,
+    minWidth: 390, maxWidth: 1300,
+    articles: [
+      { article: 'KN219EE', name: 'Компл. Петля Пов скрытая верх/низ 95º', qty: 1 },
+      { article: 'KN400FS', name: 'Приподниматель створки поворотной', qty: 1 },
+      { article: 'KN100KY', name: 'Отв.планка штульп.шпингалета (арт. KN100KY)', qty: 2 },
+      { article: 'KN100OH', name: 'Штульповый шпингалет для реверсивного редуктора', qty: 2 },
+      { article: 'KN208AH', name: 'Реверсивный штульповый редуктор (арт.KN208AH)', qty: 1 },
+      { article: 'KN100WH', name: 'Скрытый прижим регулируемый винтом', qty: 3 },
+    ],
+  },
+];
     
              const handleColorArticlesHidden180TurnTilt = {
     white: [
@@ -4794,6 +4844,36 @@ resultArticles.push({
     resultArticles.push({ ...hingeArticle, qty: hingeQty });
   }
 }
+    } else if (hardwareType === 'hidden90') {
+    if (profileTypeInput.value === 'alutech') {
+      if (wt > 100) {
+        showMessage('Максимальный вес для Штульповый Скрытая 90 ALUTECH — 100 кг.', 'error');
+        return null;
+      }
+      if (clampSide !== 'any') {
+        showMessage(
+          'Для ваших параметров сторона прижима не имеет значения. ' +
+          'Выберите вариант «Не имеет значения».',
+          'error'
+        );
+        return null;
+      }
+      const baseSet = hardwareMatrixStulpHidden90Alutech.find(row =>
+        h >= row.minHeight && h <= row.maxHeight &&
+        w >= row.minWidth && w <= row.maxWidth
+      );
+      if (!baseSet) {
+        showMessage(
+          'Под эти размеры нет зоны для Штульповый Скрытая 90 ALUTECH. Проверь диапазоны или обратись к менеджеру.',
+          'error'
+        );
+        return null;
+      }
+      baseSet.articles.forEach(item => resultArticles.push({ ...item }));
+    } else {
+      showMessage('Для Штульповый Скрытая 90 с другим профилем подбор ещё не реализован.', 'error');
+      return null;
+    }
   } else {
     showMessage('Для этого типа фурнитуры со Штульповым ещё нет подбора.', 'error');
     return null;
@@ -4815,7 +4895,8 @@ resultArticles.push({
   hardwareType,
   profileType: profileTypeInput.value,
   hingeColor: hingeColorInput.value,
-  isStulpAlutech: openingType === 'stulp' && hardwareType === 'visible' && profileTypeInput.value === 'alutech',
+  isStulpAlutech: openingType === 'stulp' && profileTypeInput.value === 'alutech' && 
+  (hardwareType === 'visible' || hardwareType === 'hidden90'),
   clampSide,
   handleColor,
   items: resultArticles
