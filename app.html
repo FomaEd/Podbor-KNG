@@ -5935,40 +5935,53 @@ handleItems.forEach(item => resultArticles.push({ ...item }));
   }
 
   } else if (openingType === 'lift-slide') {
-    if (wt > 300) {
-      showMessage('Максимальный вес для Подъёмно-сдвижной — 300 кг.', 'error');
-      return null;
+    if (wt > 401) {
+        showMessage('Для подъёмно-сдвижной створки вес должен быть не более 400 кг.', 'error');
+        return null;
     }
+
     const baseSet = hardwareMatrixLiftSlide.find(row =>
-      h >= row.minHeight && h <= row.maxHeight &&
-      w >= row.minWidth && w <= row.maxWidth
+        h >= row.minHeight && h <= row.maxHeight &&
+        w >= row.minWidth && w <= row.maxWidth
     );
+
     if (!baseSet) {
-      showMessage(
-        'Под эти размеры нет зоны для Подъёмно-сдвижной. Проверь диапазоны или обратись к менеджеру.',
-        'error'
-      );
-      return null;
+        showMessage('Для подъёмно-сдвижной створки нет подходящего комплекта.', 'error');
+        return null;
     }
+
     baseSet.articles.forEach(item => resultArticles.push({ ...item }));
+
+    resultArticles.push(
+        {
+            article: '',
+            name: 'Доп. комплект для увеличения нагрузки до 400 кг и доп. прижимы',
+            qty: ''
+        },
+        {
+            article: 'KN1679',
+            name: 'Комплект доп. кареток для створок >300 кг.',
+            qty: 1
+        },
+        {
+            article: 'KN100QV',
+            name: 'Цапфа',
+            qty: 2
+        }
+    );
 
     const liftSlideHandleType = liftSlideHandleTypeSelect.value;
     const handleColorKey = handleColorSelect.value || 'white';
     const handleSet = liftSlideHandleCatalog[liftSlideHandleType];
-    if (handleSet) {
-      const colorArticles = handleSet[handleColorKey] || handleSet['white'];
-      if (colorArticles) {
-        colorArticles.forEach(item => resultArticles.push({ ...item }));
-      }
-    }
 
+    if (handleSet) {
+        const colorArticles = handleSet[handleColorKey] || handleSet.white;
+        if (colorArticles) colorArticles.forEach(item => resultArticles.push({ ...item }));
     } else {
-        showMessage(
-            'Для этого типа открывания подбор ещё не реализован.',
-            'error'
-        );
+        showMessage('Не выбран комплект ручки.', 'error');
         return null;
     }
+}
 
     return {
   height: h,
@@ -6179,30 +6192,59 @@ totalBtn.addEventListener('click', async () => {
         texts.push(header);
 
         const grouped = groupArticles(res.items, res.quantityWindows);
-        grouped.forEach(item => {
-            texts.push(`  • ${item.article} — ${item.name} — ${item.qty} шт.`);
 
-            const key = item.article;
-            if (!summaryMap.has(key)) {
-                summaryMap.set(key, {
-                    article: item.article,
-                    name: item.name,
-                    qty: 0
-                });
-            }
-            const entry = summaryMap.get(key);
-            entry.qty += item.qty;
+grouped.forEach(item => {
+    texts.push(`  • ${item.article} — ${item.name} — ${item.qty} шт.`);
+
+    const key = item.article;
+    if (!summaryMap.has(key)) {
+        summaryMap.set(key, {
+            article: item.article,
+            name: item.name,
+            qty: 0
         });
+    }
 
-        texts.push('');
-    });
+    const entry = summaryMap.get(key);
+    entry.qty += item.qty;
+});
 
-    texts.push('ИТОГОВЫЙ СПИСОК ПО ВСЕМ ОКНАМ:');
-    const finalGrouped = Array.from(summaryMap.values())
-        .sort((a, b) => a.article.localeCompare(b.article));
-    finalGrouped.forEach(item => {
-        texts.push(`• ${item.article} — ${item.name} — ${item.qty} шт.`);
-    });
+if (res.openingType === 'lift-slide') {
+    texts.push('  Доп. комплект для увеличения нагрузки до 400 кг и доп. прижимы');
+    texts.push(`  • KN1679 — Комплект доп. кареток для створок >300 кг. — ${1 * res.quantityWindows} шт.`);
+    texts.push(`  • KN100QV — Цапфа — ${2 * res.quantityWindows} шт.`);
+
+    if (!summaryMap.has('KN1679')) {
+        summaryMap.set('KN1679', {
+            article: 'KN1679',
+            name: 'Комплект доп. кареток для створок >300 кг.',
+            qty: 0
+        });
+    }
+    summaryMap.get('KN1679').qty += 1 * res.quantityWindows;
+
+    if (!summaryMap.has('KN100QV')) {
+        summaryMap.set('KN100QV', {
+            article: 'KN100QV',
+            name: 'Цапфа',
+            qty: 0
+        });
+    }
+    summaryMap.get('KN100QV').qty += 2 * res.quantityWindows;
+}
+
+texts.push('');
+texts.push('');
+});
+
+texts.push('ИТОГОВЫЙ СПИСОК ПО ВСЕМ ОКНАМ:');
+
+const finalGrouped = Array.from(summaryMap.values())
+    .sort((a, b) => a.article.localeCompare(b.article));
+
+finalGrouped.forEach(item => {
+    texts.push(`• ${item.article} — ${item.name} — ${item.qty} шт.`);
+});
 
     const finalText = texts.join('\n');
 
