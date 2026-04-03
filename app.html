@@ -6011,12 +6011,7 @@ function groupArticles(items, multiplier) {
     return Array.from(map.values()).sort((a, b) => a.article.localeCompare(b.article));
 }
 
-    const liftSlideExtraArticles = [
-    { article: 'KN1679', name: 'Комплект доп. кареток для створок >300 кг.', qty: 1 },
-    { article: 'KN100QV', name: 'Цапфа', qty: 2 }
-];
-
-    async function exportToExcel(excelData, alternativeData, liftSlideExtraData = []) {
+    async function exportToExcel(excelData, alternativeData) {
     const workbook = new ExcelJS.Workbook();
     const sheet = workbook.addWorksheet('Фурнитура');
 
@@ -6058,22 +6053,6 @@ function groupArticles(items, multiplier) {
         const altHeaderCell = sheet.getCell('E1');
         altHeaderCell.value = 'Альтернатива для штульповой створки';
         altHeaderCell.font = { bold: true };
-
-            // Доп. комплект для подъёмно-сдвижной
-    if (liftSlideExtraData && liftSlideExtraData.length > 0) {
-        const startRow = sheet.lastRow.number + 2;
-
-        const extraHeaderCell = sheet.getCell(`A${startRow}`);
-        extraHeaderCell.value = 'Доп. комплект для увеличения нагрузки до 400 кг и доп. прижимы';
-        extraHeaderCell.font = { bold: true };
-
-        liftSlideExtraData.forEach((item, i) => {
-            const rowIndex = startRow + 1 + i;
-            sheet.getCell(`A${rowIndex}`).value = item.article;
-            sheet.getCell(`B${rowIndex}`).value = item.name;
-            sheet.getCell(`C${rowIndex}`).value = item.qty;
-        });
-    }
 
         // Артикулы альтернативы начиная со строки 2
         alternativeData.forEach((item, i) => {
@@ -6235,7 +6214,7 @@ const excelData = finalGrouped.map(item => ({
 
 // Проверяем есть ли штульповые с Видимая + ALUTECH
 const hasStulpAlutech = accumulatedResults.some(res => res.isStulpAlutech);
-
+    
 // Альтернативные артикулы (суммируем по кол-ву окон)
 let alternativeData = [];
 if (hasStulpAlutech) {
@@ -6253,43 +6232,16 @@ if (hasStulpAlutech) {
     alternativeData = Array.from(altMap.values());
 }
 
-let liftSlideExtraData = [];
-const hasLiftSlide = accumulatedResults.some(res => res.openingType === 'lift-slide');
-
-if (hasLiftSlide) {
-    const extraMap = new Map();
-
-    accumulatedResults.forEach(res => {
-        if (res.openingType !== 'lift-slide') return;
-
-        liftSlideExtraArticles.forEach(item => {
-            const key = item.article;
-            if (!extraMap.has(key)) {
-                extraMap.set(key, {
-                    article: item.article,
-                    name: item.name,
-                    qty: 0
-                });
-            }
-
-            extraMap.get(key).qty += item.qty * res.quantityWindows;
-        });
-    });
-
-    liftSlideExtraData = Array.from(extraMap.values());
-}
-
 if (tg) {
     tg.sendData(JSON.stringify({
         action: 'total',
         data: excelData,
         alternativeData: alternativeData,
-        liftSlideExtraData: liftSlideExtraData,
         yellowArticles: ['KN100OH', 'KN208AH']
     }));
     tg.close();
 } else {
-    await exportToExcel(excelData, alternativeData, liftSlideExtraData);
+    await exportToExcel(excelData, alternativeData);
     showMessage('Excel файл сформирован и скачан.', 'success');
 }
 });
