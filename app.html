@@ -342,12 +342,12 @@
             <div class="form-grid">
                 <div class="form-group">
                     <label for="height">Высота, мм</label>
-                    <input type="number" id="height" class="input" placeholder="Например, 1350" min="550" max="2400" required>
+                    <input type="number" id="height" class="input" placeholder="Например, 1350" min="500" max="3200" required>
                 </div>
 
                 <div class="form-group">
                     <label for="width">Ширина, мм</label>
-                    <input type="number" id="width" class="input" placeholder="Например, 700" min="390" max="1200" required>
+                    <input type="number" id="width" class="input" placeholder="Например, 700" min="170" max="3300" required>
                 </div>
 
                 <div class="form-group">
@@ -364,6 +364,7 @@
                         <option value="stulp">Штульповый</option>
                         <option value="top-hung">Верхнеподвесной</option>
                         <option value="vent-sash">Вент. створка</option>
+                        <option value="lift-slide">Подъёмно-сдвижная</option>
                     </select>
                 </div>
 
@@ -397,6 +398,16 @@
     </div>
   </div>
   <input type="hidden" id="profileType" value="alutech">
+</div>
+
+                <div class="form-group" id="liftSlideHandleGroup" style="display:none;">
+  <label for="liftSlideHandleType">Тип ручки</label>
+  <select id="liftSlideHandleType" class="select">
+    <option value="one_side_concise">Односторонняя Concise</option>
+    <option value="two_side_concise">Двухсторонняя Concise</option>
+    <option value="one_side_master">Односторонняя Master</option>
+    <option value="two_side_master">Двухсторонняя Master</option>
+  </select>
 </div>
 
                 <div class="form-group" id="hingeColorGroup" style="display:none;">
@@ -442,9 +453,9 @@
                 <div id="handleGroup">
                 <div class="section-divider"></div>
 
-                <div class="section-title">Форма и цвет ручки</div>
+                <div class="section-title" id="handleGroupTitle">Форма и цвет ручки</div>
 
-<div class="form-group">
+<div class="form-group" id="handleTypeGroup">
     <label for="handleType">Форма</label>
     <select id="handleType" class="select">
     <option value="classic_standard" selected>Ручка Classic стандартная</option>
@@ -457,7 +468,7 @@
 </select>
                     </div>
                     <div class="form-group">
-    <label for="handleColor">Цвет</label>
+    <label for="handleColor" id="handleColorLabel">Цвет</label>
     <select id="handleColor" class="select">
         <option value="" disabled selected hidden>Выберите</option>
         <option value="white">Белый (9016)</option>
@@ -532,10 +543,15 @@
     const profileTypeGroup = document.getElementById('profileTypeGroup');
     const profileTypeToggle = document.getElementById('profileTypeToggle');
     const profileTypeInput = document.getElementById('profileType');
+    const liftSlideHandleGroup = document.getElementById('liftSlideHandleGroup');
+    const liftSlideHandleTypeSelect = document.getElementById('liftSlideHandleType');
     const hingeColorGroup = document.getElementById('hingeColorGroup');
     const hingeColorToggle = document.getElementById('hingeColorToggle');
     const hingeColorInput = document.getElementById('hingeColor');
+    const handleColorLabel = document.getElementById('handleColorLabel');
     const handleGroup = document.getElementById('handleGroup');
+    const handleGroupTitle = document.getElementById('handleGroupTitle');
+    const handleTypeGroup = document.getElementById('handleTypeGroup');
 
     const heightInput = document.getElementById('height');
     const widthInput = document.getElementById('width');
@@ -555,18 +571,22 @@
     const accumulatedResults = [];
 
     openingTypeSelect.addEventListener('change', () => {
-        const openingType = openingTypeSelect.value;
+    const openingType = openingTypeSelect.value;
 
-        if (openingType === 'top-hung') {
-            if (hardwareTypeGroup) hardwareTypeGroup.style.display = 'none';
-            if (ventNoteGroup) ventNoteGroup.style.display = 'none';
-            hardwareTypeInput.value = 'visible';
+    if (openingType === 'top-hung') {
+        if (hardwareTypeGroup) hardwareTypeGroup.style.display = 'none';
+        if (ventNoteGroup) ventNoteGroup.style.display = 'none';
+        hardwareTypeInput.value = 'visible';
 
-            clampSideGroup.style.display = 'none';
-            clampSideInput.value = 'any';
-            if (profileTypeGroup) profileTypeGroup.style.display = 'none';
-            if (handleGroup) handleGroup.style.display = '';       // ← добавить
-            if (hingeColorGroup) hingeColorGroup.style.display = 'none'; // ← добавить
+        clampSideGroup.style.display = 'none';
+        clampSideInput.value = 'any';
+        if (profileTypeGroup) profileTypeGroup.style.display = 'none';
+        if (handleGroup) handleGroup.style.display = '';
+        if (handleTypeGroup) handleTypeGroup.style.display = '';
+        if (handleGroupTitle) handleGroupTitle.textContent = 'Форма и цвет ручки';
+        if (handleColorLabel) handleColorLabel.style.display = '';
+        if (hingeColorGroup) hingeColorGroup.style.display = 'none';
+        if (liftSlideHandleGroup) liftSlideHandleGroup.style.display = 'none';
 
     } else if (openingType === 'vent-sash') {
         if (hardwareTypeGroup) hardwareTypeGroup.style.display = 'none';
@@ -576,60 +596,81 @@
         clampSideGroup.style.display = 'none';
         clampSideInput.value = 'any';
         if (profileTypeGroup) profileTypeGroup.style.display = 'none';
-        if (handleGroup) handleGroup.style.display = '';       // ← добавить
-        if (hingeColorGroup) hingeColorGroup.style.display = 'none'; // ← добавить
+        if (handleGroup) handleGroup.style.display = '';
+        if (handleTypeGroup) handleTypeGroup.style.display = '';
+        if (handleGroupTitle) handleGroupTitle.textContent = 'Форма и цвет ручки';
+        if (handleColorLabel) handleColorLabel.style.display = '';
+        if (hingeColorGroup) hingeColorGroup.style.display = 'none';
+        if (liftSlideHandleGroup) liftSlideHandleGroup.style.display = 'none';
+
+    } else if (openingType === 'lift-slide') {
+        if (hardwareTypeGroup) hardwareTypeGroup.style.display = 'none';
+        if (ventNoteGroup) ventNoteGroup.style.display = 'none';
+        hardwareTypeInput.value = 'visible';
+
+        clampSideGroup.style.display = 'none';
+        clampSideInput.value = 'any';
+        if (profileTypeGroup) profileTypeGroup.style.display = 'none';
+        if (hingeColorGroup) hingeColorGroup.style.display = 'none';
+
+        if (handleGroup) handleGroup.style.display = '';
+        if (handleTypeGroup) handleTypeGroup.style.display = 'none';
+        if (handleGroupTitle) handleGroupTitle.textContent = 'Цвет ручки';
+        if (handleColorLabel) handleColorLabel.style.display = 'none';
+        if (liftSlideHandleGroup) liftSlideHandleGroup.style.display = '';
 
     } else {
-        // Обычные режимы (П/О, Поворотный, Откидной, Штульповый)
         if (hardwareTypeGroup) hardwareTypeGroup.style.display = '';
         if (ventNoteGroup) ventNoteGroup.style.display = 'none';
 
-        // Прячем/показываем Provedal при штульпе
         const provedalChip = hardwareTypeToggle.querySelector('[data-value="visibleProvedal"]');
         if (provedalChip) {
             if (openingType === 'stulp') {
-                // Скрываем Provedal
                 provedalChip.style.display = 'none';
-                // Если был выбран Provedal — перекидываем на visible
                 if (hardwareTypeInput.value === 'visibleProvedal') {
                     hardwareTypeInput.value = 'visible';
-                    // визуально тоже переключим
                     [...hardwareTypeToggle.querySelectorAll('.toggle-chip')]
                         .forEach(c => c.classList.remove('active'));
                     const visibleChip = hardwareTypeToggle.querySelector('[data-value="visible"]');
                     if (visibleChip) visibleChip.classList.add('active');
                 }
             } else {
-            // В остальных типах открывания Provedal показываем
-            provedalChip.style.display = '';
-          }
+                provedalChip.style.display = '';
+            }
         }
+
         if (profileTypeGroup) {
-          if (openingType === 'stulp') {
-            profileTypeGroup.style.display = '';
-          } else {
-            profileTypeGroup.style.display = 'none';
-            profileTypeInput.value = 'alutech';
-            [...profileTypeToggle.querySelectorAll('.toggle-chip')]
-              .forEach(c => c.classList.remove('active'));
-            const firstChip = profileTypeToggle.querySelector('[data-value="alutech"]');
-            if (firstChip) firstChip.classList.add('active');
-          }
+            if (openingType === 'stulp') {
+                profileTypeGroup.style.display = '';
+            } else {
+                profileTypeGroup.style.display = 'none';
+                profileTypeInput.value = 'alutech';
+                [...profileTypeToggle.querySelectorAll('.toggle-chip')]
+                    .forEach(c => c.classList.remove('active'));
+                const firstChip = profileTypeToggle.querySelector('[data-value="alutech"]');
+                if (firstChip) firstChip.classList.add('active');
+            }
         }
-                    if (openingType === 'stulp') {
-          if (handleGroup) handleGroup.style.display = 'none';
-          if (hingeColorGroup) hingeColorGroup.style.display = '';
+
+        if (openingType === 'stulp') {
+            if (handleGroup) handleGroup.style.display = 'none';
+            if (hingeColorGroup) hingeColorGroup.style.display = '';
         } else {
-          if (handleGroup) handleGroup.style.display = '';
-          if (hingeColorGroup) hingeColorGroup.style.display = 'none';
-          hingeColorInput.value = 'white';
-          [...hingeColorToggle.querySelectorAll('.toggle-chip')]
-            .forEach(c => c.classList.remove('active'));
-          const firstHingeChip = hingeColorToggle.querySelector('[data-value="white"]');
-          if (firstHingeChip) firstHingeChip.classList.add('active');
+            if (handleGroup) handleGroup.style.display = '';
+            if (hingeColorGroup) hingeColorGroup.style.display = 'none';
+            hingeColorInput.value = 'white';
+            [...hingeColorToggle.querySelectorAll('.toggle-chip')]
+                .forEach(c => c.classList.remove('active'));
+            const firstHingeChip = hingeColorToggle.querySelector('[data-value="white"]');
+            if (firstHingeChip) firstHingeChip.classList.add('active');
         }
+
+        if (liftSlideHandleGroup) liftSlideHandleGroup.style.display = 'none';
+        if (handleTypeGroup) handleTypeGroup.style.display = '';
+        if (handleGroupTitle) handleGroupTitle.textContent = 'Форма и цвет ручки';
+        if (handleColorLabel) handleColorLabel.style.display = '';
     }
-});   // ← добавить эту строку
+});
 
 // --- Тоггл типа фурнитуры ---
 if (hardwareTypeToggle && hardwareTypeInput && clampSideGroup) {
@@ -724,23 +765,30 @@ function showMessage(text, type = 'error') {
 
     // Общие габариты по проекту (зависят от типа открывания)
 if (openingType === 'vent-sash') {
-    // Для вентиляционной створки
     if (h < 550 || h > 3000) {
-        showMessage('Высота для Вент. створки должна быть в диапазоне 550–3000 мм.', 'error');
+        showMessage('Высота должна быть в диапазоне 550-3000 мм.', 'error');
         return false;
     }
     if (w < 170 || w > 300) {
-        showMessage('Ширина для Вент. створки должна быть в диапазоне 170–300 мм.', 'error');
+        showMessage('Ширина должна быть в диапазоне 170-300 мм.', 'error');
+        return false;
+    }
+} else if (openingType === 'lift-slide') {
+    if (h < 2100 || h > 3200) {
+        showMessage('Высота должна быть в диапазоне 2100-3200 мм.', 'error');
+        return false;
+    }
+    if (w < 720 || w > 3300) {
+        showMessage('Ширина должна быть в диапазоне 720-3300 мм.', 'error');
         return false;
     }
 } else {
-    // Для всех остальных
     if (h < 500 || h > 3000) {
-        showMessage('Высота должна быть в диапазоне 500–3000 мм.', 'error');
+        showMessage('Высота должна быть в диапазоне 500-3000 мм.', 'error');
         return false;
     }
     if (w < 390 || w > 1600) {
-        showMessage('Ширина должна быть в диапазоне 390–1600 мм.', 'error');
+        showMessage('Ширина должна быть в диапазоне 390-1600 мм.', 'error');
         return false;
     }
 }
@@ -751,7 +799,8 @@ if (openingType === 'vent-sash') {
         openingType !== 'tilt' &&
         openingType !== 'stulp' &&
         openingType !== 'top-hung' &&
-        openingType !== 'vent-sash'
+        openingType !== 'vent-sash' &&
+        openingType !== 'lift-slide'
     ) {
         showMessage(
             'Сейчас доступны: П/О, Поворотный, Откидной, Штульповый, Верхнеподвесной и Вент. створка.',
@@ -4843,6 +4892,130 @@ const hingeArticlesProvedal = {
         );
     }
 
+    const liftSlideHandleCatalog = {
+  one_side_concise: {
+    white: [
+      { article: 'KN218MN_9016', name: 'Ручка Concise для раздвиж. двери под квадратный штифт белая', qty: 1 },
+      { article: 'KN208AA_9016', name: 'Ручка Concise врезная внешняя (Ракушка) белая', qty: 1 },
+      { article: 'KN100SO-100', name: 'Штифт 100 мм', qty: 1 },
+      { article: 'KN100TN-90', name: 'Пара винтов', qty: 1 },
+    ],
+    black: [
+      { article: 'KN218MN_9005M', name: 'Ручка Concise для раздвиж. двери под квадратный штифт чёрная', qty: 1 },
+      { article: 'KN208AA_9005M', name: 'Ручка Concise врезная внешняя (Ракушка) чёрная', qty: 1 },
+      { article: 'KN100SO-100', name: 'Штифт 100 мм', qty: 1 },
+      { article: 'KN100TN-90', name: 'Пара винтов', qty: 1 },
+    ],
+    raw: [
+      { article: 'KN218MN_C', name: 'Ручка Concise для раздвиж. двери под квадратный штифт неокрашенная', qty: 1 },
+      { article: 'KN208AA_C', name: 'Ручка Concise врезная внешняя (Ракушка) неокрашенная', qty: 1 },
+      { article: 'KN100SO-100', name: 'Штифт 100 мм', qty: 1 },
+      { article: 'KN100TN-90', name: 'Пара винтов', qty: 1 },
+    ],
+  },
+  two_side_concise: {
+    white: [
+      { article: 'KN218MO_9016', name: 'Ручка Concise для раздвиж. двери под квадратный штифт белая', qty: 1 },
+      { article: 'KN218NG_9016', name: 'Ручка врезная внешняя под квадратный штифт белая', qty: 1 },
+      { article: 'KN100SO-115', name: 'Штифт 115 мм', qty: 1 },
+      { article: 'KN100TN-90', name: 'Пара винтов', qty: 1 },
+    ],
+    black: [
+      { article: 'KN218MO_9005M', name: 'Ручка Concise для раздвиж. двери под квадратный штифт чёрная', qty: 1 },
+      { article: 'KN218NG_9005M', name: 'Ручка врезная внешняя под квадратный штифт чёрная', qty: 1 },
+      { article: 'KN100SO-115', name: 'Штифт 115 мм', qty: 1 },
+      { article: 'KN100TN-90', name: 'Пара винтов', qty: 1 },
+    ],
+    raw: [
+      { article: 'KN218MO_C', name: 'Ручка Concise для раздвиж. двери под квадратный штифт неокрашенная', qty: 1 },
+      { article: 'KN218NG_C', name: 'Ручка врезная внешняя под квадратный штифт неокрашенная', qty: 1 },
+      { article: 'KN100SO-115', name: 'Штифт 115 мм', qty: 1 },
+      { article: 'KN100TN-90', name: 'Пара винтов', qty: 1 },
+    ],
+  },
+  one_side_master: {
+    white: [
+      { article: 'KN218NK_9016', name: 'Ручка Master Pro LS внутренняя белая', qty: 1 },
+      { article: 'KN208AA_9016', name: 'Ручка Concise врезная внешняя (ракушка) белая', qty: 1 },
+      { article: 'KN100SO-100', name: 'Штифт 100 мм', qty: 1 },
+      { article: 'KN100TN-90', name: 'Пара винтов', qty: 1 },
+    ],
+    black: [
+      { article: 'KN218NK_9005M', name: 'Ручка Master Pro LS внутренняя чёрная', qty: 1 },
+      { article: 'KN208AA_9005M', name: 'Ручка Concise врезная внешняя (ракушка) чёрная', qty: 1 },
+      { article: 'KN100SO-100', name: 'Штифт 100 мм', qty: 1 },
+      { article: 'KN100TN-90', name: 'Пара винтов', qty: 1 },
+    ],
+    raw: [
+      { article: 'KN218NK_C', name: 'Ручка Master Pro LS внутренняя неокрашенная', qty: 1 },
+      { article: 'KN208AA_C', name: 'Ручка Concise врезная внешняя (ракушка) неокрашенная', qty: 1 },
+      { article: 'KN100SO-100', name: 'Штифт 100 мм', qty: 1 },
+      { article: 'KN100TN-90', name: 'Пара винтов', qty: 1 },
+    ],
+  },
+  two_side_master: {
+    white: [
+      { article: 'KN218NT_9016', name: 'Ручка Master Pro LS внутренняя под цилиндр белая', qty: 1 },
+      { article: 'KN218NU_9016', name: 'Ручка Master Pro LS внешняя под цилиндр белая', qty: 1 },
+      { article: 'KN100SO-115', name: 'Штифт 115 мм', qty: 1 },
+      { article: 'KN100TN-90', name: 'Пара винтов', qty: 1 },
+    ],
+    black: [
+      { article: 'KN218NT_9005M', name: 'Ручка Master Pro LS внутренняя под цилиндр чёрная', qty: 1 },
+      { article: 'KN218NU_9005M', name: 'Ручка Master Pro LS внешняя под цилиндр чёрная', qty: 1 },
+      { article: 'KN100SO-115', name: 'Штифт 115 мм', qty: 1 },
+      { article: 'KN100TN-90', name: 'Пара винтов', qty: 1 },
+    ],
+    raw: [
+      { article: 'KN218NT_C', name: 'Ручка Master Pro LS внутренняя под цилиндр неокрашенная', qty: 1 },
+      { article: 'KN218NU_C', name: 'Ручка Master Pro LS внешняя под цилиндр неокрашенная', qty: 1 },
+      { article: 'KN100SO-115', name: 'Штифт 115 мм', qty: 1 },
+      { article: 'KN100TN-90', name: 'Пара винтов', qty: 1 },
+    ],
+  },
+};
+
+const hardwareMatrixLiftSlide = [
+  {
+    minHeight: 2100, maxHeight: 2400,
+    minWidth: 720, maxWidth: 3300,
+    articles: [
+      { article: 'KN230AY-2300', name: 'Привод 2100-2400', qty: 1 },
+      { article: 'KN1678', name: 'Комплект кареток с угловой подкладкой', qty: 1 },
+      { article: 'KN1611', name: 'Комплект из крепежей, подкладок и упоров', qty: 1 },
+      { article: 'KN100QN-1400', name: 'Соединитель кареток 1500-2000', qty: 1 },
+      { article: '12001', name: 'Дистанционная подкладка зацепа 1мм', qty: 2 },
+      { article: '12002', name: 'Дистанционная подкладка зацепа 2мм', qty: 2 },
+    ],
+  },
+  {
+    minHeight: 2401, maxHeight: 2700,
+    minWidth: 720, maxWidth: 3300,
+    articles: [
+      { article: 'KN230AY-2600', name: 'Привод 2400-2700', qty: 1 },
+      { article: 'KN1678', name: 'Комплект кареток с угловой подкладкой', qty: 1 },
+      { article: 'KN1611', name: 'Комплект из крепежей, подкладок и упоров', qty: 1 },
+      { article: 'KN100QN-1400', name: 'Соединитель кареток 1500-2000', qty: 1 },
+      { article: '12001', name: 'Дистанционная подкладка зацепа 1мм', qty: 2 },
+      { article: '12002', name: 'Дистанционная подкладка зацепа 2мм', qty: 2 },
+    ],
+  },
+  {
+    minHeight: 2701, maxHeight: 3200,
+    minWidth: 720, maxWidth: 3300,
+    articles: [
+      { article: 'KN230AY-2600', name: 'Привод 2400-2700', qty: 1 },
+      { article: 'KN1678', name: 'Комплект кареток с угловой подкладкой', qty: 1 },
+      { article: 'KN1611', name: 'Комплект из крепежей, подкладок и упоров', qty: 1 },
+      { article: 'KN100QN-1400', name: 'Соединитель кареток 1500-2000', qty: 1 },
+      { article: 'KN100VO', name: 'Удлинитель привода 600', qty: 1 },
+      { article: 'KN100QV', name: 'Цапфа', qty: 1 },
+      { article: '12001', name: 'Дистанционная подкладка зацепа 1мм', qty: 4 },
+      { article: '12002', name: 'Дистанционная подкладка зацепа 2мм', qty: 4 },
+    ],
+  },
+];
+
     const handleCatalog = {
   classic_standard: {
     name: 'Ручка Classic стандартная',
@@ -5756,10 +5929,38 @@ handleItems.forEach(item => resultArticles.push({ ...item }));
       showMessage('Для Штульповый Скрытая 180 с другим профилем подбор ещё не реализован.', 'error');
       return null;
     }
-  } else {
+    } else {
     showMessage('Для этого типа фурнитуры со Штульповым ещё нет подбора.', 'error');
     return null;
   }
+
+  } else if (openingType === 'lift-slide') {
+    if (wt > 300) {
+      showMessage('Максимальный вес для Подъёмно-сдвижной — 300 кг.', 'error');
+      return null;
+    }
+    const baseSet = hardwareMatrixLiftSlide.find(row =>
+      h >= row.minHeight && h <= row.maxHeight &&
+      w >= row.minWidth && w <= row.maxWidth
+    );
+    if (!baseSet) {
+      showMessage(
+        'Под эти размеры нет зоны для Подъёмно-сдвижной. Проверь диапазоны или обратись к менеджеру.',
+        'error'
+      );
+      return null;
+    }
+    baseSet.articles.forEach(item => resultArticles.push({ ...item }));
+
+    const liftSlideHandleType = liftSlideHandleTypeSelect.value;
+    const handleColorKey = handleColorSelect.value || 'white';
+    const handleSet = liftSlideHandleCatalog[liftSlideHandleType];
+    if (handleSet) {
+      const colorArticles = handleSet[handleColorKey] || handleSet['white'];
+      if (colorArticles) {
+        colorArticles.forEach(item => resultArticles.push({ ...item }));
+      }
+    }
 
     } else {
         showMessage(
@@ -5777,6 +5978,7 @@ handleItems.forEach(item => resultArticles.push({ ...item }));
   hardwareType,
   profileType: profileTypeInput.value,
   hingeColor: hingeColorInput.value,
+  liftSlideHandleType: liftSlideHandleTypeSelect.value,
   isStulpAlutech: openingType === 'stulp' && profileTypeInput.value === 'alutech' &&
   (hardwareType === 'visible' || hardwareType === 'hidden90' || hardwareType === 'hidden180'),
   clampSide,
