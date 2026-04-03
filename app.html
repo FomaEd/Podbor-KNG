@@ -5178,6 +5178,7 @@ function getHandleArticles(handleType, handleColor, openingType, hardwareType) {
         const hardwareType = hardwareTypeInput.value;
         const handleType = handleTypeSelect.value;
         const handleColor = handleColorSelect.value || 'white';
+        const clampSide = clampSideInput.value;
 
     if (!validateInputs()) {
         return null;
