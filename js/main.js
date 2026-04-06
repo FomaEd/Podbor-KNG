@@ -1,3 +1,46 @@
+function getOpeningTypeLabel(value) {
+    if (value === 'turn-tilt') return 'Поворотно-откидное окно';
+    if (value === 'turn') return 'Поворотное окно';
+    if (value === 'tilt') return 'Откидное окно';
+    if (value === 'stulp') return 'Штульповое окно';
+    if (value === 'top-hung') return 'Верхнеподвесное окно';
+    if (value === 'vent-sash') return 'Вентиляционная створка';
+    if (value === 'lift-slide') return 'Подъёмно-раздвижная дверь';
+    return value;
+}
+
+function getHardwareTypeLabel(value) {
+    if (value === 'visible') return 'Видимая';
+    if (value === 'visibleProvedal') return 'Видимая Provedal';
+    if (value === 'hidden90') return 'Скрытая 90';
+    if (value === 'hidden180') return 'Скрытая 180';
+    return value;
+}
+
+function renderSavedWindows() {
+    if (!savedWindowsList) return;
+
+    if (accumulatedResults.length === 0) {
+        savedWindowsList.innerHTML = '';
+        return;
+    }
+
+    savedWindowsList.innerHTML = accumulatedResults.map((item) => {
+        const openingLabel = getOpeningTypeLabel(item.openingType);
+        const hardwareLabel = getHardwareTypeLabel(item.hardwareType);
+        const qty = item.quantityWindows || 1;
+
+        return `
+            <div class="saved-window-item">
+                <div class="saved-window-text">
+                    ${openingLabel}, ${hardwareLabel}, ${qty} шт.
+                </div>
+                <div class="saved-window-check">✔</div>
+            </div>
+        `;
+    }).join('');
+}
+
 saveBtn.addEventListener('click', () => {
     const hardwareResult = calculateHardware();
     if (!hardwareResult) return;
@@ -56,6 +99,7 @@ function finalizeSave(hardwareResult) {
 
     accumulatedCounter.style.display = '';
     accumulatedCountElement.textContent = String(accumulatedResults.length);
+    renderSavedWindows();
 
     const n = accumulatedResults.length;
     showMessage(`Расчёт №${n} записан. Нажмите «Итого», когда соберёте все окна.`, 'success');
