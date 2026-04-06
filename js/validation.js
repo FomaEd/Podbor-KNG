@@ -1,20 +1,23 @@
-// ============================================
-// ВАЛИДАЦИЯ ВХОДНЫХ ДАННЫХ
-// ============================================
+const heightInput = document.getElementById('height');
+const widthInput = document.getElementById('width');
+const weightInput = document.getElementById('weight');
+const openingTypeSelect = document.getElementById('openingType');
+const hardwareTypeInput = document.getElementById('hardwareType');
+const quantityInput = document.getElementById('quantity');
+const saveBtn = document.getElementById('saveBtn');
+const totalBtn = document.getElementById('totalBtn');
+const messageBox = document.getElementById('messageBox');
+const accumulatedCounter = document.getElementById('accumulatedCounter');
+const accumulatedCountElement = document.getElementById('accumulatedCount');
+
+const accumulatedResults = [];
 
 function showMessage(text, type = 'error') {
-    const messageBox = document.getElementById('messageBox');
     messageBox.textContent = text;
     messageBox.className = 'message-box ' + type;
 }
 
 function validateInputs() {
-    const heightInput = document.getElementById('height');
-    const widthInput = document.getElementById('width');
-    const weightInput = document.getElementById('weight');
-    const openingTypeSelect = document.getElementById('openingType');
-    const hardwareTypeInput = document.getElementById('hardwareType');
-    
     const h = Number(heightInput.value);
     const w = Number(widthInput.value);
     const wt = Number(weightInput.value);
@@ -26,7 +29,6 @@ function validateInputs() {
         return false;
     }
 
-    // Общие габариты по проекту (зависят от типа открывания)
     if (openingType === 'vent-sash') {
         if (h < 550 || h > 3000) {
             showMessage('Высота должна быть в диапазоне 550-3000 мм.', 'error');
@@ -86,7 +88,6 @@ function validateInputs() {
         return false;
     }
 
-    // Видимая
     if (hardwareType === 'visible') {
         if (openingType === 'turn-tilt' && wt > 100) {
             showMessage('Максимальный вес для Видимая П/О — 100 кг.', 'error');
@@ -102,7 +103,6 @@ function validateInputs() {
         }
     }
 
-    // Видимая Provedal
     if (hardwareType === 'visibleProvedal') {
         if (openingType === 'turn-tilt' && wt > 90) {
             showMessage('Максимальный вес для Видимая Provedal П/О — 90 кг.', 'error');
@@ -118,7 +118,6 @@ function validateInputs() {
         }
     }
 
-    // Скрытая 90
     if (hardwareType === 'hidden90') {
         if (wt > 150) {
             showMessage('Максимальный вес для скрытой фурнитуры 90° — 150 кг.', 'error');
@@ -126,15 +125,12 @@ function validateInputs() {
         }
     }
 
-    // Скрытая 180
     if (hardwareType === 'hidden180') {
-        // Общий максимум для любой конфигурации
         if (wt > 210) {
             showMessage('Максимальный вес для скрытой фурнитуры 180° — 210 кг.', 'error');
             return false;
         }
 
-        // Если уже выбран тип открывания "Откидной" — режем по 130 кг
         if (openingType === 'tilt' && wt > 130) {
             showMessage('Максимальный вес для Скрытая 180 Откидная — 130 кг.', 'error');
             return false;
