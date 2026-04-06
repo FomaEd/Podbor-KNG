@@ -1,15 +1,3 @@
-const tg = window.Telegram ? window.Telegram.WebApp : null;
-
-if (tg) {
-    tg.ready();
-    tg.expand();
-    tg.MainButton.hide();
-}
-
-// === КАСТОМНЫЙ ПОПАП ДЛЯ СКРЫТАЯ 180 / 131–160 КГ ===
-const angleWarningOverlay = document.getElementById('angleWarningOverlay');
-const angleWarningOkBtn = document.getElementById('angleWarningOkBtn');
-
 saveBtn.addEventListener('click', () => {
     const hardwareResult = calculateHardware();
     if (!hardwareResult) return;
