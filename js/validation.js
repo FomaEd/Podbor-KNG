@@ -125,19 +125,18 @@ function validateInputs() {
         }
     }
 
-        // ОБЯЗАТЕЛЬНАЯ СТОРОНА ПРИЖИМА ДЛЯ СКРЫТОЙ ФУРНИТУРЫ
+           // ОБЯЗАТЕЛЬНАЯ СТОРОНА ПРИЖИМА ДЛЯ СКРЫТОЙ ФУРНИТУРЫ
     if (
         (hardwareType === 'hidden90' || hardwareType === 'hidden180') &&
-        (openingType === 'turn-tilt' || openingType === 'turn' || openingType === 'stulp')
+        (openingType === 'turn-tilt' || openingType === 'turn')
     ) {
-        if (!clampSide) {
+        if (clampSide !== 'left' && clampSide !== 'right') {
             showMessage(
-                'Для скрытой фурнитуры в этих конфигурациях обязательно выберите сторону прижима.',
+                'Для скрытой фурнитуры в этой конфигурации обязательно выберите левый или правый прижим.',
                 'error'
             );
             return false;
         }
     }
-
     return true;
 }
