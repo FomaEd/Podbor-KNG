@@ -17,6 +17,7 @@ const handleColorLabel = document.getElementById('handleColorLabel');
 const handleGroup = document.getElementById('handleGroup');
 const handleGroupTitle = document.getElementById('handleGroupTitle');
 const handleTypeGroup = document.getElementById('handleTypeGroup');
+const savedWindowsList = document.getElementById('savedWindowsList');
 
 const heightInput = document.getElementById('height');
 const widthInput = document.getElementById('width');
