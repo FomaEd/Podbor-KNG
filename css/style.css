@@ -370,3 +370,12 @@
     display: block;
     flex-shrink: 0;
 }
+
+.support-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 16px;
+    text-decoration: none;
+}
