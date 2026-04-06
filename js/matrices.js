@@ -1,4 +1,4 @@
-// js/matrices.js — все матрицы фурнитуры KNG
+// js/matrices.js - все матрицы фурнитуры KNG
 
 const hardwareMatrixTopHung_0_80 = [
   {
@@ -13,29 +13,135 @@ const hardwareMatrixTopHung_0_80 = [
 ];
 
 const hardwareMatrixVisibleTurnTilt = [
-  { minHeight: 550, maxHeight: 1200, minWidth: 390, maxWidth: 700, articles: [ { article: 'KN604AU', name: 'Ножницы ПО 390-700 мм', qty: 1 }, { article: 'KN100TD', name: 'Ответная планка для цапфы', qty: 1 }, { article: 'KN400GS', name: 'Ответная планка шпингалета', qty: 1 }, { article: 'KN100KL', name: 'Поворотно-откидная планка', qty: 1 }, { article: 'KN100IX', name: 'Приподниматель створки', qty: 1 }, { article: 'KN100KS', name: 'Угловая передача', qty: 1 }, { article: 'KN100KQ', name: 'Шпингалет поворотно-откидной', qty: 1 } ] },
-  { minHeight: 550, maxHeight: 1200, minWidth: 701, maxWidth: 1000, articles: [ { article: 'KN604AV', name: 'Ножницы ПО 701-1200 мм', qty: 1 }, { article: 'KN100TD', name: 'Ответная планка для цапфы', qty: 1 }, { article: 'KN400GS', name: 'Ответная планка шпингалета', qty: 1 }, { article: 'KN100KL', name: 'Поворотно-откидная планка', qty: 1 }, { article: 'KN100IX', name: 'Приподниматель створки', qty: 1 }, { article: 'KN100KS', name: 'Угловая передача', qty: 1 }, { article: 'KN100KQ', name: 'Шпингалет поворотно-откидной', qty: 1 } ] },
-  { minHeight: 550, maxHeight: 1200, minWidth: 1001, maxWidth: 1200, articles: [ { article: 'KN604AV', name: 'Ножницы ПО 701-1200 мм', qty: 1 }, { article: 'KN100TD', name: 'Ответная планка для цапфы', qty: 3 }, { article: 'KN400GS', name: 'Ответная планка шпингалета', qty: 1 }, { article: 'KN100KL', name: 'Поворотно-откидная планка', qty: 1 }, { article: 'KN100IX', name: 'Приподниматель створки', qty: 1 }, { article: 'KN100KS', name: 'Угловая передача', qty: 1 }, { article: 'KN100KQ', name: 'Шпингалет поворотно-откидной', qty: 1 }, { article: 'KN100UZ', name: 'Угловой переключатель ножниц', qty: 1 }, { article: 'KN100LE', name: 'Цапфа концевая', qty: 1 }, { article: 'KN100OU', name: 'Цапфа под тягу стандарт', qty: 1 } ] },
-  { minHeight: 1201, maxHeight: 1800, minWidth: 390, maxWidth: 700, articles: [ { article: 'KN604AU', name: 'Ножницы ПО 390-700 мм', qty: 1 }, { article: 'KN100TD', name: 'Ответная планка для цапфы', qty: 3 }, { article: 'KN400GS', name: 'Ответная планка шпингалета', qty: 1 }, { article: 'KN100KL', name: 'Поворотно-откидная планка', qty: 1 }, { article: 'KN100IX', name: 'Приподниматель створки', qty: 1 }, { article: 'KN100KS', name: 'Угловая передача', qty: 1 }, { article: 'KN100KQ', name: 'Шпингалет поворотно-откидной', qty: 1 }, { article: 'KN100UZ', name: 'Угловой переключатель ножниц', qty: 1 }, { article: 'KN100LE', name: 'Цапфа концевая', qty: 1 }, { article: 'KN100OU', name: 'Цапфа под тягу стандарт', qty: 1 } ] },
-  { minHeight: 1201, maxHeight: 1800, minWidth: 701, maxWidth: 1000, articles: [ { article: 'KN604AV', name: 'Ножницы ПО 701-1200 мм', qty: 1 }, { article: 'KN100TD', name: 'Ответная планка для цапфы', qty: 3 }, { article: 'KN400GS', name: 'Ответная планка шпингалета', qty: 1 }, { article: 'KN100KL', name: 'Поворотно-откидная планка', qty: 1 }, { article: 'KN100IX', name: 'Приподниматель створки', qty: 1 }, { article: 'KN100KS', name: 'Угловая передача', qty: 1 }, { article: 'KN100KQ', name: 'Шпингалет поворотно-откидной', qty: 1 }, { article: 'KN100UZ', name: 'Угловой переключатель ножниц', qty: 1 }, { article: 'KN100LE', name: 'Цапфа концевая', qty: 1 }, { article: 'KN100OU', name: 'Цапфа под тягу стандарт', qty: 1 } ] },
-  { minHeight: 1201, maxHeight: 1800, minWidth: 1001, maxWidth: 1200, articles: [ { article: 'KN604AV', name: 'Ножницы ПО 701-1200 мм', qty: 1 }, { article: 'KN100TD', name: 'Ответная планка для цапфы', qty: 5 }, { article: 'KN400GS', name: 'Ответная планка шпингалета', qty: 1 }, { article: 'KN100KL', name: 'Поворотно-откидная планка', qty: 1 }, { article: 'KN100IX', name: 'Приподниматель створки', qty: 1 }, { article: 'KN100KS', name: 'Угловая передача', qty: 1 }, { article: 'KN100KQ', name: 'Шпингалет поворотно-откидной', qty: 1 }, { article: 'KN100UZ', name: 'Угловой переключатель ножниц', qty: 1 }, { article: 'KN100LE', name: 'Цапфа концевая', qty: 2 }, { article: 'KN100OU', name: 'Цапфа под тягу стандарт', qty: 2 } ] },
-  { minHeight: 1801, maxHeight: 2400, minWidth: 390, maxWidth: 700, articles: [ { article: 'KN604AU', name: 'Ножницы ПО 390-700 мм', qty: 1 }, { article: 'KN100TD', name: 'Ответная планка для цапфы', qty: 5 }, { article: 'KN400GS', name: 'Ответная планка шпингалета', qty: 1 }, { article: 'KN100KL', name: 'Поворотно-откидная планка', qty: 1 }, { article: 'KN100IX', name: 'Приподниматель створки', qty: 1 }, { article: 'KN100KS', name: 'Угловая передача', qty: 1 }, { article: 'KN100KQ', name: 'Шпингалет поворотно-откидной', qty: 1 }, { article: 'KN100UZ', name: 'Угловой переключатель ножниц', qty: 1 }, { article: 'KN100LE', name: 'Цапфа концевая', qty: 1 }, { article: 'KN100OU', name: 'Цапфа под тягу стандарт', qty: 3 } ] },
-  { minHeight: 1801, maxHeight: 2400, minWidth: 701, maxWidth: 1000, articles: [ { article: 'KN604AV', name: 'Ножницы ПО 701-1200 мм', qty: 1 }, { article: 'KN100TD', name: 'Ответная планка для цапфы', qty: 5 }, { article: 'KN400GS', name: 'Ответная планка шпингалета', qty: 1 }, { article: 'KN100KL', name: 'Поворотно-откидная планка', qty: 1 }, { article: 'KN100IX', name: 'Приподниматель створки', qty: 1 }, { article: 'KN100KS', name: 'Угловая передача', qty: 1 }, { article: 'KN100KQ', name: 'Шпингалет поворотно-откидной', qty: 1 }, { article: 'KN100UZ', name: 'Угловой переключатель ножниц', qty: 1 }, { article: 'KN100LE', name: 'Цапфа концевая', qty: 1 }, { article: 'KN100OU', name: 'Цапфа под тягу стандарт', qty: 3 } ] },
-  { minHeight: 1801, maxHeight: 2400, minWidth: 1001, maxWidth: 1200, articles: [ { article: 'KN604AV', name: 'Ножницы ПО 701-1200 мм', qty: 1 }, { article: 'KN100TD', name: 'Ответная планка для цапфы', qty: 7 }, { article: 'KN400GS', name: 'Ответная планка шпингалета', qty: 1 }, { article: 'KN100KL', name: 'Поворотно-откидная планка', qty: 1 }, { article: 'KN100IX', name: 'Приподниматель створки', qty: 1 }, { article: 'KN100KS', name: 'Угловая передача', qty: 1 }, { article: 'KN100KQ', name: 'Шпингалет поворотно-откидной', qty: 1 }, { article: 'KN100UZ', name: 'Угловой переключатель ножниц', qty: 2 }, { article: 'KN100LE', name: 'Цапфа концевая', qty: 2 }, { article: 'KN100OU', name: 'Цапфа под тягу стандарт', qty: 4 } ] },
+  {
+    minHeight: 550, maxHeight: 1200, minWidth: 390, maxWidth: 700,
+    articles: [
+      { article: 'KN604AU', name: 'Ножницы ПО 390-700 мм', qty: 1 },
+      { article: 'KN100TD', name: 'Ответная планка для цапфы', qty: 1 },
+      { article: 'KN400GS', name: 'Ответная планка шпингалета', qty: 1 },
+      { article: 'KN100KL', name: 'Поворотно-откидная планка', qty: 1 },
+      { article: 'KN100IX', name: 'Приподниматель створки', qty: 1 },
+      { article: 'KN100KS', name: 'Угловая передача', qty: 1 },
+      { article: 'KN100KQ', name: 'Шпингалет поворотно-откидной', qty: 1 }
+    ]
+  },
+  {
+    minHeight: 550, maxHeight: 1200, minWidth: 701, maxWidth: 1000,
+    articles: [
+      { article: 'KN604AV', name: 'Ножницы ПО 701-1200 мм', qty: 1 },
+      { article: 'KN100TD', name: 'Ответная планка для цапфы', qty: 1 },
+      { article: 'KN400GS', name: 'Ответная планка шпингалета', qty: 1 },
+      { article: 'KN100KL', name: 'Поворотно-откидная планка', qty: 1 },
+      { article: 'KN100IX', name: 'Приподниматель створки', qty: 1 },
+      { article: 'KN100KS', name: 'Угловая передача', qty: 1 },
+      { article: 'KN100KQ', name: 'Шпингалет поворотно-откидной', qty: 1 }
+    ]
+  },
+  {
+    minHeight: 550, maxHeight: 1200, minWidth: 1001, maxWidth: 1200,
+    articles: [
+      { article: 'KN604AV', name: 'Ножницы ПО 701-1200 мм', qty: 1 },
+      { article: 'KN100TD', name: 'Ответная планка для цапфы', qty: 3 },
+      { article: 'KN400GS', name: 'Ответная планка шпингалета', qty: 1 },
+      { article: 'KN100KL', name: 'Поворотно-откидная планка', qty: 1 },
+      { article: 'KN100IX', name: 'Приподниматель створки', qty: 1 },
+      { article: 'KN100KS', name: 'Угловая передача', qty: 1 },
+      { article: 'KN100KQ', name: 'Шпингалет поворотно-откидной', qty: 1 },
+      { article: 'KN100UZ', name: 'Угловой переключатель ножниц', qty: 1 },
+      { article: 'KN100LE', name: 'Цапфа концевая', qty: 1 },
+      { article: 'KN100OU', name: 'Цапфа под тягу стандарт', qty: 1 }
+    ]
+  },
+  {
+    minHeight: 1201, maxHeight: 1800, minWidth: 390, maxWidth: 700,
+    articles: [
+      { article: 'KN604AU', name: 'Ножницы ПО 390-700 мм', qty: 1 },
+      { article: 'KN100TD', name: 'Ответная планка для цапфы', qty: 3 },
+      { article: 'KN400GS', name: 'Ответная планка шпингалета', qty: 1 },
+      { article: 'KN100KL', name: 'Поворотно-откидная планка', qty: 1 },
+      { article: 'KN100IX', name: 'Приподниматель створки', qty: 1 },
+      { article: 'KN100KS', name: 'Угловая передача', qty: 1 },
+      { article: 'KN100KQ', name: 'Шпингалет поворотно-откидной', qty: 1 },
+      { article: 'KN100UZ', name: 'Угловой переключатель ножниц', qty: 1 },
+      { article: 'KN100LE', name: 'Цапфа концевая', qty: 1 },
+      { article: 'KN100OU', name: 'Цапфа под тягу стандарт', qty: 1 }
+    ]
+  },
+  {
+    minHeight: 1201, maxHeight: 1800, minWidth: 701, maxWidth: 1000,
+    articles: [
+      { article: 'KN604AV', name: 'Ножницы ПО 701-1200 мм', qty: 1 },
+      { article: 'KN100TD', name: 'Ответная планка для цапфы', qty: 3 },
+      { article: 'KN400GS', name: 'Ответная планка шпингалета', qty: 1 },
+      { article: 'KN100KL', name: 'Поворотно-откидная планка', qty: 1 },
+      { article: 'KN100IX', name: 'Приподниматель створки', qty: 1 },
+      { article: 'KN100KS', name: 'Угловая передача', qty: 1 },
+      { article: 'KN100KQ', name: 'Шпингалет поворотно-откидной', qty: 1 },
+      { article: 'KN100UZ', name: 'Угловой переключатель ножниц', qty: 1 },
+      { article: 'KN100LE', name: 'Цапфа концевая', qty: 1 },
+      { article: 'KN100OU', name: 'Цапфа под тягу стандарт', qty: 1 }
+    ]
+  },
+  {
+    minHeight: 1201, maxHeight: 1800, minWidth: 1001, maxWidth: 1200,
+    articles: [
+      { article: 'KN604AV', name: 'Ножницы ПО 701-1200 мм', qty: 1 },
+      { article: 'KN100TD', name: 'Ответная планка для цапфы', qty: 5 },
+      { article: 'KN400GS', name: 'Ответная планка шпингалета', qty: 1 },
+      { article: 'KN100KL', name: 'Поворотно-откидная планка', qty: 1 },
+      { article: 'KN100IX', name: 'Приподниматель створки', qty: 1 },
+      { article: 'KN100KS', name: 'Угловая передача', qty: 1 },
+      { article: 'KN100KQ', name: 'Шпингалет поворотно-откидной', qty: 1 },
+      { article: 'KN100UZ', name: 'Угловой переключатель ножниц', qty: 1 },
+      { article: 'KN100LE', name: 'Цапфа концевая', qty: 2 },
+      { article: 'KN100OU', name: 'Цапфа под тягу стандарт', qty: 2 }
+    ]
+  },
+  {
+    minHeight: 1801, maxHeight: 2400, minWidth: 390, maxWidth: 700,
+    articles: [
+      { article: 'KN604AU', name: 'Ножницы ПО 390-700 мм', qty: 1 },
+      { article: 'KN100TD', name: 'Ответная планка для цапфы', qty: 5 },
+      { article: 'KN400GS', name: 'Ответная планка шпингалета', qty: 1 },
+      { article: 'KN100KL', name: 'Поворотно-откидная планка', qty: 1 },
+      { article: 'KN100IX', name: 'Приподниматель створки', qty: 1 },
+      { article: 'KN100KS', name: 'Угловая передача', qty: 1 },
+      { article: 'KN100KQ', name: 'Шпингалет поворотно-откидной', qty: 1 },
+      { article: 'KN100UZ', name: 'Угловой переключатель ножниц', qty: 1 },
+      { article: 'KN100LE', name: 'Цапфа концевая', qty: 1 },
+      { article: 'KN100OU', name: 'Цапфа под тягу стандарт', qty: 3 }
+    ]
+  },
+  {
+    minHeight: 1801, maxHeight: 2400, minWidth: 701, maxWidth: 1000,
+    articles: [
+      { article: 'KN604AV', name: 'Ножницы ПО 701-1200 мм', qty: 1 },
+      { article: 'KN100TD', name: 'Ответная планка для цапфы', qty: 5 },
+      { article: 'KN400GS', name: 'Ответная планка шпингалета', qty: 1 },
+      { article: 'KN100KL', name: 'Поворотно-откидная планка', qty: 1 },
+      { article: 'KN100IX', name: 'Приподниматель створки', qty: 1 },
+      { article: 'KN100KS', name: 'Угловая передача', qty: 1 },
+      { article: 'KN100KQ', name: 'Шпингалет поворотно-откидной', qty: 1 },
+      { article: 'KN100UZ', name: 'Угловой переключатель ножниц', qty: 1 },
+      { article: 'KN100LE', name: 'Цапфа концевая', qty: 1 },
+      { article: 'KN100OU', name: 'Цапфа под тягу стандарт', qty: 3 }
+    ]
+  },
+  {
+    minHeight: 1801, maxHeight: 2400, minWidth: 1001, maxWidth: 1200,
+    articles: [
+      { article: 'KN604AV', name: 'Ножницы ПО 701-1200 мм', qty: 1 },
+      { article: 'KN100TD', name: 'Ответная планка для цапфы', qty: 7 },
+      { article: 'KN400GS', name: 'Ответная планка шпингалета', qty: 1 },
+      { article: 'KN100KL', name: 'Поворотно-откидная планка', qty: 1 },
+      { article: 'KN100IX', name: 'Приподниматель створки', qty: 1 },
+      { article: 'KN100KS', name: 'Угловая передача', qty: 1 },
+      { article: 'KN100KQ', name: 'Шпингалет поворотно-откидной', qty: 1 },
+      { article: 'KN100UZ', name: 'Угловой переключатель ножниц', qty: 2 },
+      { article: 'KN100LE', name: 'Цапфа концевая', qty: 2 },
+      { article: 'KN100OU', name: 'Цапфа под тягу стандарт', qty: 4 }
+    ]
+  }
 ];
 
-// NOTE: все остальные матрицы (hardwareMatrixVisibleTurn, hardwareMatrixVisibleTilt,
-// hardwareMatrixVisibleProvedalTurnTilt, hardwareMatrixVisibleProvedalTurn,
-// hardwareMatrixVisibleProvedalTilt, hardwareMatrixHidden90TurnTilt,
-// hardwareMatrixHidden90Turn_0_100, hardwareMatrixHidden90Turn_101_150,
-// hardwareMatrixHidden90Tilt, hardwareMatrixHidden180TurnTilt,
-// hardwareMatrixHidden180TurnTilt_130_160, hardwareMatrixHidden180TurnTilt_160_210,
-// hardwareMatrixHidden180Turn_0_130, hardwareMatrixHidden180Turn_130_160,
-// hardwareMatrixHidden180Turn_160_210, hardwareMatrixHidden180Tilt_0_130,
-// hardwareMatrixVentSash, hardwareMatrixStulp*, hardwareMatrixLiftSlide,
-// handleCatalog, liftSlideHandleCatalog, hingeArticles*, handleColorArticles*)
-// перенесены сюда из app.html без изменений.
-// Полный код матриц — см. app.html (раздел <script>) до момента функции calculateHardware.
-// Ниже — заглушки для будущего разбиения:
-
-// TODO: вставить оставшиеся матрицы из app.html сюда
+// Продолжение следует... (файл слишком большой для одного действия)
