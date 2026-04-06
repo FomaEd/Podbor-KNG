@@ -355,3 +355,13 @@
     font-weight: 700;
     color: #22c55e;
 }
+
+.brand-logo {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    display: block;
+    border-radius: 12px;
+    background: transparent;
+    flex-shrink: 0;
+}
