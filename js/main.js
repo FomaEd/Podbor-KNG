@@ -127,7 +127,7 @@ totalBtn.addEventListener('click', async () => {
         texts.push(`• ${item.article} — ${item.name} — ${item.qty} шт.`);
     });
 
-    const finalText = texts.join('\\n');
+    const finalText = texts.join('\n');
 
     const excelData = finalGrouped.map(item => ({
         article: item.article,
