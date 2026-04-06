@@ -20,7 +20,11 @@
 function isClampSideRequired(openingType, hardwareType) {
     return (
         (hardwareType === 'hidden90' || hardwareType === 'hidden180') &&
-        (openingType === 'turn-tilt' || openingType === 'turn')
+        (
+            openingType === 'turn-tilt' ||
+            openingType === 'turn' ||
+            openingType === 'stulp'
+        )
     );
 }
 
@@ -29,12 +33,31 @@ function updateClampSideVisibility() {
     const hardwareType = hardwareTypeInput.value;
     const shouldShow = isClampSideRequired(openingType, hardwareType);
 
-    if (!clampSideGroup) return;
+    if (!clampSideGroup || !clampSideToggle) return;
+
+    const anyChip = clampSideToggle.querySelector('[data-value="any"]');
 
     if (shouldShow) {
         clampSideGroup.style.display = '';
+
+        if (anyChip) {
+            if (openingType === 'turn-tilt' || openingType === 'turn') {
+                anyChip.style.display = 'none';
+
+                if (clampSideInput.value === 'any') {
+                    setClampSide('left');
+                }
+            } else {
+                anyChip.style.display = '';
+            }
+        }
     } else {
         clampSideGroup.style.display = 'none';
+
+        if (anyChip) {
+            anyChip.style.display = '';
+        }
+
         setClampSide('any');
     }
 }
@@ -212,3 +235,5 @@ if (clampSideToggle && clampSideInput) {
         clampSideInput.value = chip.dataset.value;
     });
 }
+
+updateClampSideVisibility();
