@@ -67,6 +67,11 @@
     padding-top: 0px;
 }
 
+.header-text .title {
+    margin: 0;
+    transform: translateY(-4px);
+}
+
         .title {
     margin: 0;
     font-size: 30px;
