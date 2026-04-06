@@ -383,3 +383,6 @@ function getHandleArticles(handleType, handleColor, openingType, hardwareType) {
 
     const extras = handleConfig.extras[extrasKey] || handleConfig.extras['default'] || [];
     extras.forEach(item => result.push({ ...item }));
+  // Возвращаем итоговый массив артикулов
+    return result;
+}
