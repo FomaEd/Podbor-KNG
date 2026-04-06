@@ -1,23 +1,3 @@
-const heightInput = document.getElementById('height');
-const widthInput = document.getElementById('width');
-const weightInput = document.getElementById('weight');
-const openingTypeSelect = document.getElementById('openingType');
-const hardwareTypeInput = document.getElementById('hardwareType');
-const quantityInput = document.getElementById('quantity');
-const saveBtn = document.getElementById('saveBtn');
-const totalBtn = document.getElementById('totalBtn');
-const messageBox = document.getElementById('messageBox');
-const accumulatedCounter = document.getElementById('accumulatedCounter');
-const accumulatedCountElement = document.getElementById('accumulatedCount');
-const handleTypeSelect = document.getElementById('handleType');
-const handleColorSelect = document.getElementById('handleColor');
-const clampSideInput = document.getElementById('clampSide');
-const profileTypeInput = document.getElementById('profileType');
-const hingeColorInput = document.getElementById('hingeColor');
-const liftSlideHandleTypeSelect = document.getElementById('liftSlideHandleType');
-
-const accumulatedResults = [];
-
 function showMessage(text, type = 'error') {
     messageBox.textContent = text;
     messageBox.className = 'message-box ' + type;
