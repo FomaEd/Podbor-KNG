@@ -42,8 +42,8 @@
 
         .header {
     display: flex;
-    align-items: center;
-    gap: 12px;
+    align-items: flex-start;
+    gap: 10px;
 }
 
         .logo-circle {
@@ -62,12 +62,14 @@
         }
 
         .header-text {
-            flex: 1;
-        }
+    display: flex;
+    align-items: flex-start;
+    padding-top: 8px;
+}
 
         .title {
     margin: 0;
-    font-size: 26px;
+    font-size: 18px;
     font-weight: 800;
     line-height: 1;
     color: #111;
@@ -357,8 +359,8 @@
 }
 
 .brand-logo {
-    width: 52px;
-    height: 52px;
+    width: 88px;
+    height: auto;
     object-fit: contain;
     display: block;
     flex-shrink: 0;
