@@ -295,7 +295,7 @@ handleItems.forEach(item => resultArticles.push({ ...item }));
 handleItems.forEach(item => resultArticles.push({ ...item }));
 
 
-        } else if (hardwareType === 'hidden90') {
+                        } else if (hardwareType === 'hidden90') {
             // Скрытая 90 + Поворотная
 
             if (wt > 150) {
@@ -304,15 +304,7 @@ handleItems.forEach(item => resultArticles.push({ ...item }));
             }
 
             if (wt <= 100) {
-                if (clampSide !== 'any') {
-                    showMessage(
-                        'Для ваших параметров сторона прижима не имеет значения. ' +
-                        'Выберите вариант «Не имеет значения».',
-                        'error'
-                    );
-                    return null;
-                }
-
+                // До 100 кг — сторона прижима на UI видна, но в подборе не участвует
                 const baseSet = hardwareMatrixHidden90Turn_0_100.find(row =>
                     h >= row.minHeight && h <= row.maxHeight &&
                     w >= row.minWidth && w <= row.maxWidth
@@ -327,14 +319,15 @@ handleItems.forEach(item => resultArticles.push({ ...item }));
                     return null;
                 }
 
-                baseSet.articles.forEach(item => resultArticles.push({ ...item }));
+                if (baseSet.articles) {
+                    baseSet.articles.forEach(item => resultArticles.push({ ...item }));
+                }
 
                 const handleItems = getHandleArticles(handleType, handleColor, openingType, hardwareType);
-handleItems.forEach(item => resultArticles.push({ ...item }));
-
+                handleItems.forEach(item => resultArticles.push({ ...item }));
 
             } else {
-                // 101–150 кг, учитываем сторону прижима
+                // 101–150 кг — нужна сторона прижима
                 const baseSet = hardwareMatrixHidden90Turn_101_150.find(row =>
                     h >= row.minHeight && h <= row.maxHeight &&
                     w >= row.minWidth && w <= row.maxWidth
@@ -371,9 +364,9 @@ handleItems.forEach(item => resultArticles.push({ ...item }));
                 clampArticles.forEach(item => resultArticles.push({ ...item }));
 
                 const handleItems = getHandleArticles(handleType, handleColor, openingType, hardwareType);
-handleItems.forEach(item => resultArticles.push({ ...item }));
+                handleItems.forEach(item => resultArticles.push({ ...item }));
             }
-
+                
         } else if (hardwareType === 'visible') {
             // Видимая + Поворотный
             const baseSet = hardwareMatrixVisibleTurn.find(row =>
