@@ -3076,6 +3076,10 @@ const stulpAlternativeArticles = [
   { article: 'KN208AE', name: 'Шпингалет штульп.створки низ (арт. KN208AE)', qty: 1 },
 ];
 
+const stulpAlternativeArticlesHidden180Alutech = [
+  { article: 'KN208AD', name: 'Шпингалет штульп.створки верх (арт. KN208AD)', qty: 2 },
+];
+
 const hingeColorArticlesStulp = {
   white: { article: 'KN219CC_9016', name: 'Петля поворотная 3-хсекц.бел.', qty: 1 },
   black: { article: 'KN219CC_9005M', name: 'Петля поворотная 3-хсекц черн. matt', qty: 1 },
