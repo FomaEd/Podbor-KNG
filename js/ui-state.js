@@ -6,7 +6,9 @@
     const allowed = ['left', 'right', 'any'];
     const nextValue = allowed.includes(value) ? value : 'any';
 
-    clampSideInput.value = nextValue;
+    if (clampSideInput) {
+        clampSideInput.value = nextValue;
+    }
 
     if (clampSideToggle) {
         [...clampSideToggle.querySelectorAll('.toggle-chip')]
@@ -22,37 +24,35 @@ function isClampSideRequired(openingType, hardwareType) {
         (hardwareType === 'hidden180' &&
             (openingType === 'turn-tilt' || openingType === 'turn')) ||
         (hardwareType === 'hidden90' &&
-            (openingType === 'turn-tilt' || openingType === 'stulp'))
+            (openingType === 'turn-tilt' || openingType === 'turn' || openingType === 'stulp'))
     );
 }
 
 function updateClampSideVisibility() {
+    if (!clampSideGroup || !clampSideToggle || !clampSideInput) return;
+
     const openingType = openingTypeSelect.value;
     const hardwareType = hardwareTypeInput.value;
     const shouldShow = isClampSideRequired(openingType, hardwareType);
 
-    if (!clampSideGroup || !clampSideToggle) return;
-
     const anyChip = clampSideToggle.querySelector('[data-value="any"]');
+
+    const mustChooseExactSide =
+        (hardwareType === 'hidden180' &&
+            (openingType === 'turn-tilt' || openingType === 'turn')) ||
+        (hardwareType === 'hidden90' &&
+            (openingType === 'turn-tilt' || openingType === 'turn'));
 
     if (shouldShow) {
         clampSideGroup.style.display = '';
 
         if (anyChip) {
-    const mustChooseExactSide =
-        (hardwareType === 'hidden180' && (openingType === 'turn-tilt' || openingType === 'turn')) ||
-        (hardwareType === 'hidden90' && openingType === 'turn-tilt');
+            anyChip.style.display = mustChooseExactSide ? 'none' : '';
+        }
 
-    if (mustChooseExactSide) {
-        anyChip.style.display = 'none';
-
-        if (clampSideInput.value === 'any') {
+        if (mustChooseExactSide && clampSideInput.value === 'any') {
             setClampSide('left');
         }
-    } else {
-        anyChip.style.display = '';
-    }
-}
     } else {
         clampSideGroup.style.display = 'none';
 
@@ -70,10 +70,8 @@ function updateClampSideVisibility() {
     if (openingType === 'top-hung') {
         if (hardwareTypeGroup) hardwareTypeGroup.style.display = 'none';
         if (ventNoteGroup) ventNoteGroup.style.display = 'none';
-        hardwareTypeInput.value = 'visible';
+        if (hardwareTypeInput) hardwareTypeInput.value = 'visible';
 
-        clampSideGroup.style.display = 'none';
-        setClampSide('any');
         if (profileTypeGroup) profileTypeGroup.style.display = 'none';
         if (handleGroup) handleGroup.style.display = '';
         if (handleTypeGroup) handleTypeGroup.style.display = '';
@@ -81,14 +79,15 @@ function updateClampSideVisibility() {
         if (handleColorLabel) handleColorLabel.style.display = '';
         if (hingeColorGroup) hingeColorGroup.style.display = 'none';
         if (liftSlideHandleGroup) liftSlideHandleGroup.style.display = 'none';
+
+        setClampSide('any');
+        updateClampSideVisibility();
 
     } else if (openingType === 'vent-sash') {
         if (hardwareTypeGroup) hardwareTypeGroup.style.display = 'none';
         if (ventNoteGroup) ventNoteGroup.style.display = '';
-        hardwareTypeInput.value = 'hidden90';
+        if (hardwareTypeInput) hardwareTypeInput.value = 'hidden90';
 
-        clampSideGroup.style.display = 'none';
-        setClampSide('any');
         if (profileTypeGroup) profileTypeGroup.style.display = 'none';
         if (handleGroup) handleGroup.style.display = '';
         if (handleTypeGroup) handleTypeGroup.style.display = '';
@@ -97,13 +96,14 @@ function updateClampSideVisibility() {
         if (hingeColorGroup) hingeColorGroup.style.display = 'none';
         if (liftSlideHandleGroup) liftSlideHandleGroup.style.display = 'none';
 
+        setClampSide('any');
+        updateClampSideVisibility();
+
     } else if (openingType === 'lift-slide') {
         if (hardwareTypeGroup) hardwareTypeGroup.style.display = 'none';
         if (ventNoteGroup) ventNoteGroup.style.display = 'none';
-        hardwareTypeInput.value = 'visible';
+        if (hardwareTypeInput) hardwareTypeInput.value = 'visible';
 
-        clampSideGroup.style.display = 'none';
-        setClampSide('any');
         if (profileTypeGroup) profileTypeGroup.style.display = 'none';
         if (hingeColorGroup) hingeColorGroup.style.display = 'none';
 
@@ -113,18 +113,27 @@ function updateClampSideVisibility() {
         if (handleColorLabel) handleColorLabel.style.display = 'none';
         if (liftSlideHandleGroup) liftSlideHandleGroup.style.display = '';
 
+        setClampSide('any');
+        updateClampSideVisibility();
+
     } else {
         if (hardwareTypeGroup) hardwareTypeGroup.style.display = '';
         if (ventNoteGroup) ventNoteGroup.style.display = 'none';
 
-        const provedalChip = hardwareTypeToggle.querySelector('[data-value="visibleProvedal"]');
+        const provedalChip = hardwareTypeToggle
+            ? hardwareTypeToggle.querySelector('[data-value="visibleProvedal"]')
+            : null;
+
         if (provedalChip) {
             if (openingType === 'stulp') {
                 provedalChip.style.display = 'none';
+
                 if (hardwareTypeInput.value === 'visibleProvedal') {
                     hardwareTypeInput.value = 'visible';
+
                     [...hardwareTypeToggle.querySelectorAll('.toggle-chip')]
                         .forEach(c => c.classList.remove('active'));
+
                     const visibleChip = hardwareTypeToggle.querySelector('[data-value="visible"]');
                     if (visibleChip) visibleChip.classList.add('active');
                 }
@@ -138,11 +147,15 @@ function updateClampSideVisibility() {
                 profileTypeGroup.style.display = '';
             } else {
                 profileTypeGroup.style.display = 'none';
-                profileTypeInput.value = 'alutech';
-                [...profileTypeToggle.querySelectorAll('.toggle-chip')]
-                    .forEach(c => c.classList.remove('active'));
-                const firstChip = profileTypeToggle.querySelector('[data-value="alutech"]');
-                if (firstChip) firstChip.classList.add('active');
+
+                if (profileTypeInput) profileTypeInput.value = 'alutech';
+                if (profileTypeToggle) {
+                    [...profileTypeToggle.querySelectorAll('.toggle-chip')]
+                        .forEach(c => c.classList.remove('active'));
+
+                    const firstChip = profileTypeToggle.querySelector('[data-value="alutech"]');
+                    if (firstChip) firstChip.classList.add('active');
+                }
             }
         }
 
@@ -152,11 +165,15 @@ function updateClampSideVisibility() {
         } else {
             if (handleGroup) handleGroup.style.display = '';
             if (hingeColorGroup) hingeColorGroup.style.display = 'none';
-            hingeColorInput.value = 'white';
-            [...hingeColorToggle.querySelectorAll('.toggle-chip')]
-                .forEach(c => c.classList.remove('active'));
-            const firstHingeChip = hingeColorToggle.querySelector('[data-value="white"]');
-            if (firstHingeChip) firstHingeChip.classList.add('active');
+
+            if (hingeColorInput) hingeColorInput.value = 'white';
+            if (hingeColorToggle) {
+                [...hingeColorToggle.querySelectorAll('.toggle-chip')]
+                    .forEach(c => c.classList.remove('active'));
+
+                const firstHingeChip = hingeColorToggle.querySelector('[data-value="white"]');
+                if (firstHingeChip) firstHingeChip.classList.add('active');
+            }
         }
 
         if (liftSlideHandleGroup) liftSlideHandleGroup.style.display = 'none';
