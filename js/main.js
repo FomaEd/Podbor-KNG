@@ -202,37 +202,22 @@ totalBtn.addEventListener('click', async () => {
 
         accumulatedResults.length = 0;
 
-        heightInput.value = '';
-        widthInput.value = '';
-        weightInput.value = '';
-        qtyInput.value = '1';
+        if (heightInput) heightInput.value = '';
+        if (widthInput) widthInput.value = '';
+        if (weightInput) weightInput.value = '';
 
-        openingTypeSelect.value = 'turn-tilt';
-        hardwareTypeInput.value = 'visible';
-        handleTypeSelect.value = 'classic';
-        handleColorSelect.value = 'white';
-        clampSideInput.value = 'any';
-        profileTypeInput.value = 'alutech';
-        hingeColorInput.value = 'white';
-
-        if (liftSlideHandleTypeSelect) {
-            liftSlideHandleTypeSelect.value = 'without-key';
-        }
+        if (openingTypeSelect) openingTypeSelect.value = 'turn-tilt';
+        if (hardwareTypeInput) hardwareTypeInput.value = 'visible';
+        if (clampSideInput) clampSideInput.value = 'any';
+        if (profileTypeInput) profileTypeInput.value = 'alutech';
+        if (hingeColorInput) hingeColorInput.value = 'white';
 
         if (typeof setClampSide === 'function') {
             setClampSide('any');
         }
 
-        if (typeof updateAccumulatedCounter === 'function') {
-            updateAccumulatedCounter();
-        }
-
-        if (typeof openingTypeSelect.dispatchEvent === 'function') {
+        if (openingTypeSelect) {
             openingTypeSelect.dispatchEvent(new Event('change'));
-        }
-
-        if (savedWindowsList) {
-            savedWindowsList.innerHTML = '';
         }
     }
 }
