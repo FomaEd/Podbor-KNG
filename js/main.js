@@ -176,20 +176,28 @@ totalBtn.addEventListener('click', async () => {
         const hasStulpAlutech = accumulatedResults.some(res => res.isStulpAlutech);
 
         let alternativeData = [];
-        if (hasStulpAlutech) {
-            const altMap = new Map();
-            accumulatedResults.forEach(res => {
-                if (!res.isStulpAlutech) return;
-                stulpAlternativeArticles.forEach(item => {
-                    const key = item.article;
-                    if (!altMap.has(key)) {
-                        altMap.set(key, { ...item, qty: 0 });
-                    }
-                    altMap.get(key).qty += item.qty * res.quantityWindows;
-                });
-            });
-            alternativeData = Array.from(altMap.values());
-        }
+if (hasStulpAlutech) {
+    const altMap = new Map();
+
+    accumulatedResults.forEach(res => {
+        if (!res.isStulpAlutech) return;
+
+        const alternativeArticles =
+            res.hardwareType === 'hidden180'
+                ? stulpAlternativeArticlesHidden180Alutech
+                : stulpAlternativeArticles;
+
+        alternativeArticles.forEach(item => {
+            const key = item.article;
+            if (!altMap.has(key)) {
+                altMap.set(key, { ...item, qty: 0 });
+            }
+            altMap.get(key).qty += item.qty * res.quantityWindows;
+        });
+    });
+
+    alternativeData = Array.from(altMap.values());
+}
 
                 if (isTelegramWebApp) {
             tg.sendData(JSON.stringify({
