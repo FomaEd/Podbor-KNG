@@ -188,17 +188,52 @@ totalBtn.addEventListener('click', async () => {
     }
 
     if (tg) {
-        tg.sendData(JSON.stringify({
-            action: 'total',
-            data: excelData,
-            alternativeData: alternativeData,
-            yellowArticles: ['KN100OH', 'KN208AH']
-        }));
-        tg.close();
-    } else {
-        const ok = await exportToExcel(excelData, alternativeData);
-        if (ok) {
-            showMessage('Excel файл сформирован и скачан.', 'success');
+    tg.sendData(JSON.stringify({
+        action: 'total',
+        data: excelData,
+        alternativeData: alternativeData,
+        yellowArticles: ['KN100OH', 'KN208AH']
+    }));
+    tg.close();
+} else {
+    const ok = await exportToExcel(excelData, alternativeData);
+    if (ok) {
+        showMessage('Excel файл сформирован и скачан.', 'success');
+
+        accumulatedResults.length = 0;
+
+        heightInput.value = '';
+        widthInput.value = '';
+        weightInput.value = '';
+        qtyInput.value = '1';
+
+        openingTypeSelect.value = 'turn-tilt';
+        hardwareTypeInput.value = 'visible';
+        handleTypeSelect.value = 'classic';
+        handleColorSelect.value = 'white';
+        clampSideInput.value = 'any';
+        profileTypeInput.value = 'alutech';
+        hingeColorInput.value = 'white';
+
+        if (liftSlideHandleTypeSelect) {
+            liftSlideHandleTypeSelect.value = 'without-key';
+        }
+
+        if (typeof setClampSide === 'function') {
+            setClampSide('any');
+        }
+
+        if (typeof updateAccumulatedCounter === 'function') {
+            updateAccumulatedCounter();
+        }
+
+        if (typeof openingTypeSelect.dispatchEvent === 'function') {
+            openingTypeSelect.dispatchEvent(new Event('change'));
+        }
+
+        if (savedWindowsList) {
+            savedWindowsList.innerHTML = '';
         }
     }
+}
 });
