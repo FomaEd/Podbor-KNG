@@ -1,5 +1,3 @@
-const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
-
 const isTelegramWebApp =
     !!tg &&
     typeof tg.sendData === 'function' &&
@@ -193,7 +191,7 @@ totalBtn.addEventListener('click', async () => {
             alternativeData = Array.from(altMap.values());
         }
 
-        if (isTelegramWebApp) {
+                if (isTelegramWebApp) {
             tg.sendData(JSON.stringify({
                 action: 'total',
                 data: excelData,
