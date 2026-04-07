@@ -1,5 +1,3 @@
-const tg = window.Telegram?.WebApp || null;
-
 const isTelegramWebApp =
     !!tg &&
     typeof tg.sendData === 'function' &&
