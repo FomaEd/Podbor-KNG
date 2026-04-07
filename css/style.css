@@ -80,6 +80,11 @@
     color: #208080;
 }
 
+/* только для Telegram Mini App — уменьшаем шрифт */
+.is-telegram-miniapp .title {
+    font-size: 20px;
+}
+
         .form-grid {
             display: flex;
             flex-direction: column;
