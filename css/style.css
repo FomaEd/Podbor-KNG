@@ -82,7 +82,7 @@
 
 /* только для Telegram Mini App — уменьшаем шрифт */
 .is-telegram-miniapp .title {
-    font-size: 5px;
+    font-size: 18px;
 }
 
         .form-grid {
