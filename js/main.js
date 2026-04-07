@@ -113,100 +113,114 @@ function finalizeSave(hardwareResult) {
 }
 
 totalBtn.addEventListener('click', async () => {
-    if (accumulatedResults.length === 0) {
-        showMessage('Нет записанных расчётов. Сначала нажмите «Записать».', 'error');
-        return;
-    }
-
-    const summaryMap = new Map();
-    const texts = [];
-
-    accumulatedResults.forEach((res, index) => {
-        let openingTypeText = 'Поворотно-откидная';
-        if (res.openingType === 'turn') {
-            openingTypeText = 'Поворотная';
-        } else if (res.openingType === 'tilt') {
-            openingTypeText = 'Откидная';
+    try {
+        if (accumulatedResults.length === 0) {
+            showMessage('Нет записанных расчётов. Сначала нажмите «Записать».', 'error');
+            return;
         }
 
-        const header = `Окно ${index + 1}: ${res.width}×${res.height} мм, ${res.weight} кг, ` +
-            `Видимая, ${openingTypeText}, цвет ручки: ${res.handleColor}, кол-во: ${res.quantityWindows} шт.`;
-        texts.push(header);
+        const summaryMap = new Map();
+        const texts = [];
 
-        const grouped = groupArticles(res.items, res.quantityWindows);
-        grouped.forEach(item => {
-            texts.push(`  • ${item.article} — ${item.name} — ${item.qty} шт.`);
-
-            const key = item.article;
-            if (!summaryMap.has(key)) {
-                summaryMap.set(key, {
-                    article: item.article,
-                    name: item.name,
-                    qty: 0
-                });
+        accumulatedResults.forEach((res, index) => {
+            let openingTypeText = 'Поворотно-откидная';
+            if (res.openingType === 'turn') {
+                openingTypeText = 'Поворотная';
+            } else if (res.openingType === 'tilt') {
+                openingTypeText = 'Откидная';
             }
-            const entry = summaryMap.get(key);
-            entry.qty += item.qty;
-        });
 
-        texts.push('');
-    });
+            const header = `Окно ${index + 1}: ${res.width}×${res.height} мм, ${res.weight} кг, ` +
+                `Видимая, ${openingTypeText}, цвет ручки: ${res.handleColor}, кол-во: ${res.quantityWindows} шт.`;
+            texts.push(header);
 
-    texts.push('ИТОГОВЫЙ СПИСОК ПО ВСЕМ ОКНАМ:');
-    const finalGrouped = Array.from(summaryMap.values())
-        .sort((a, b) => a.article.localeCompare(b.article));
-    finalGrouped.forEach(item => {
-        texts.push(`• ${item.article} — ${item.name} — ${item.qty} шт.`);
-    });
+            const grouped = groupArticles(res.items, res.quantityWindows);
+            grouped.forEach(item => {
+                texts.push(`  • ${item.article} — ${item.name} — ${item.qty} шт.`);
 
-    const finalText = texts.join('\n');
-
-    const excelData = finalGrouped.map(item => ({
-        article: item.article,
-        name: item.name,
-        qty: item.qty
-    }));
-
-    // Проверяем есть ли штульповые с Видимая + ALUTECH
-    const hasStulpAlutech = accumulatedResults.some(res => res.isStulpAlutech);
-
-    // Альтернативные артикулы (суммируем по кол-ву окон)
-    let alternativeData = [];
-    if (hasStulpAlutech) {
-        const altMap = new Map();
-        accumulatedResults.forEach(res => {
-            if (!res.isStulpAlutech) return;
-            stulpAlternativeArticles.forEach(item => {
                 const key = item.article;
-                if (!altMap.has(key)) {
-                    altMap.set(key, { ...item, qty: 0 });
+                if (!summaryMap.has(key)) {
+                    summaryMap.set(key, {
+                        article: item.article,
+                        name: item.name,
+                        qty: 0
+                    });
                 }
-                altMap.get(key).qty += item.qty * res.quantityWindows;
+                const entry = summaryMap.get(key);
+                entry.qty += item.qty;
             });
-        });
-        alternativeData = Array.from(altMap.values());
-    }
 
-    if (tg) {
-    tg.sendData(JSON.stringify({
-        action: 'total',
-        data: excelData,
-        alternativeData: alternativeData,
-        yellowArticles: ['KN100OH', 'KN208AH']
-    }));
-    tg.close();
-} else {
-    const ok = await exportToExcel(excelData, alternativeData);
-    if (ok) {
+            texts.push('');
+        });
+
+        texts.push('ИТОГОВЫЙ СПИСОК ПО ВСЕМ ОКНАМ:');
+        const finalGrouped = Array.from(summaryMap.values())
+            .sort((a, b) => a.article.localeCompare(b.article));
+
+        finalGrouped.forEach(item => {
+            texts.push(`• ${item.article} — ${item.name} — ${item.qty} шт.`);
+        });
+
+        const excelData = finalGrouped.map(item => ({
+            article: item.article,
+            name: item.name,
+            qty: item.qty
+        }));
+
+        const hasStulpAlutech = accumulatedResults.some(res => res.isStulpAlutech);
+
+        let alternativeData = [];
+        if (hasStulpAlutech) {
+            const altMap = new Map();
+            accumulatedResults.forEach(res => {
+                if (!res.isStulpAlutech) return;
+                stulpAlternativeArticles.forEach(item => {
+                    const key = item.article;
+                    if (!altMap.has(key)) {
+                        altMap.set(key, { ...item, qty: 0 });
+                    }
+                    altMap.get(key).qty += item.qty * res.quantityWindows;
+                });
+            });
+            alternativeData = Array.from(altMap.values());
+        }
+
+        if (tg) {
+            tg.sendData(JSON.stringify({
+                action: 'total',
+                data: excelData,
+                alternativeData: alternativeData,
+                yellowArticles: ['KN100OH', 'KN208AH']
+            }));
+            tg.close();
+            return;
+        }
+
+        const ok = await exportToExcel(excelData, alternativeData);
+
+        if (!ok) {
+            showMessage('Не удалось сформировать Excel файл.', 'error');
+            return;
+        }
+
         showMessage('Excel файл сформирован и скачан.', 'success');
 
         accumulatedResults.length = 0;
+        renderSavedWindows();
+
+        if (accumulatedCounter) accumulatedCounter.style.display = 'none';
+        if (accumulatedCountElement) accumulatedCountElement.textContent = '0';
 
         if (heightInput) heightInput.value = '';
         if (widthInput) widthInput.value = '';
         if (weightInput) weightInput.value = '';
+        if (quantityInput) quantityInput.value = '1';
 
-        if (openingTypeSelect) openingTypeSelect.value = 'turn-tilt';
+        if (openingTypeSelect) {
+            openingTypeSelect.value = 'turn-tilt';
+            openingTypeSelect.dispatchEvent(new Event('change'));
+        }
+
         if (hardwareTypeInput) hardwareTypeInput.value = 'visible';
         if (clampSideInput) clampSideInput.value = 'any';
         if (profileTypeInput) profileTypeInput.value = 'alutech';
@@ -216,9 +230,8 @@ totalBtn.addEventListener('click', async () => {
             setClampSide('any');
         }
 
-        if (openingTypeSelect) {
-            openingTypeSelect.dispatchEvent(new Event('change'));
-        }
+    } catch (error) {
+        console.error('Ошибка в totalBtn:', error);
+        showMessage(`Ошибка: ${error.message}`, 'error');
     }
-}
 });
