@@ -1,6 +1,6 @@
 :root {
-            --color-primary: #208080;
-            --color-primary-hover: #1a6666;
+            --color-primary: #1FAE92;
+            --color-primary-hover: #188a74;
             --color-bg: #f5f5f5;
             --color-surface: #ffffff;
             --color-text: #1f2933;
@@ -16,16 +16,21 @@
         * {
             box-sizing: border-box;
         }
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--color-text);
 
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            background: radial-gradient(circle at top, #e0f2f1 0, #f5f5f5 45%, #f5f5f5 100%);
-            color: var(--color-text);
-        }
+    background:
+        radial-gradient(circle at 0% 0%, #24caa5 0, rgba(31,174,146,0) 45%),
+        radial-gradient(circle at 100% 100%, #11856b 0, rgba(0,0,0,0) 50%),
+        linear-gradient(135deg, #f6fbfa 0%, #e9f5f1 35%, #e2f1ee 100%);
+    background-attachment: fixed;
+}
 
-        .app {
+.app {
             max-width: 480px;
             margin: 0 auto;
             padding: 16px 16px 24px;
@@ -82,7 +87,7 @@
 
 /* только для Telegram Mini App — уменьшаем шрифт */
 .is-telegram-miniapp .title {
-    font-size: 25px;
+    font-size: 28px;
 }
 
         .form-grid {
@@ -227,14 +232,16 @@
         }
 
         .btn-secondary {
-            background: #f3f4f6;
-            color: #374151;
-            border: 1px solid #e5e7eb;
-        }
+    background: linear-gradient(135deg, #1FAE92, #26c2a2);
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 8px 20px rgba(31, 174, 146, 0.35);
+}
 
-        .btn-secondary:active {
-            transform: translateY(1px);
-        }
+.btn-secondary:active {
+    transform: translateY(1px);
+    box-shadow: 0 4px 10px rgba(31, 174, 146, 0.25);
+}
 
         .btn span.emoji {
             font-size: 16px;
@@ -329,6 +336,49 @@
             box-shadow: 0 4px 10px rgba(32,128,128,0.35);
             opacity: 0.95;
         }
+
+/* слой с логотипами на фоне */
+.app-bg-logos {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.06; /* прозрачность всего слоя, можно крутить 0.03–0.1 */
+}
+
+/* сетка для логотипов */
+.app-bg-logos-inner {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 220px;
+    gap: 80px;
+    transform: translate3d(0,0,0);
+}
+
+/* общий стиль картинок */
+.app-bg-logo {
+    width: 260px;
+    max-width: 80%;
+    justify-self: center;
+    align-self: center;
+    object-fit: contain;
+}
+
+/* разные повороты/масштаб, чтобы не было ровного штампика */
+.app-bg-logo--furk {
+    transform: translateY(-10px) scale(1.05);
+}
+
+.app-bg-logo--kng {
+    transform: translateY(10px) scale(0.9);
+}
+
+/* чуть сдвинем чётные строки для живости */
+.app-bg-logos-inner > div:nth-child(2n) {
+    transform: translateX(40px);
+}
 
 .saved-windows-wrap {
     margin-top: 16px;
