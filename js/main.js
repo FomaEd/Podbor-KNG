@@ -1,7 +1,7 @@
-const isTelegramWebApp =
-    !!tg &&
-    typeof tg.sendData === 'function' &&
-    typeof tg.close === 'function';
+const isTelegramWebApp = !!tg && typeof tg.close === 'function';
+
+const initDataUnsafe = isTelegramWebApp ? tg.initDataUnsafe : null;
+const isInlineWebApp = isTelegramWebApp && !!initDataUnsafe && !!initDataUnsafe.query_id;
 
 if (isTelegramWebApp) {
     document.documentElement.classList.add('is-telegram-miniapp');
@@ -201,16 +201,53 @@ if (totalBtn) {
                 alternativeData = Array.from(altMap.values());
             }
 
-            if (isTelegramWebApp) {
-                tg.sendData(JSON.stringify({
+            if (isTelegramWebApp && isInlineWebApp) {
+    try {
+        const queryId = initDataUnsafe.query_id;
+        const userId = initDataUnsafe.user?.id || null;
+        const chatType = initDataUnsafe.chat_type || null;
+        const chatInstance = initDataUnsafe.chat_instance || null;
+
+        const res = await fetch('http://5.42.115.153:3000/webapp-total', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                query_id: queryId,
+                user_id: userId,
+                chat_type: chatType,
+                chat_instance: chatInstance,
+                payload: {
                     action: 'total',
                     data: excelData,
                     alternativeData: alternativeData,
                     yellowArticles: ['KN100OH', 'KN208AH']
-                }));
-                tg.close();
-                return;
-            }
+                }
+            })
+        });
+
+        if (!res.ok) {
+            throw new Error('Сервер вернул ошибку ' + res.status);
+        }
+
+        const json = await res.json();
+        if (!json.ok) {
+            throw new Error(json.error || 'Неизвестная ошибка сервера');
+        }
+
+        if (tg.HapticFeedback && tg.HapticFeedback.notificationOccurred) {
+            tg.HapticFeedback.notificationOccurred('success');
+        }
+
+        tg.close();
+        return;
+    } catch (err) {
+        console.error('Ошибка отправки в вебхук:', err);
+        showMessage('Ошибка при отправке данных в бот. Попробуйте ещё раз позже.', 'error');
+        return;
+    }
+}
 
             const ok = await exportToExcel(excelData, alternativeData);
             if (!ok) {
