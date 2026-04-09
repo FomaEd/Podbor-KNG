@@ -208,7 +208,7 @@ if (totalBtn) {
         const chatType = initDataUnsafe.chat_type || null;
         const chatInstance = initDataUnsafe.chat_instance || null;
 
-        const res = await fetch('https://podborkng.ru/webapp-total', {
+        const res = await fetch('https://api.podborkng.ru/webapp-total', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
